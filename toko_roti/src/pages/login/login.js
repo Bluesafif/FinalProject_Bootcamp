@@ -10,7 +10,7 @@ class Login extends Component {
     }
     render() {
         return (
-            <div>
+            <div class="coverbg">
                 <div className="login_wrapper">
                     <div className="animate form login_form">
                         <section className="login_content">

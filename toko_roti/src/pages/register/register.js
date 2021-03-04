@@ -10,6 +10,7 @@ class Register extends Component {
     }
     render() {
         return (
+            <body className="coverbg">
             <div className="regis_wrapper">
                 <section className="login_content">
                     <form>
@@ -39,7 +40,7 @@ class Register extends Component {
                         <div className="clearfix" />
                         <div className="separator">
                             <b><p className="change_link">Kembali ke Halaman
-                            <Link to="/" className="to_register"> Masuk! </Link>
+                            <Link to="/login" className="to_register"> Masuk! </Link>
                             </p></b>
                             <div>
                                 <p>©2021 UBW. Hak Cipta Dilindungi Undang-Undang.<br />Pengembang Aplikasi Oleh: Al Afif</p>
@@ -48,6 +49,7 @@ class Register extends Component {
                     </form>
                 </section>
             </div>
+            </body>
         );
     }
 }

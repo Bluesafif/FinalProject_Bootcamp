@@ -802,7 +802,7 @@
   content: "\e260"; }
 
 .left_col {
-  background: #2A3F54; }
+  background: #B8977E; }
 
 .container {
   width: 100%;
@@ -1031,7 +1031,7 @@ body .container.body .right_col {
 .nav_title {
   width: 230px;
   float: left;
-  background: #2A3F54;
+  background: #B8977E;
   border-radius: 0;
   height: 57px;
   padding: 0px; }
@@ -1400,7 +1400,7 @@ a:hover, a:focus {
   padding: 13px 15px 12px; }
 
 .nav.side-menu > li.current-page, .nav.side-menu > li.active {
-  border-right: 5px solid #1ABB9C; }
+  border-right: 5px solid #ffee00; }
 
 .nav li.current-page {
   background: rgba(255, 255, 255, 0.05); }
@@ -1413,8 +1413,8 @@ a:hover, a:focus {
 
 .nav.side-menu > li.active > a {
   text-shadow: rgba(0, 0, 0, 0.25) 0 -1px 0;
-  background: -webkit-gradient(linear, left top, left bottom, from(#334556), to(#2C4257)), #2A3F54;
-  background: linear-gradient(#334556, #2C4257), #2A3F54;
+  background: -webkit-gradient(linear, left top, left bottom, from(#B8977E), to(#B8855F)), #2A3F54;
+  background: linear-gradient(#B8977E, #B8855F), #2A3F54;
   -webkit-box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0;
   box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0; }
 
