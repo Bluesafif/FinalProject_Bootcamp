@@ -8,10 +8,10 @@ class Button extends Component {
 
 
     render() {
-        const {onClick, className} = this.props
+        const {onClick, className, title} = this.props
         return (
             <>
-                <button onClick={onClick} className={className}>
+                <button onClick={onClick} className={className} title={title} >
                     {this.props.children}
                 </button>
             </>

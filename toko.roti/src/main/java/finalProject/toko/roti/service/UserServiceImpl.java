@@ -14,9 +14,47 @@ public class UserServiceImpl implements UserService{
     UserRepository userRepository;
 
     @Override
-    public void saveUser(User user) {
+    public User findByUsername(String username) {
+        User pd;
+        try{
+            pd = userRepository.findByUsername(username);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    @Override
+    public User findById(String idUser) {
+        User pd;
+        try{
+            pd = userRepository.findById(idUser);
+        }catch (IndexOutOfBoundsException e){
+            System.out.println(e);
+            pd = null;
+        }
+        return pd;
+    }
+
+    @Override
+    public void savePelanggan(User user) {
         synchronized (this) {
-            userRepository.saveUser(user);
+            userRepository.savePelanggan(user);
+        }
+    }
+
+    @Override
+    public void updatePassword(User user) {
+        synchronized (this) {
+            userRepository.updatePassword(user);
+        }
+    }
+
+    @Override
+    public void saveAdmin(User user) {
+        synchronized (this) {
+            userRepository.saveAdmin(user);
         }
     }
 
@@ -34,19 +72,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findById(String idUser) {
-        return null;
-    }
-
-    @Override
-    public boolean isUserExist(String idUser) {
-        return false;
+    public boolean isUserExist(String username) {
+        return userRepository.isUserExist(username);
     }
 
     @Override
     public void status(User user) {
         synchronized (this) {
-            userRepository.updateUser(user);
+            userRepository.status(user);
         }
     }
 }

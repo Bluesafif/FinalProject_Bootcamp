@@ -14,7 +14,7 @@ class SidebarPel extends Component {
                     <li><Link to="/pelanggan"><i className="fa fa-tachometer" /> Dashboard </Link></li>
                     <li><Link><i className="fa fa-tachometer" /> Roti </Link></li>
                     <li><Link><i className="fa fa-shopping-cart" /> Keranjang </Link></li>
-                    <li><Link><i className="fa fa-user" /> Data Pelanggan </Link></li>
+                    <li><Link to="/data-pelanggan"><i className="fa fa-user" /> Data Pelanggan </Link></li>
                 </ul>
             </div>
         </div>

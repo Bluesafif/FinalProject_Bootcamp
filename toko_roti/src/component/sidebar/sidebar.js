@@ -14,7 +14,7 @@ class Sidebar extends Component {
                     <li><Link to="/admin"><i className="fa fa-tachometer" /> Dashboard </Link></li>
                     <li><Link to="/admin-roti"><i className="fa fa-tachometer" /> Roti </Link></li>
                     <li><Link to="/admin-laporan"><i className="fa fa-print" /> Laporan </Link></li>
-                    <li><Link><i className="fa fa-user" /> Pengguna </Link></li>
+                    <li><Link to="/admin-pengguna"><i className="fa fa-user" /> Pengguna </Link></li>
                 </ul>
             </div>
         </div>
