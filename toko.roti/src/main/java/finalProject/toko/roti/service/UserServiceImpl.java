@@ -52,13 +52,6 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void saveAdmin(User user) {
-        synchronized (this) {
-            userRepository.saveAdmin(user);
-        }
-    }
-
-    @Override
     public void updateUser(User user) {
         synchronized (this) {
             userRepository.updateUser(user);
@@ -66,20 +59,34 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findAll(String paginationSelect) {
-        List<User> userList = userRepository.findAll(paginationSelect);
+    public void saveAdmin(User user) {
+        synchronized (this) {
+            userRepository.saveAdmin(user);
+        }
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<User> userList = userRepository.findAll();
         return userList;
     }
 
     @Override
-    public boolean isUserExist(String username) {
-        return userRepository.isUserExist(username);
+    public boolean isTeleponExist(String nomorTelepon) {
+        return userRepository.isTeleponExist(nomorTelepon);
     }
 
     @Override
     public void status(User user) {
         synchronized (this) {
             userRepository.status(user);
+        }
+    }
+
+    @Override
+    public void passwordDefault(User user) {
+        synchronized (this) {
+            userRepository.passwordDefult(user);
         }
     }
 }

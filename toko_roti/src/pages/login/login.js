@@ -12,10 +12,6 @@ class Login extends Component {
             password: "",
             users: {}
         }
-        this.handleEye = () => {
-            if(this.state.type === 'password') this.setState({type: 'text'})
-            else this.setState({type: 'password'})
-        }
     }
 
     setValue = el => {
@@ -82,11 +78,10 @@ class Login extends Component {
                                 <img src={logo} height="125" alt="Logo" />
                                 <h4>Silahkan,<br />Masuk ke Akun Anda</h4>
                                 <div>
-                                    <Input type="text" name="username" className="form-control input" placeholder="Nama Pengguna" required onChange={this.setValue} />
+                                    <Input type="text" name="username" className="form-control input" placeholder="Nama Pengguna" required="required" onChange={this.setValue} />
                                 </div>
                                 <div>
-                                    <Input type="password" name="password" className="form-control input" placeholder="Kata Sandi" required onChange={this.setValue} />
-                                        {/* <i className={this.state.type === 'text' ? 'fa fa-eye' : 'fa fa-eye-slash'} id="togglePassword" onClick={() => this.handleEye()}></i> */}
+                                    <Input type="password" name="password" className="form-control input" placeholder="Kata Sandi" required="required" onChange={this.setValue} />
                                 </div>
                                 <div>
                                     <Button className="btn btn-success form-control" onClick={() => this.doLogin({username, password})}>Masuk</Button>

@@ -54,7 +54,7 @@ class DataPelanggan extends Component {
                         <div className="x_panel">
                             <div className="x_title">
                                 <h2>Profil</h2>&nbsp;
-                                <Link to="###" className="btn btn-warning btn-sm"><i className="fa fa-pencil-square-o" /> Edit Profil</Link>
+                                <Link to={"/pelanggan-editpelanggan/"+this.state.userProfil.idUser} className="btn btn-warning btn-sm"><i className="fa fa-pencil-square-o" /> Edit Profil</Link>
                                 <ul className="nav navbar-right panel_toolbox">
                                     <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link>
                                     </li>

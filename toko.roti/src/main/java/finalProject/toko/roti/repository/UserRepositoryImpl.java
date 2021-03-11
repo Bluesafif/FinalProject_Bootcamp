@@ -75,19 +75,20 @@ public class UserRepositoryImpl implements UserRepository{
     @Override
     public void saveAdmin(User user) {
         jdbcTemplate.update("INSERT INTO user (idUser, username, namaLengkap, password, alamat, nomorTelepon, email, role, status, tanggalRegistrasi) " +
-                        "VALUES (?,?,?,MD5(?),?,?,?,'Admin',1,?)",
-                user.getIdUser(), user.getUsername(), user.getNamaLengkap(), user.getPassword(), user.getAlamat(), user.getNomorTelepon(), user.getEmail(), new Date());
+                        "VALUES (?,?,?,MD5('Admin123'),?,?,?,'Admin',1,?)",
+                user.getIdUser(), user.getUsername(), user.getNamaLengkap(), user.getAlamat(), user.getNomorTelepon(), user.getEmail(), new Date());
     }
 
     @Override
     public void updateUser(User user) {
-
+        jdbcTemplate.update("UPDATE user SET namaLengkap =?, username=?, nomorTelepon=?, email=?, alamat=? WHERE idUser=?",
+                user.getNamaLengkap(), user.getUsername(), user.getNomorTelepon(), user.getEmail(), user.getAlamat(), user.getIdUser());
     }
 
     @Override
-    public List<User> findAll(String paginationSelect) {
+    public List<User> findAll() {
         List<User> userList;
-        userList = jdbcTemplate.query("SELECT * FROM user "+paginationSelect,
+        userList = jdbcTemplate.query("SELECT * FROM user ORDER BY role ASC",
                 (rs, rowNum)->
                         new User(
                                 rs.getString("idUser"),
@@ -106,14 +107,21 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public boolean isUserExist(String username) {
-        String query = "SELECT COUNT(*) FROM user WHERE username =?";
-        int count = jdbcTemplate.queryForObject(query, Integer.class, username);
+    public boolean isTeleponExist(String nomorTelepon) {
+        String query = "SELECT COUNT(*) FROM user WHERE nomorTelepon =?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, nomorTelepon);
         return count > 0;
     }
 
     @Override
     public void status(User user) {
+        jdbcTemplate.update("UPDATE user SET status=? WHERE idUser=?",
+                user.isStatusUser(), user.getIdUser());
+    }
 
+    @Override
+    public void passwordDefult(User user) {
+        jdbcTemplate.update("UPDATE user SET password=MD5('User123') WHERE idUser=?",
+                user.getIdUser());
     }
 }

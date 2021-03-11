@@ -1,12 +1,97 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { Button, Input, Label } from '../../component';
+import { Input, Label } from '../../component';
 
 class DataPengguna extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            pengguna: [],
+            usersView: {}
+        }
     }
+
+    fetchPengguna = () => {
+        fetch(`http://localhost:8080/roti/master/user`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    pengguna: json,
+                });
+            })
+            .catch(() => {
+                alert("failed fetching data");
+            });
+    };
+
+    view = (index) => {
+        const userView = this.state.pengguna[index]
+        this.setState({
+            usersView: userView
+        })
+    }
+    
+    resetStatus = (idUser) =>{
+        fetch(`http://localhost:8080/roti/master/user/status/`+idUser, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+                alert(json.errorMessage);
+            } else if (typeof json.errorMessage === "undefined") {
+                alert(
+                    json.errorMessage
+                );
+            }
+            this.fetchPengguna()
+        })
+        .catch((e) => {
+            window.alert(e);
+        });
+    }
+
+    resetPassword = (idUser) =>{
+        fetch(`http://localhost:8080/roti/master/user/password/`+idUser, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+                alert(json.errorMessage);
+            } else if (typeof json.errorMessage === "undefined") {
+                alert(
+                    json.errorMessage
+                );
+            }
+            this.fetchPengguna()
+        })
+        .catch((e) => {
+            window.alert(e);
+        });
+    }
+
+    componentDidMount() {
+        this.fetchPengguna()
+    }
+
     render() {
         return (
             <>
@@ -22,7 +107,7 @@ class DataPengguna extends Component {
                             <div className="col-md-12 col-sm-12 col-xs-12">
                                 <div className="x_panel">
                                     <div className="x_title">
-                                        <h2>Data Pengguna</h2>&nbsp; &nbsp;<Link to="###" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Pengguna</Link>
+                                        <h2>Data Pengguna</h2>&nbsp; &nbsp;<Link to="/admin-tambahpengguna" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Admin</Link>
                                         <ul className="nav navbar-right panel_toolbox">
                                             <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link></li>
                                         </ul>
@@ -53,21 +138,43 @@ class DataPengguna extends Component {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>
-                                                            <center>
-                                                                <button href="index.php?page=edit_surat_masuk&id=<?php echo $data['id']; ?>" className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
-                                                                <button href="index.php?page=hapus_surat_masuk&id=<?php echo $data['id'] ?>" className="text-white btn btn-danger" title="Hapus"><i className="fa fa-trash-o" /></button>
-                                                                <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail"><i className="fa fa-file-text-o" /></button>
-                                                            </center>
-                                                        </td>
-                                                    </tr>
+                                                    {
+                                                        this.state.pengguna.map((user, index) => {
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td><center>{index + 1}</center></td>
+                                                                    <td>{user.idUser}</td>
+                                                                    <td>{user.namaLengkap}</td>
+                                                                    <td>{user.username}</td>
+                                                                    <td><center>{user.role}</center></td>
+                                                                    <td><center>{user.statusUser === true ? "Aktif" : "Tidak Aktif"}</center></td>
+                                                                    <td>
+                                                                        <center>
+                                                                            {user.role === "Admin"
+                                                                                ? <>
+                                                                                    <Link to={"/admin-editpengguna/"+user.idUser}>
+                                                                                        <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                    </Link>
+                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                  </>
+                                                                                : user.role === "Member"
+                                                                                    ? <>
+                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-exclamation" /></button>
+                                                                                        <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                      </>
+                                                                                    : <>
+                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-exclamation" /></button>
+                                                                                        <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                      </>
+                                                                            }
+                                                                        </center>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        })
+                                                    }
                                                 </tbody>
                                             </table>
                                         </div>
@@ -89,7 +196,44 @@ class DataPengguna extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                ...
+                                <center><h6>{this.state.usersView.namaLengkap}</h6></center>
+                                <table className="table table-borderless table-hover">
+                                    <tbody>
+                                        <tr>
+                                            <td>ID User</td>
+                                            <td>{this.state.usersView.idUser}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nama Pengguna</td>
+                                            <td>{this.state.usersView.username}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nomor Telepon</td>
+                                            <td>{this.state.usersView.nomorTelepon}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Email</td>
+                                            <td>{this.state.usersView.email}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alamat</td>
+                                            <td>{this.state.usersView.alamat}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Peran</td>
+                                            <td>{this.state.usersView.role}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Status</td>
+                                            <td>{this.state.usersView.statusUser === true ? "Aktif" : "Tidak Aktif"}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal Registrasi</td>
+                                            <td>{this.state.usersView.tanggalRegis}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
                             </div>
                         </div>
                     </div>

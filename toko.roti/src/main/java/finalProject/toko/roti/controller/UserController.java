@@ -59,7 +59,7 @@ public class UserController {
         }
     }
 
-    //------------------Register User------------------//
+    //------------------Register User------------------// (check)
 
     @PostMapping("/registrasi")
     public ResponseEntity<?> createData(@RequestBody User user) {
@@ -72,17 +72,28 @@ public class UserController {
             Matcher m = p.matcher(user.getUsername());
             if (m.matches()) {
                 if (Pattern.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,8}$", user.getPassword())) {
-                    try {
-                        User findUser = userService.findByUsername(user.getUsername());
-                        if (findUser == null) {
-                            userService.savePelanggan(user);
-                            return new ResponseEntity<>(new CustomErrorType("Berhasil melakukan input data"), HttpStatus.CREATED);
+                    if(Pattern.matches("^(\\+62|62|0)8[1-9][0-9]{6,11}$", user.getNomorTelepon())){
+                        if (Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", user.getEmail())){
+                            try {
+                                User findUser = userService.findByUsername(user.getUsername());
+                                if (findUser == null) {
+                                    if (userService.isTeleponExist(user.getNomorTelepon())) {
+                                        return new ResponseEntity<>(new CustomErrorType("Nomor telepon '" + user.getNomorTelepon() + "' telah tersedia"), HttpStatus.CONFLICT);
+                                    }
+                                    userService.savePelanggan(user);
+                                    return new ResponseEntity<>(new CustomErrorType("Berhasil melakukan input data"), HttpStatus.CREATED);
+                                } else {
+                                    return new ResponseEntity<>(new CustomErrorType("Pelanggan dengan username = '" + user.getUsername() + "' telah tersedia"), HttpStatus.CONFLICT);
+                                }
+                            } catch (DataAccessException e) {
+                                e.printStackTrace();
+                                return new ResponseEntity<>(new CustomErrorType("Gagal melakukan input data"), HttpStatus.BAD_GATEWAY);
+                            }
                         } else {
-                            return new ResponseEntity<>(new CustomErrorType("Pelanggan dengan username = '" + user.getUsername() + "' telah tersedia"), HttpStatus.CONFLICT);
+                            return new ResponseEntity<>(new CustomErrorType("Email tidak sesuai dengan format email (test123@mail.com)"), HttpStatus.BAD_REQUEST);
                         }
-                    } catch (DataAccessException e) {
-                        e.printStackTrace();
-                        return new ResponseEntity<>(new CustomErrorType("Gagal melakukan input data"), HttpStatus.BAD_GATEWAY);
+                    } else {
+                        return new ResponseEntity<>(new CustomErrorType("Nomor telepon harus (+62##########) atau (62##########) atau (0##########)"), HttpStatus.BAD_REQUEST);
                     }
                 } else {
                     return new ResponseEntity<>(new CustomErrorType("Password harus terdiri dari 6 sampai 8 karakter, dengan huruf besar dan kecil serta angka"), HttpStatus.BAD_REQUEST);
@@ -106,7 +117,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    //------------------Change Password------------------//
+    //------------------Change Password------------------// (check)
 
     @PutMapping("/changePass")
     public ResponseEntity<?> changePass(@RequestBody User user) {
@@ -134,111 +145,126 @@ public class UserController {
         }
     }
 
-    //------------------Get All Data------------------//
+    //------------------Get All Data------------------// (check)
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> listAllUser(@RequestParam Map<Object, Object> pagination){
-        String paginationSelect = "";
-        if (pagination.containsKey("limit")){
-            paginationSelect += " LIMIT " + pagination.get("limit");
-        }
-        if(pagination.containsKey("offset")){
-            paginationSelect += " OFFSET " + pagination.get("offset");
-        }
-        List<User> userList = userService.findAll(paginationSelect);
+    @GetMapping("/user")
+    public ResponseEntity<List<User>> listAllUser(){
+        List<User> userList = userService.findAll();
         if (userList.isEmpty()) {
             return new ResponseEntity<>(userList, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
-//    //------------------Save a Data Admin------------------//
-//
-//    @RequestMapping(value = "/save-admin", method = RequestMethod.POST)
-//    public ResponseEntity<?> saveAdmin(@RequestBody User user){
-//        logger.info("Menyimpan User : {} ", user);
-//
-//        if (userService.isUserExist(user.getUsername())) {
-//            logger.error("Tidak dapat menyimpan user! User dengan username {} sudah tersedia!", user.getUsername());
-//            return new ResponseEntity<>(new CustomErrorType("Tidak dapat menyimpan user! User dengan username " +
-//                    user.getUsername() + " sudah tersedia!"), HttpStatus.CONFLICT);
-//        }
-//
-//        userService.saveAdmin(user);
-//
-//        return new ResponseEntity<>("Data Berhasil Ditambahkan!", HttpStatus.CREATED);
-//    }
+    //------------------Update a Data------------------// (check)
 
-//    //------------------Save a Data Pelanggan------------------//
-//
-//    @RequestMapping(value = "/save-pelanggan", method = RequestMethod.POST)
-//    public ResponseEntity<?> savePelanggan(@RequestBody User user){
-//        logger.info("Menyimpan User : {} ", user);
-//
-//        if (userService.isUserExist(user.getUsername())) {
-//            logger.error("Tidak dapat menyimpan pelanggan! Pelanggan dengan username {} sudah tersedia!", user.getUsername());
-//            return new ResponseEntity<>(new CustomErrorType("Tidak dapat menyimpan pelanggan! Pelanggan dengan username " +
-//                    user.getUsername() + " sudah tersedia!"), HttpStatus.CONFLICT);
-//        }
-//
-//        userService.savePelanggan(user);
-//
-//        return new ResponseEntity<>("Data Berhasil Ditambahkan!", HttpStatus.CREATED);
-//    }
+    @PutMapping("/user/{idUser}")
+    public ResponseEntity<?> updateUser(@PathVariable("idUser") String idUser, @RequestBody User user) {
+        logger.info("Mengubah user dengan id {}", idUser);
 
-//    //------------------Update a Data------------------//
-//
-//    @RequestMapping(value = "/user/{idUser}", method = RequestMethod.PUT)
-//    public ResponseEntity<?> updateUser(@PathVariable("idUser") String idUser, @RequestBody User user) {
-//        logger.info("Mengubah user dengan id {}", idUser);
-//
-//        User users = userService.findById(idUser);
-//
-//        if (users == null) {
-//            logger.error("Tidak dapat mengubah data User . User dengan id {} tidak tersedia.", idUser);
-//            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data User. User dengan id "
-//                    + idUser + " tidak tersedia."),
-//                    HttpStatus.NOT_FOUND);
-//        } else if (userService.isUserExist(user.getUsername())) {
-//            logger.error("Tidak dapat menyimpan user! User dengan username {} sudah tersedia!", user.getUsername());
-//            return new ResponseEntity<>(new CustomErrorType("Tidak dapat menyimpan user! User dengan username " +
-//                    user.getUsername() + " sudah tersedia!"), HttpStatus.CONFLICT);
-//        }
-//
-//        users.setNamaLengkap(user.getNamaLengkap());
-//        users.setUsername(user.getUsername());
-//        users.setNomorTelepon(user.getNomorTelepon());
-//        users.setEmail(user.getEmail());
-//        users.setAlamat(user.getAlamat());
-//        users.setRole(user.getRole());
-////        users.setStatusUser(user.isStatusUser());
-//
-//        userService.updateUser(users);
-//        return new ResponseEntity<>("Data Berhasil Diubah!", HttpStatus.OK);
-//    }
+        User users = userService.findById(idUser);
 
-//    //------------------Switching Status One Data Only------------------//
-//
-//    @RequestMapping(value = "/user/status/{idUser}", method = RequestMethod.PUT)
-//    public ResponseEntity<?> updateStatusUser(@PathVariable("idUser") String idUser) {
-//        logger.info("Mengubah status user dengan id {}", idUser);
-//
-//        User users = userService.findById(idUser);
-//
-//        if (users == null) {
-//            logger.error("Tidak dapat mengubah data User. User dengan id {} tidak tersedia.", idUser);
-//            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data user. User Baku dengan id "
-//                    + idUser + " tidak tersedia."),
-//                    HttpStatus.NOT_FOUND);
-//        }
-//
-//        if (users.isStatusUser() == true){
-//            users.setStatusUser(false);
-//        }else{
-//            users.setStatusUser(true);
-//        }
-//
-//        userService.status(users);
-//        return new ResponseEntity<>("Status Berhasil Diubah!", HttpStatus.OK);
-//    }
+        if (users == null) {
+            logger.error("Tidak dapat mengubah data User . User dengan id {} tidak tersedia.", idUser);
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data User. User dengan id "
+                    + idUser + " tidak tersedia."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        users.setNamaLengkap(user.getNamaLengkap());
+        users.setUsername(user.getUsername());
+        users.setNomorTelepon(user.getNomorTelepon());
+        users.setEmail(user.getEmail());
+        users.setAlamat(user.getAlamat());
+
+        userService.updateUser(users);
+        return new ResponseEntity<>(new CustomErrorType("Data Berhasil Diubah!"), HttpStatus.OK);
+    }
+
+    //------------------Save a Data Admin------------------// (check)
+
+    @PostMapping("/save-admin")
+    public ResponseEntity<?> savePelanggan(@RequestBody User user){
+        if (user.getIdUser().isBlank() || user.getNamaLengkap().isBlank() ||
+                user.getUsername().isBlank() || user.getNomorTelepon().isBlank() ||
+                user.getEmail().isBlank() || user.getAlamat().isBlank()){
+            return new ResponseEntity<>(new CustomErrorType("Data tidak boleh kosong"), HttpStatus.BAD_REQUEST);
+        } else {
+            Pattern p = Pattern.compile("[a-zA-Z0-9.\\\\-_]{3,}");
+            Matcher m = p.matcher(user.getUsername());
+            if (m.matches()) {
+                if(Pattern.matches("^(\\+62|62|0)8[1-9][0-9]{6,11}$", user.getNomorTelepon())){
+                    if (Pattern.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", user.getEmail())){
+                        try {
+                            User findUser = userService.findByUsername(user.getUsername());
+                            if (findUser == null) {
+                                if (userService.isTeleponExist(user.getNomorTelepon())) {
+                                    return new ResponseEntity<>(new CustomErrorType("Nomor telepon '" + user.getNomorTelepon() + "' telah tersedia"), HttpStatus.CONFLICT);
+                                }
+                                userService.saveAdmin(user);
+                                return new ResponseEntity<>(new CustomErrorType("Berhasil melakukan input data"), HttpStatus.CREATED);
+                            } else {
+                                return new ResponseEntity<>(new CustomErrorType("Admin dengan username = '" + user.getUsername() + "' telah tersedia"), HttpStatus.CONFLICT);
+                            }
+                        } catch (DataAccessException e) {
+                            e.printStackTrace();
+                            return new ResponseEntity<>(new CustomErrorType("Gagal melakukan input data"), HttpStatus.BAD_GATEWAY);
+                        }
+                    } else {
+                        return new ResponseEntity<>(new CustomErrorType("Email tidak sesuai dengan format email (test123@mail.com)"), HttpStatus.BAD_REQUEST);
+                    }
+                } else {
+                    return new ResponseEntity<>(new CustomErrorType("Nomor telepon harus (+62##########) atau (62##########) atau (0##########)"), HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<>(new CustomErrorType("Username harus terdiri dari minimal 3 huruf, tidak boleh menggunakan spasi, dan tidak boleh memiliki spesial karakter"), HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+    //------------------Switching Status One Data Only------------------// (check)
+
+    @PutMapping("/user/status/{idUser}")
+    public ResponseEntity<?> updateStatusUser(@PathVariable("idUser") String idUser) {
+        logger.info("Mengubah status user dengan id {}", idUser);
+
+        User users = userService.findById(idUser);
+
+        if (users == null) {
+            logger.error("Tidak dapat mengubah data User. User dengan id {} tidak tersedia.", idUser);
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data user. User dengan id "
+                    + idUser + " tidak tersedia."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        if (users.isStatusUser() == true){
+            users.setStatusUser(false);
+        }else{
+            users.setStatusUser(true);
+        }
+
+        userService.status(users);
+        return new ResponseEntity<>(new CustomErrorType("Status Berhasil Diubah!"), HttpStatus.OK);
+    }
+
+    //------------------Switching Password to Default------------------// (check)
+
+    @PutMapping("/user/password/{idUser}")
+    public ResponseEntity<?> switchPassUser(@PathVariable("idUser") String idUser) {
+        logger.info("Mengubah password user dengan id {}", idUser);
+
+        User users = userService.findById(idUser);
+
+        if (users == null) {
+            logger.error("Tidak dapat mengubah data User. User dengan id {} tidak tersedia.", idUser);
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data user. User dengan id "
+                    + idUser + " tidak tersedia."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        users.setPassword(idUser);
+
+        userService.passwordDefault(users);
+        return new ResponseEntity<>(new CustomErrorType("Password Berhasil Diubah Menjadi Default!"), HttpStatus.OK);
+    }
 }

@@ -13,14 +13,15 @@ public interface UserService {
 
     void updatePassword(User user);
 
-    void saveAdmin(User user);
-
     void updateUser(User user);
 
-    List<User> findAll(String paginationSelect);
+    void saveAdmin(User user);
 
-    boolean isUserExist (String username);
+    List<User> findAll();
+
+    boolean isTeleponExist (String nomorTelepon);
 
     void status(User user);
 
+    void passwordDefault(User user);
 }

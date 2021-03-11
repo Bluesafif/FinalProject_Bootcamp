@@ -7,5 +7,8 @@ import Laporan from "./laporan/laporan.js"
 import Profil from "./profil/profil.js"
 import Pengguna from "./pengguna/pengguna.js"
 import UbahPassword from "./ubahPassword/ubahPassword.js"
+import EditPengguna from './edit/editPengguna.js'
+import TambahAdmin from './tambah/admin.js'
+import EditPenggunaPel from './edit/editPenggunaPel.js';
 
-export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword }
+export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword, EditPengguna, TambahAdmin, EditPenggunaPel }

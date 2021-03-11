@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Sidebar, MenuProfile, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
-import DataPengguna from '../content/dataPengguna'
+import UbahPengguna from '../content/ubahPengguna.js'
 
-class Pengguna extends Component {
+class EditPengguna extends Component {
     constructor(props) {
         super(props);
         this.state = {}
     }
-
     render() {
         return (
             <body className="nav-md">
@@ -27,7 +26,7 @@ class Pengguna extends Component {
                         </div>
                         <Topnav />
                         <div className="right_col" role="main">
-                            <DataPengguna />
+                            <UbahPengguna {...this.props} />
                         </div>
                     </div>
                 </div>
@@ -35,5 +34,5 @@ class Pengguna extends Component {
         );
     }
 }
-
-export default Pengguna;
+ 
+export default EditPengguna;

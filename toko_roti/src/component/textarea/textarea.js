@@ -6,10 +6,10 @@ class Textarea extends Component {
         this.state = {  }
     }
     render() { 
-        const { name, onChange, value } = this.props
+        const { name, onChange, value, required } = this.props
         return ( 
             <>
-                <textarea name={name} className="form-control" value={value} onChange={onChange}/>
+                <textarea name={name} className="form-control" value={value} onChange={onChange} required={required} />
             </>
         );
     }

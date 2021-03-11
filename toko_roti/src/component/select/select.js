@@ -7,10 +7,10 @@ class Select extends Component {
     }
 
     render() {
-        const {name, onChange, value} = this.props
+        const {name, onChange, value, type, required} = this.props
         return (
             <>    
-                <select name={name} onChange={onChange} value={value} className="custom-select">
+                <select name={name} onChange={onChange} value={value} className="custom-select" typeof={type} required={required}>
                     {this.props.children}
                 </select>
             </>

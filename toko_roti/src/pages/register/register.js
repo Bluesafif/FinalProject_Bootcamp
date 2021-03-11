@@ -26,8 +26,6 @@ class Register extends Component {
 
     doRegis = () => {
         let obj = this.state;
-        console.log(obj.password);
-        console.log(obj.passwordUlangi);
 
         if (
             obj.namaLengkap === "" || obj.alamat === "" ||
@@ -35,14 +33,6 @@ class Register extends Component {
             obj.username === "" || obj.password === "" || obj.passwordUlangi === ""
         ) {
             alert("Semua Data wajib diisi");
-            // }else if(obj.username.length < 6 || obj.username.length > 8){
-            //   swal("Gagal !", "Panjang username antara 6-8 huruf", "error");
-            // }else if(!(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(obj.email))){
-            //   swal("Gagal !", "Format Email Tidak Sesuai", "error");
-            // }else if(!(/^(^\+62|62|^08)(\d{3,4}-?){2}\d{3,4}$/i.test(obj.phone))){
-            //   swal("Gagal !", "Format No.HP Tidak Sesuai", "error");
-            // }else if(!(/^(?=.[a-z])(?=.[A-Z])(?=.*\d)[A-Za-z\d]{6,8}$/i.test(obj.password))){
-            //   swal("Gagal !", "Password minimal 6 karakter dan maksimal 8 karakter yang terdiri dari minimal 1 huruf besar, 1 huruf kecil, satu angka", "error");
         } else if (obj.password !== obj.passwordUlangi) {
             alert("Password dan Konfirmasi password tidak sesuai");
         } else {
@@ -52,11 +42,8 @@ class Register extends Component {
                 namaLengkap: this.state.namaLengkap,
                 alamat: this.state.alamat,
                 nomorTelepon: this.state.nomorTelepon,
-                email: this.state.email,
-                role: "Umum"
+                email: this.state.email
             };
-
-            console.log(objekRegistrasi)
 
             fetch("http://localhost:8080/roti/master/registrasi", {
                 method: "POST",
@@ -93,7 +80,7 @@ class Register extends Component {
                             <img src={logo} height="125" alt="Logo" />
                             <h4>Silahkan,<br />Buat Akun Baru</h4>
                             <div>
-                                <Input type="text" className="form-control" name="namaLengkap" placeholder="Nama Lengkap" required onChange={this.setValue} value={this.state.namaLengkap} />
+                                <Input type="text" className="form-control" name="namaLengkap" placeholder="Nama Lengkap" required="required" onChange={this.setValue} value={this.state.namaLengkap} />
                             </div>
                             <div>
                                 <Input type="text" className="form-control" name="alamat" placeholder="Alamat" required="required" onChange={this.setValue} value={this.state.alamat} />

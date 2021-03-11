@@ -18,9 +18,11 @@ public interface UserRepository {
 
     void updateUser(User user);
 
-    List<User> findAll(String paginationSelect);
+    List<User> findAll();
 
-    boolean isUserExist (String username);
+    boolean isTeleponExist (String username);
 
     void status(User user);
+
+    void passwordDefult(User user);
 }

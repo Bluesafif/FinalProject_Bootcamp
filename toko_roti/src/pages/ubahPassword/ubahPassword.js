@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Sidebar, MenuProfile, Topnav } from '../../component'
+import { Sidebar, SidebarPel, MenuProfile, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import UbahPass from '../content/ubahPass.js'
+import { connect } from 'react-redux';
 
 class UbahPassword extends Component {
     constructor(props) {
@@ -21,7 +22,11 @@ class UbahPassword extends Component {
                             <div className="clearfix" />
                                 <MenuProfile />
                                 <br />
-                                <Sidebar />
+                                {
+                                    this.props.userLogin.role === "Admin"
+                                    ? <Sidebar />
+                                    : <SidebarPel />
+                                }
                             </div>
                         </div>
                         <Topnav />
@@ -35,4 +40,16 @@ class UbahPassword extends Component {
     }
 }
  
-export default UbahPassword;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+      submitLogin: (data) => dispatch({type: "LOGIN_SUCCESS", payload:data})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UbahPassword);

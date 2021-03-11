@@ -8,7 +8,8 @@ class UbahPassword extends Component {
         super(props);
         this.state = {
             password : "",
-            passwordUlangi: ""
+            passwordUlangi: "",
+            userProfil: {}
         }
     }
 
@@ -17,6 +18,30 @@ class UbahPassword extends Component {
             [el.target.name]: el.target.value
         })
     }
+
+    getProfil = () => {
+        fetch(`http://localhost:8080/roti/master/profil/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    userProfil: json
+                });
+                if (typeof json.errorMessage !== 'undefined') {
+
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+
+            });
+    };
 
     updatePassword = () => {
         let obj = this.state;
@@ -62,6 +87,10 @@ class UbahPassword extends Component {
         }
     };
 
+    componentDidMount() {
+        this.getProfil()
+    }
+
     render() {
         return (
             <div className="">
@@ -85,10 +114,10 @@ class UbahPassword extends Component {
                             <div className="x_content">
                                 <div className="form form-horizontal form-label-left">
                                     <div>
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12" htmlFor="username">Username<span className="required"> :</span>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Username<span className="required"> :</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" id="username" name="username" required="required" disabled="disabled" className="form-control col-md-7 col-xs-12" defaultValue="<?php echo $_SESSION['username']; ?>" />
+                                            <Input type="text" id="username" name="username" required="required" disabled="disabled" className="form-control col-md-7 col-xs-12" value={this.state.userProfil.username} />
                                         </div>
                                     </div><br />
                                     <div>
