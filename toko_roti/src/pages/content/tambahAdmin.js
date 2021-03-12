@@ -39,8 +39,6 @@ class AddAdmin extends Component {
                 email: this.state.email,
                 alamat: this.state.alamat
             };
-
-            console.log(objekAdd);
             fetch("http://localhost:8080/roti/master/save-admin", {
                 method: "POST",
                 headers: {
@@ -58,8 +56,8 @@ class AddAdmin extends Component {
                         alert(
                             json.errorMessage
                         );
+                        this.props.history.push("/admin-pengguna");
                     }
-                    this.props.history.push("/admin-pengguna");
                 })
                 .catch((e) => {
                     window.alert(e);

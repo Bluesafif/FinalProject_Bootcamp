@@ -10,5 +10,7 @@ import UbahPassword from "./ubahPassword/ubahPassword.js"
 import EditPengguna from './edit/editPengguna.js'
 import TambahAdmin from './tambah/admin.js'
 import EditPenggunaPel from './edit/editPenggunaPel.js';
+import TambahRoti from './tambah/roti.js'
+import EditRoti from './edit/editRoti.js'
 
-export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword, EditPengguna, TambahAdmin, EditPenggunaPel }
+export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword, EditPengguna, TambahAdmin, EditPenggunaPel, TambahRoti, EditRoti }

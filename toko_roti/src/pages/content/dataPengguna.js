@@ -108,9 +108,6 @@ class DataPengguna extends Component {
                                 <div className="x_panel">
                                     <div className="x_title">
                                         <h2>Data Pengguna</h2>&nbsp; &nbsp;<Link to="/admin-tambahpengguna" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Admin</Link>
-                                        <ul className="nav navbar-right panel_toolbox">
-                                            <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link></li>
-                                        </ul>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
@@ -159,12 +156,12 @@ class DataPengguna extends Component {
                                                                                   </>
                                                                                 : user.role === "Member"
                                                                                     ? <>
-                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-exclamation" /></button>
+                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
                                                                                         <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
                                                                                         <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
                                                                                       </>
                                                                                     : <>
-                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-exclamation" /></button>
+                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
                                                                                         <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
                                                                                         <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
                                                                                       </>

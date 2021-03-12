@@ -6,10 +6,10 @@ class Input extends Component {
         this.state = {  }
     }
     render() { 
-        const { type, name, onChange, placeholder, value, disabled, required, id, defaultValue } = this.props
+        const { type, className, name, onChange, placeholder, value, disabled, required, id, defaultValue, min } = this.props
         return ( 
             <>
-                <input type={type} className="form-control" name={name} onChange={onChange} placeholder={placeholder} value={value} disabled={disabled} required={required} id={id} defaultValue={defaultValue} />
+                <input type={type} className={className} min={min} name={name} onChange={onChange} placeholder={placeholder} value={value} disabled={disabled} required={required} id={id} defaultValue={defaultValue} />
             </>
         );
     }
