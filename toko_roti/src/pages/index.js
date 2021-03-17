@@ -12,5 +12,7 @@ import TambahAdmin from './tambah/admin.js'
 import EditPenggunaPel from './edit/editPenggunaPel.js';
 import TambahRoti from './tambah/roti.js'
 import EditRoti from './edit/editRoti.js'
+import RotiPelanggan from './roti/rotiPelanggan.js'
+import Keranjang from './keranjang/keranjang.js'
 
-export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword, EditPengguna, TambahAdmin, EditPenggunaPel, TambahRoti, EditRoti }
+export { Login, Register, HomeAdmin, HomePelanggan, RotiAdmin, Laporan, Profil, Pengguna, UbahPassword, EditPengguna, TambahAdmin, EditPenggunaPel, TambahRoti, EditRoti, RotiPelanggan, Keranjang }

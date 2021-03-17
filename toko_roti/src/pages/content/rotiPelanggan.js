@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import rotiGambar from '../../assets/roti.jpg'
 
-class RotiAdminContent extends Component {
+class RotiPelangganContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,35 +38,10 @@ class RotiAdminContent extends Component {
         })
     }
 
-    resetStatus = (idRoti) =>{
-        fetch(`http://localhost:8080/roti/master/roti/status/`+idRoti, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json; ; charset=utf-8",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-                alert(json.errorMessage);
-            } else if (typeof json.errorMessage === "undefined") {
-                alert(
-                    json.errorMessage
-                );
-            }
-            this.fetchRoti()
-        })
-        .catch((e) => {
-            window.alert(e);
-        });
-    }
-
     componentDidMount() {
         this.fetchRoti()
     }
-    render() {
+    render() { 
         return (
             <>
                 <div>
@@ -80,45 +56,34 @@ class RotiAdminContent extends Component {
                             <div className="col-md-12 col-sm-12 col-xs-12">
                                 <div className="x_panel">
                                     <div className="x_title">
-                                        <h2>Data Roti</h2>&nbsp; &nbsp;<Link to="/admin-tambahroti" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Roti</Link>
+                                        <h2>List Roti</h2>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table id="surat_masuk" className="table table-striped table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th><center>No</center></th>
-                                                        <th><center>Nama Roti</center></th>
-                                                        <th><center>Harga Satuan</center></th>
-                                                        <th><center>Stok</center></th>
-                                                        <th><center>Action</center></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {
-                                                        this.state.roti.map((roti, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td><center>{index + 1}</center></td>
-                                                                    <td>{roti.namaRoti}</td>
-                                                                    <td><center>Rp. {roti.hargaSatuan}</center></td>
-                                                                    <td><center>{roti.stokRoti}</center></td>
-                                                                    <td>
-                                                                        <center>
-                                                                            <Link to={"/admin-editroti/"+roti.idRoti}>
-                                                                                <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
-                                                                            </Link>
-                                                                            <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-trash-o" /></button>
-                                                                            <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                        </center>
-                                                                    </td>
-                                                                </tr>
-                                                            )
-                                                        })
-                                                    }
-                                                </tbody>
-                                            </table>
+                                            {
+                                                this.state.roti.map((roti, index) => {
+                                                    return (
+                                                        <>
+                                                        <div className="row row-content padding">
+                                                            <div className="product-wrap mb-20">
+                                                                <div className="product-img b-s" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>
+                                                                    <img src={rotiGambar} alt="..." className="default-img" />
+                                                                </div>
+                                                                <div className="product-content">
+                                                                    <div class="product-header"></div>
+                                                                    <h3 className="b-s" title="Kacang Mede Original" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>{roti.namaRoti}</h3>
+                                                                </div>
+                                                                <div class="product-realprice">&nbsp;</div>
+                                                                <div class="product-price">
+                                                                    <span>&nbsp;&nbsp;Rp. {roti.hargaSatuan}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        </>
+                                                    )
+                                                })
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -163,7 +128,7 @@ class RotiAdminContent extends Component {
                                         </tr>
                                     </tbody>
                                 </table>
-
+                                <button className="text-white btn btn-warning width" title="Detail"><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
                             </div>
                         </div>
                     </div>
@@ -172,5 +137,5 @@ class RotiAdminContent extends Component {
         );
     }
 }
-
-export default RotiAdminContent;
+ 
+export default RotiPelangganContent;

@@ -50,9 +50,6 @@ class Topnav extends Component {
         return (
             <div className="top_nav">
                 <div className="nav_menu">
-                    <div className="nav toggle">
-                        <Link id="menu_toggle"><i className="fa fa-bars" /></Link>
-                    </div>
                     <nav className="nav navbar-nav">
                         <ul className=" navbar-right">
                             <li className="nav-item dropdown open" style={{ paddingLeft: 15 }}>

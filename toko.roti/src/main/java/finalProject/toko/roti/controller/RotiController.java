@@ -1,7 +1,6 @@
 package finalProject.toko.roti.controller;
 
 import finalProject.toko.roti.model.Roti;
-import finalProject.toko.roti.service.JenisService;
 import finalProject.toko.roti.service.RotiService;
 import finalProject.toko.roti.util.CustomErrorType;
 import org.slf4j.Logger;
@@ -23,7 +22,6 @@ public class RotiController {
 
     @Autowired
     RotiService rotiService;
-    JenisService jenisService;
 
     //------------------Get All Roti------------------//
 
@@ -110,5 +108,30 @@ public class RotiController {
 
         rotiService.updateRoti(roti1);
         return new ResponseEntity<>(new CustomErrorType("Data Berhasil Diubah!"), HttpStatus.OK);
+    }
+
+    //------------------Switching Status One Data Only------------------// (check)
+
+    @PutMapping("/roti/status/{idRoti}")
+    public ResponseEntity<?> updateStatusRoti(@PathVariable("idRoti") String idRoti) {
+        logger.info("Mengubah status roti dengan id {}", idRoti);
+
+        Roti roti = rotiService.findById(idRoti);
+
+        if (roti == null) {
+            logger.error("Tidak dapat mengubah data Roti. Roti dengan id {} tidak tersedia.", idRoti);
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data roti. Roti dengan id "
+                    + idRoti + " tidak tersedia."),
+                    HttpStatus.NOT_FOUND);
+        }
+
+        if (roti.isStatusRoti() == true){
+            roti.setStatusRoti(false);
+        }else{
+            roti.setStatusRoti(true);
+        }
+
+        rotiService.status(roti);
+        return new ResponseEntity<>(new CustomErrorType("Status Berhasil Diubah!"), HttpStatus.OK);
     }
 }

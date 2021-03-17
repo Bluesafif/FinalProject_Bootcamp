@@ -56,4 +56,11 @@ public class RotiServiceImpl implements RotiService{
             rotiRepository.updateRoti(roti);
         }
     }
+
+    @Override
+    public void status(Roti roti) {
+        synchronized (this) {
+            rotiRepository.status(roti);
+        }
+    }
 }

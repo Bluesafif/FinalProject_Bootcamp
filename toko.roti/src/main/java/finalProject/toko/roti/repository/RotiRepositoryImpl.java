@@ -16,7 +16,7 @@ public class RotiRepositoryImpl implements RotiRepository{
     @Override
     public List<Roti> findAll() {
         List<Roti> rotiList;
-        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti",
+        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti WHERE a.statusRoti='1'",
                 (rs, rowNum)->
                         new Roti(
                                 rs.getString("idRoti"),
@@ -26,6 +26,7 @@ public class RotiRepositoryImpl implements RotiRepository{
                                 rs.getInt("hargaSatuan"),
                                 rs.getInt("hargaLusin"),
                                 rs.getString("keterangan"),
+                                rs.getBoolean("statusRoti"),
                                 rs.getString("jenisRoti")
                         )
         );
@@ -46,14 +47,15 @@ public class RotiRepositoryImpl implements RotiRepository{
                                 rs.getInt("stokRoti"),
                                 rs.getInt("hargaSatuan"),
                                 rs.getInt("hargaLusin"),
-                                rs.getString("keterangan")
+                                rs.getString("keterangan"),
+                                rs.getBoolean("statusRoti")
                         )).get(0);
     }
 
     @Override
     public void saveRoti(Roti roti) {
-        jdbcTemplate.update("INSERT INTO roti (idRoti, namaRoti, idJenisRoti, stokRoti, hargaSatuan, hargaLusin, keterangan) " +
-                        "VALUES (?,?,?,?,?,?,?)",
+        jdbcTemplate.update("INSERT INTO roti (idRoti, namaRoti, idJenisRoti, stokRoti, hargaSatuan, hargaLusin, keterangan, statusRoti) " +
+                        "VALUES (?,?,?,?,?,?,?,'1')",
                 roti.getIdRoti(), roti.getNamaRoti(), roti.getIdJenisRoti(), roti.getStokRoti(), roti.getHargaSatuan(), roti.getHargaLusin(), roti.getKeterangan());
     }
 
@@ -72,6 +74,7 @@ public class RotiRepositoryImpl implements RotiRepository{
                                 rs.getInt("hargaSatuan"),
                                 rs.getInt("hargaLusin"),
                                 rs.getString("keterangan"),
+                                rs.getBoolean("statusRoti"),
                                 rs.getString("jenisRoti")
                         )).get(0);
     }
@@ -80,5 +83,11 @@ public class RotiRepositoryImpl implements RotiRepository{
     public void updateRoti(Roti roti) {
         jdbcTemplate.update("UPDATE roti SET namaRoti =?, idJenisRoti=?, stokRoti=?, hargaSatuan=?, hargaLusin=?, keterangan=? WHERE idRoti=?",
                 roti.getNamaRoti(), roti.getIdJenisRoti(), roti.getStokRoti(), roti.getHargaSatuan(), roti.getHargaLusin(), roti.getKeterangan(), roti.getIdRoti());
+    }
+
+    @Override
+    public void status(Roti roti) {
+        jdbcTemplate.update("UPDATE roti SET statusRoti=? WHERE idRoti=?",
+                roti.isStatusRoti(), roti.getIdRoti());
     }
 }

@@ -105,10 +105,6 @@ class UbahPassword extends Component {
                         <div className="x_panel">
                             <div className="x_title">
                                 <h2>Form Ganti Password</h2>
-                                <ul className="nav navbar-rigth panel_toolbox">
-                                    <li><Link className="collapse-link"><i className="fa fa-chevron-up"> </i></Link>
-                                    </li>
-                                </ul>
                                 <div className="clearfix" />
                             </div>
                             <div className="x_content">

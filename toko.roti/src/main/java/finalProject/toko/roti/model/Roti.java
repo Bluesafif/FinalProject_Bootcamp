@@ -8,12 +8,15 @@ public class Roti {
     private int hargaSatuan;
     private int hargaLusin;
     private String keterangan;
+    private boolean statusRoti;
     private String jenisRoti;
+    private int kuantitas;
+    private String idDetail;
 
     public Roti() {
     }
 
-    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan) {
+    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti) {
         this.idRoti = idRoti;
         this.namaRoti = namaRoti;
         this.idJenisRoti = idJenisRoti;
@@ -21,9 +24,10 @@ public class Roti {
         this.hargaSatuan = hargaSatuan;
         this.hargaLusin = hargaLusin;
         this.keterangan = keterangan;
+        this.statusRoti = statusRoti;
     }
 
-    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, String jenisRoti) {
+    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti, String jenisRoti) {
         this.idRoti = idRoti;
         this.namaRoti = namaRoti;
         this.idJenisRoti = idJenisRoti;
@@ -31,7 +35,22 @@ public class Roti {
         this.hargaSatuan = hargaSatuan;
         this.hargaLusin = hargaLusin;
         this.keterangan = keterangan;
+        this.statusRoti = statusRoti;
         this.jenisRoti = jenisRoti;
+    }
+
+    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti, String jenisRoti, int kuantitas, String idDetail) {
+        this.idRoti = idRoti;
+        this.namaRoti = namaRoti;
+        this.idJenisRoti = idJenisRoti;
+        this.stokRoti = stokRoti;
+        this.hargaSatuan = hargaSatuan;
+        this.hargaLusin = hargaLusin;
+        this.keterangan = keterangan;
+        this.statusRoti = statusRoti;
+        this.jenisRoti = jenisRoti;
+        this.kuantitas = kuantitas;
+        this.idDetail = idDetail;
     }
 
     public String getIdRoti() {
@@ -90,12 +109,36 @@ public class Roti {
         this.keterangan = keterangan;
     }
 
+    public boolean isStatusRoti() {
+        return statusRoti;
+    }
+
+    public void setStatusRoti(boolean statusRoti) {
+        this.statusRoti = statusRoti;
+    }
+
     public String getJenisRoti() {
         return jenisRoti;
     }
 
     public void setJenisRoti(String jenisRoti) {
         this.jenisRoti = jenisRoti;
+    }
+
+    public int getKuantitas() {
+        return kuantitas;
+    }
+
+    public void setKuantitas(int kuantitas) {
+        this.kuantitas = kuantitas;
+    }
+
+    public String getIdDetail() {
+        return idDetail;
+    }
+
+    public void setIdDetail(String idDetail) {
+        this.idDetail = idDetail;
     }
 
     @Override
@@ -108,7 +151,10 @@ public class Roti {
                 ", hargaSatuan=" + hargaSatuan +
                 ", hargaLusin=" + hargaLusin +
                 ", keterangan='" + keterangan + '\'' +
+                ", statusRoti=" + statusRoti +
                 ", jenisRoti='" + jenisRoti + '\'' +
+                ", kuantitas=" + kuantitas +
+                ", idDetail='" + idDetail + '\'' +
                 '}';
     }
 }

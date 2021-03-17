@@ -14,4 +14,6 @@ public interface RotiService {
     Roti findById(String idRoti);
 
     void updateRoti(Roti roti);
+
+    void status(Roti roti);
 }

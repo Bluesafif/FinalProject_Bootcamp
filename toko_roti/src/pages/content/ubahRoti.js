@@ -136,9 +136,6 @@ class UbahRoti extends Component {
                         <div className="x_panel">
                             <div className="x_title">
                                 <h2>Form Edit Roti</h2>
-                                <ul className="nav navbar-right panel_toolbox">
-                                    <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link></li>
-                                </ul>
                                 <div className="clearfix" />
                             </div>
                             <div className="x_content">

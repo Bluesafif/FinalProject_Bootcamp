@@ -4996,3 +4996,74 @@ ul.notifications {
 .input {
   margin-top: 12px;
 }
+
+.product-wrap {
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  -webkit-box-shadow: 0 2px 8px #ddd;
+  box-shadow: 0 2px 8px #ddd;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.product-img {
+  position: relative;
+  cursor: pointer;
+}
+
+img {
+  width: 100%;
+}
+
+.product-content {
+  padding: 0 10px 10px;
+  margin-top: 10px;
+}
+
+.product-header {
+  display: flex;
+  flex-direction: row;
+}
+
+h3{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.product-price span {
+  margin: 0;
+  line-height: 1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.default-img {
+  width: 245px;
+  height: 200px;
+}
+
+.keranjang-img {
+  width: 85px;
+  height: 65px;
+}
+
+.keranjang-td {
+  padding-top: 2rem;
+}
+
+.padding {
+  padding-left: 30px;
+  padding-right: 3px;
+}
+
+.width {
+  width: 100%;
+}

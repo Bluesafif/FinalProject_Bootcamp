@@ -62,7 +62,7 @@ class AddRoti extends Component {
                             json.errorMessage
                         );
                     }
-                    // this.props.history.push("/admin-roti");
+                    this.props.history.push("/admin-roti");
                 })
                 .catch((e) => {
                     window.alert(e);
@@ -107,9 +107,6 @@ class AddRoti extends Component {
                         <div className="x_panel">
                             <div className="x_title">
                                 <h2>Form Tambah Roti</h2>
-                                <ul className="nav navbar-right panel_toolbox">
-                                    <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link></li>
-                                </ul>
                                 <div className="clearfix" />
                             </div>
                             <div className="x_content">

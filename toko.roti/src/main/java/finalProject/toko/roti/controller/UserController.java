@@ -163,12 +163,17 @@ public class UserController {
         logger.info("Mengubah user dengan id {}", idUser);
 
         User users = userService.findById(idUser);
+        User findUser = userService.findByUsername(user.getUsername());
 
         if (users == null) {
             logger.error("Tidak dapat mengubah data User . User dengan id {} tidak tersedia.", idUser);
             return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data User. User dengan id "
                     + idUser + " tidak tersedia."),
                     HttpStatus.NOT_FOUND);
+        }
+        if (findUser != null) {
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data user. User dengan username "
+                    + user.getUsername() + " sudah tersedia."), HttpStatus.CONFLICT);
         }
 
         users.setNamaLengkap(user.getNamaLengkap());
