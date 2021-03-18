@@ -9,6 +9,9 @@ public class Keranjang {
     private Date tglKeranjang;
     private boolean statusKeranjang;
     List<Roti> rotiList;
+    private String detailKeranjang;
+
+    private String idRoti;
 
     public Keranjang() {
     }
@@ -19,6 +22,7 @@ public class Keranjang {
         this.tglKeranjang = tglKeranjang;
         this.statusKeranjang = statusKeranjang;
     }
+
 
     public String getIdKeranjang() {
         return idKeranjang;
@@ -60,6 +64,14 @@ public class Keranjang {
         this.rotiList = rotiList;
     }
 
+    public String getIdRoti() {
+        return idRoti;
+    }
+
+    public void setIdRoti(String idRoti) {
+        this.idRoti = idRoti;
+    }
+
     @Override
     public String toString() {
         return "Keranjang{" +
@@ -68,6 +80,7 @@ public class Keranjang {
                 ", tglKeranjang=" + tglKeranjang +
                 ", statusKeranjang=" + statusKeranjang +
                 ", rotiList=" + rotiList +
+                ", idRoti='" + idRoti + '\'' +
                 '}';
     }
 }

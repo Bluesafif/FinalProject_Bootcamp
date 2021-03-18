@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 class DashboardPelanggan extends Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class DashboardPelanggan extends Component {
                 <div className="">
                     <div className="page-title">
                         <div className="title_left">
-                            <h3>Dashboard</h3>
+                            <h3>Beranda</h3>
                         </div>
                     </div>
                     <div className="clearfix" />
@@ -21,7 +21,7 @@ class DashboardPelanggan extends Component {
                             <div className="tile-stats">
                                 <div className="icon"><i className="fa fa-check" /></div>
                                 <div className="count">Status</div>
-                                <h3>Umum</h3>
+                                <h3>{this.props.userLogin.role}</h3>
                             </div>
                         </div>
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -67,10 +67,6 @@ class DashboardPelanggan extends Component {
                         <div className="x_panel">
                             <div className="x_title">
                                 <h2>Daftar Roti <small>Terbeli</small></h2>
-                                <ul className="nav navbar-right panel_toolbox">
-                                    <li><Link className="collapse-link"><i className="fa fa-chevron-up" /></Link></li>
-                                    <li><Link className="close-link"><i className="fa fa-close" /></Link></li>
-                                </ul>
                                 <div className="clearfix" />
                             </div>
                             <div className="x_content">
@@ -110,4 +106,15 @@ class DashboardPelanggan extends Component {
     }
 }
 
-export default DashboardPelanggan;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPelanggan);

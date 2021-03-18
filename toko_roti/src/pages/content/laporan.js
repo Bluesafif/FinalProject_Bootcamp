@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import { Search } from '../../component';
 
 class LaporanContent extends Component {

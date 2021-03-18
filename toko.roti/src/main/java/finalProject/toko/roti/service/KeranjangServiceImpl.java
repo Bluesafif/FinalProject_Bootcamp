@@ -3,6 +3,7 @@ package finalProject.toko.roti.service;
 import finalProject.toko.roti.model.Keranjang;
 import finalProject.toko.roti.repository.KeranjangRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,6 +30,20 @@ public class KeranjangServiceImpl implements KeranjangService{
     public void deleteDetailById(String idDetail) {
         synchronized (this) {
             keranjangRepository.deleteDetailById(idDetail);
+        }
+    }
+
+    @Override
+    public void saveKeranjang(Keranjang keranjang) {
+        synchronized (this) {
+            keranjangRepository.saveKeranjang(keranjang);
+        }
+    }
+
+    @Override
+    public void saveDetail(Keranjang keranjang) {
+        synchronized (this) {
+            keranjangRepository.saveDetail(keranjang);
         }
     }
 }

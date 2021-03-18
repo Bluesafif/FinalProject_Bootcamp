@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import rotiGambar from '../../assets/roti.jpg'
+import { connect } from 'react-redux';
 
 class RotiPelangganContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             roti: [],
-            rotiListView: {}
+            rotiListView: {},
+            keranjang: {},
+            qty: 1
         }
     }
 
@@ -38,10 +40,99 @@ class RotiPelangganContent extends Component {
         })
     }
 
+    getKeranjang = () => {
+        fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    keranjang: json,
+                });
+            })
+            .catch(() => {
+                alert("failed fetching data");
+            });
+    }
+
+    addToCart = () => {
+        
+        if (this.state.keranjang === 0) {
+            const objekAdd = {
+                idUser: this.props.userLogin.idUser,
+                detailKeranjang:
+                    {
+                        idRoti: this.state.rotiListView.idRoti,
+                        kuantitas: this.state.qty
+                    }
+            };
+            fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(objekAdd)
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (typeof json.errorMessage !== "undefined") {
+                        alert(json.errorMessage);
+                    } else if (typeof json.errorMessage === "undefined") {
+                        alert(
+                            json.errorMessage
+                        );
+                    }
+                })
+                .catch(() => {
+                    alert("failed fetching data");
+                });
+        } else {
+            const objekAdd2 = {
+                idUser: this.props.userLogin.idUser,
+                idKeranjang: this.state.keranjang.idKeranjang,
+                idRoti: this.state.rotiListView.idRoti,
+                kuantitas: this.state.qty
+            }
+            console.log(this.state.keranjang.idKeranjang);
+            fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                body: JSON.stringify(objekAdd2)
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (typeof json.errorMessage !== "undefined") {
+                        alert(json.errorMessage);
+                    } else if (typeof json.errorMessage === "undefined") {
+                        alert(
+                            json.errorMessage
+                        );
+                    }
+                })
+                .catch(() => {
+                    alert("failed fetching data");
+                });
+        }
+    }
+
     componentDidMount() {
         this.fetchRoti()
+        this.getKeranjang()
+
     }
-    render() { 
+    render() {
+        console.log(this.state.keranjang);
         return (
             <>
                 <div>
@@ -128,7 +219,7 @@ class RotiPelangganContent extends Component {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <button className="text-white btn btn-warning width" title="Detail"><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
+                                <button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
                             </div>
                         </div>
                     </div>
@@ -137,5 +228,16 @@ class RotiPelangganContent extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
  
-export default RotiPelangganContent;
+export default connect(mapStateToProps, mapDispatchToProps)(RotiPelangganContent);

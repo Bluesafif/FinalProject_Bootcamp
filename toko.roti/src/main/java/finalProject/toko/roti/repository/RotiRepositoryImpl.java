@@ -14,9 +14,9 @@ public class RotiRepositoryImpl implements RotiRepository{
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Roti> findAll() {
+    public List<Roti> findAll(String paginationSelect) {
         List<Roti> rotiList;
-        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti WHERE a.statusRoti='1'",
+        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti WHERE a.statusRoti='1' ORDER BY a.idRoti ASC "+paginationSelect,
                 (rs, rowNum)->
                         new Roti(
                                 rs.getString("idRoti"),
@@ -89,5 +89,13 @@ public class RotiRepositoryImpl implements RotiRepository{
     public void status(Roti roti) {
         jdbcTemplate.update("UPDATE roti SET statusRoti=? WHERE idRoti=?",
                 roti.isStatusRoti(), roti.getIdRoti());
+    }
+
+    @Override
+    public int findAllCountObat() {
+        int countRoti;
+        countRoti = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM roti",
+                Integer.class);
+        return countRoti;
     }
 }

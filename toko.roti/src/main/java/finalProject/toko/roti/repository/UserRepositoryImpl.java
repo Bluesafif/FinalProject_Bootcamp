@@ -88,7 +88,7 @@ public class UserRepositoryImpl implements UserRepository{
     @Override
     public List<User> findAll() {
         List<User> userList;
-        userList = jdbcTemplate.query("SELECT * FROM user ORDER BY role ASC",
+        userList = jdbcTemplate.query("SELECT * FROM user ORDER BY role, namaLengkap ASC",
                 (rs, rowNum)->
                         new User(
                                 rs.getString("idUser"),

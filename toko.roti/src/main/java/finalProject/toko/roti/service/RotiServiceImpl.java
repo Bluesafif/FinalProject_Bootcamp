@@ -14,8 +14,8 @@ public class RotiServiceImpl implements RotiService{
     RotiRepository rotiRepository;
 
     @Override
-    public List<Roti> findAll() {
-        List<Roti> rotiList = rotiRepository.findAll();
+    public List<Roti> findAll(String paginationSelect) {
+        List<Roti> rotiList = rotiRepository.findAll(paginationSelect);
         return rotiList;
     }
 
@@ -62,5 +62,10 @@ public class RotiServiceImpl implements RotiService{
         synchronized (this) {
             rotiRepository.status(roti);
         }
+    }
+
+    @Override
+    public int findAllCountObat() {
+        return rotiRepository.findAllCountObat();
     }
 }

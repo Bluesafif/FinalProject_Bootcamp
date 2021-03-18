@@ -5067,3 +5067,11 @@ h3{
 .width {
   width: 100%;
 }
+
+.pagination{
+  
+  /* background: blue; */
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}

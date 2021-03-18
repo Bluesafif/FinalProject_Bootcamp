@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Button, Input, Label } from '../../component';
 import { connect } from 'react-redux';
 

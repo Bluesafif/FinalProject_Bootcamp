@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Input, Label, Textarea } from '../../component';
-import { Link } from 'react-router-dom'
 
 class UbahPengguna extends Component {
     constructor(props) {

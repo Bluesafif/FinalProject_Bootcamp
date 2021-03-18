@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -26,12 +27,30 @@ public class RotiController {
     //------------------Get All Roti------------------//
 
     @GetMapping("/roti")
-    public ResponseEntity<List<Roti>> listAllRoti(){
-        List<Roti> rotiList = rotiService.findAll();
+    public ResponseEntity<List<Roti>> listAllRoti(@RequestParam Map<Object, Object> pagination){
+        String paginationSelect = "";
+        if (pagination.containsKey("limit")){
+            paginationSelect += " LIMIT " + pagination.get("limit");
+        }
+        if(pagination.containsKey("offset")){
+            paginationSelect += " OFFSET " + pagination.get("offset");
+        }
+        List<Roti> rotiList = rotiService.findAll(paginationSelect);
         if (rotiList.isEmpty()) {
             return new ResponseEntity<>(rotiList, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(rotiList, HttpStatus.OK);
+    }
+
+    //------------------Count All Roti------------------//
+
+    @GetMapping("/roti-count/")
+    public ResponseEntity<?> countRoti(){
+        int listRoti = rotiService.findAllCountObat();
+        if (listRoti == 0){
+            return new ResponseEntity<>(listRoti, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listRoti,HttpStatus.OK);
     }
 
     //------------------Save a Data------------------//

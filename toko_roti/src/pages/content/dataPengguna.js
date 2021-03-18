@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Input, Label } from '../../component';
+import { connect } from 'react-redux';
 
 class DataPengguna extends Component {
     constructor(props) {
@@ -148,12 +149,16 @@ class DataPengguna extends Component {
                                                                     <td>
                                                                         <center>
                                                                             {user.role === "Admin"
-                                                                                ? <>
-                                                                                    <Link to={"/admin-editpengguna/"+user.idUser}>
-                                                                                        <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
-                                                                                    </Link>
-                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                                  </>
+                                                                                ? user.idUser === this.props.userLogin.idUser
+                                                                                    ? <>
+                                                                                        <Link to={"/admin-editpengguna/"+user.idUser}>
+                                                                                            <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                        </Link>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                    </>
+                                                                                    : <>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                    </>
                                                                                 : user.role === "Member"
                                                                                     ? <>
                                                                                         <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
@@ -242,4 +247,15 @@ class DataPengguna extends Component {
     }
 }
 
-export default DataPengguna;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+ 
+export default connect(mapStateToProps, mapDispatchToProps)(DataPengguna);

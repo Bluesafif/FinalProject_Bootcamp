@@ -5,7 +5,7 @@ import finalProject.toko.roti.model.Roti;
 import java.util.List;
 
 public interface RotiService {
-    List<Roti> findAll();
+    List<Roti> findAll(String paginationSelect);
 
     Roti findByNamaRoti(String namaRoti);
 
@@ -16,4 +16,6 @@ public interface RotiService {
     void updateRoti(Roti roti);
 
     void status(Roti roti);
+
+    int findAllCountObat();
 }

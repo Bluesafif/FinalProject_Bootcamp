@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 class DashboardAdmin extends Component {
     constructor(props) {
@@ -12,7 +11,7 @@ class DashboardAdmin extends Component {
                 <div className="">
                     <div className="page-title">
                         <div className="title_left">
-                            <h3>Dashboard</h3>
+                            <h3>Beranda</h3>
                         </div>
                     </div>
                     <div className="clearfix" />

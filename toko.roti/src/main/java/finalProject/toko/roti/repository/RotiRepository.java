@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RotiRepository {
 
-    List<Roti> findAll();
+    List<Roti> findAll(String paginationSelect);
 
     Roti findByNamaRoti(String namaRoti);
 
@@ -17,4 +17,6 @@ public interface RotiRepository {
     void updateRoti(Roti roti);
 
     void status(Roti roti);
+
+    int findAllCountObat();
 }

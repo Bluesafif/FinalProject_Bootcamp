@@ -8,4 +8,8 @@ public interface KeranjangRepository {
     Keranjang findAll(String idUser);
 
     void deleteDetailById(String idDetail);
+
+    void saveKeranjang(Keranjang keranjang);
+
+    void saveDetail(Keranjang keranjang);
 }

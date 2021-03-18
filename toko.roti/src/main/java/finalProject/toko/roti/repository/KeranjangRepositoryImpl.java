@@ -7,7 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Repository("KeranjangRepository")
 public class KeranjangRepositoryImpl implements KeranjangRepository {
@@ -53,5 +55,30 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
     @Override
     public void deleteDetailById(String idDetail) {
         jdbcTemplate.update("DELETE FROM detailKeranjang WHERE idDetail='"+idDetail+"'");
+    }
+
+    @Override
+    public void saveKeranjang(Keranjang keranjang) {
+        String uuid = String.valueOf(UUID.randomUUID());
+        jdbcTemplate.update("INSERT INTO keranjang (idKeranjang, idUser, tglKeranjang, statusKeranjang) VALUES (?,?,?,'1')",
+                uuid, keranjang.getIdUser(), new Date()
+                );
+        for (Roti roti : keranjang.getRotiList()) {
+            String uuid2 = String.valueOf(UUID.randomUUID());
+            jdbcTemplate.update("INSERT INTO detailKeranjang (idDetail, idKeranjang, idRoti, kuantitas) VALUES (?,?,?,?)",
+                    uuid2, uuid, roti.getIdRoti(), roti.getKuantitas()
+            );
+        }
+    }
+
+    @Override
+    public void saveDetail(Keranjang keranjang) {
+            String uuid2 = String.valueOf(UUID.randomUUID());
+            System.out.println("keranjang.getIdKeranjang()"+keranjang.getIdKeranjang());
+            System.out.println("keranjang.getIdRoti()"+keranjang.getIdRoti());
+            jdbcTemplate.update("INSERT INTO detailKeranjang (idDetail, idKeranjang, idRoti, kuantitas) VALUES (?,?,?,?)",
+                    uuid2, keranjang.getIdKeranjang(), keranjang.getIdRoti(), 1
+            );
+
     }
 }

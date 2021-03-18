@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button, Input, Label, Textarea } from '../../component';
-import { Link } from 'react-router-dom'
+import { Button, Label } from '../../component';
 import rotiGambar from '../../assets/roti.jpg'
 import { connect } from 'react-redux';
+import $ from "jquery";
 
 class DetailKeranjang extends Component {
     constructor(props) {
@@ -28,12 +28,19 @@ class DetailKeranjang extends Component {
         })
             .then((response) => response.json())
             .then((json) => {
+                console.log(json);
                 this.setState({
                     keranjang: json,
                 });
-                this.setState({
-                    rotiList: this.state.keranjang.rotiList,
-                });
+                if ($.isEmptyObject(this.state.keranjang) === true) {
+                    this.setState({
+                        rotiList: []
+                    })
+                } else {
+                    this.setState({
+                        rotiList: this.state.keranjang.rotiList,
+                    });
+                }
                 if (this.props.userLogin.role === "Member") {
                     let hargaTotal = [];
                     for (let i = 0; i < this.state.rotiList.length; i++) {
@@ -76,7 +83,6 @@ class DetailKeranjang extends Component {
                 })
             })
             .catch(() => {
-                alert("failed fetching data");
             });
     };
 
@@ -108,7 +114,7 @@ class DetailKeranjang extends Component {
     }
 
     render() {
-        console.log(this.state.keranjang);
+       
         return (
             <div>
                 <div className="">
@@ -139,7 +145,7 @@ class DetailKeranjang extends Component {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {Object.keys(this.state.keranjang) === 0
+                                                {this.state.rotiList.length === 0
                                                     ? <tr>
                                                         <td colSpan="6" align="center">Keranjang Kosong</td>
                                                     </tr>

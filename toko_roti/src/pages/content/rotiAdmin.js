@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import Pagination from '@material-ui/lab/Pagination';
 
 class RotiAdminContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             roti: [],
-            rotiListView: {}
+            rotiListView: {},
+            offset: 0,
+            limit: 5,
+            count: ""
         }
     }
 
     fetchRoti = () => {
-        fetch(`http://localhost:8080/roti/master/roti`, {
+        fetch(`http://localhost:8080/roti/master/roti?limit=`+this.state.limit+`&offset=`+this.state.offset+'', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -29,6 +33,35 @@ class RotiAdminContent extends Component {
                 alert("failed fetching data");
             });
     };
+
+    getCount = () => {
+        fetch('http://localhost:8080/roti/master/roti-count/', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
+
+    handleChange = (event, value) => {
+
+        this.setState({
+            offset: value
+        })
+        console.log("value", value);
+        this.fetchRoti(value, 5);
+    }
 
     view = (index) => {
         const rotiView = this.state.roti[index]
@@ -64,6 +97,7 @@ class RotiAdminContent extends Component {
 
     componentDidMount() {
         this.fetchRoti()
+        this.getCount()
     }
     render() {
         return (
@@ -119,6 +153,10 @@ class RotiAdminContent extends Component {
                                                     }
                                                 </tbody>
                                             </table>
+                                            {/* <div className="pagination float-right"> */}
+                                                {/* <Typography>Page: {page}</Typography> */}
+                                                {/* <Pagination count={this.state.count} offset={this.state.offset} onChange={this.handleChange} /> */}
+                                            {/* </div> */}
                                         </div>
                                     </div>
                                 </div>
