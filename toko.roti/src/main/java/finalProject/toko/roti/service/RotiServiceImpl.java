@@ -68,4 +68,9 @@ public class RotiServiceImpl implements RotiService{
     public int findAllCountObat() {
         return rotiRepository.findAllCountObat();
     }
+
+    @Override
+    public int countStokRoti() {
+        return rotiRepository.countStokRoti();
+    }
 }

@@ -83,7 +83,17 @@ class UbahRoti extends Component {
         if (this.state.operator === "tambah") {
             stokUbah = this.state.stokRoti + Number(this.state.tambahRoti);
         } else {
-            stokUbah = this.state.stokRoti - Number(this.state.tambahRoti);
+            if (Number(this.state.tambahRoti > 0)) {
+                if (this.state.stokRoti >= Number(this.state.tambahRoti)) {
+                    stokUbah = this.state.stokRoti - Number(this.state.tambahRoti);
+                } else {
+                    stokUbah = this.state.stokRoti
+                    alert("Input Roti Tidak Boleh Lebih Besar Dari Stok Roti")
+                }
+            } else {
+                stokUbah = this.state.stokRoti
+                alert("Input Roti Tidak Boleh Kurang dari 0")
+            }
         }
 
         const objekUbah = {

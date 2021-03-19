@@ -18,4 +18,6 @@ public interface RotiService {
     void status(Roti roti);
 
     int findAllCountObat();
+
+    int countStokRoti();
 }

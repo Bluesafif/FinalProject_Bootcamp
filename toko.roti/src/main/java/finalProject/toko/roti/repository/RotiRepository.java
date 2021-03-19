@@ -19,4 +19,6 @@ public interface RotiRepository {
     void status(Roti roti);
 
     int findAllCountObat();
+
+    int countStokRoti();
 }

@@ -116,17 +116,17 @@ public class RotiController {
             return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data Roti. Roti dengan id "
                     + idRoti + " tidak tersedia."),
                     HttpStatus.NOT_FOUND);
+        } else {
+            roti1.setNamaRoti(roti.getNamaRoti());
+            roti1.setIdJenisRoti(roti.getIdJenisRoti());
+            roti1.setStokRoti(roti.getStokRoti());
+            roti1.setHargaSatuan(roti.getHargaSatuan());
+            roti1.setHargaLusin(roti.getHargaLusin());
+            roti1.setKeterangan(roti.getKeterangan());
+
+            rotiService.updateRoti(roti1);
+            return new ResponseEntity<>(new CustomErrorType("Data Berhasil Diubah!"), HttpStatus.OK);
         }
-
-        roti1.setNamaRoti(roti.getNamaRoti());
-        roti1.setIdJenisRoti(roti.getIdJenisRoti());
-        roti1.setStokRoti(roti.getStokRoti());
-        roti1.setHargaSatuan(roti.getHargaSatuan());
-        roti1.setHargaLusin(roti.getHargaLusin());
-        roti1.setKeterangan(roti.getKeterangan());
-
-        rotiService.updateRoti(roti1);
-        return new ResponseEntity<>(new CustomErrorType("Data Berhasil Diubah!"), HttpStatus.OK);
     }
 
     //------------------Switching Status One Data Only------------------// (check)
@@ -152,5 +152,16 @@ public class RotiController {
 
         rotiService.status(roti);
         return new ResponseEntity<>(new CustomErrorType("Status Berhasil Diubah!"), HttpStatus.OK);
+    }
+
+    //------------------Sum Stok Roti------------------// (check)
+
+    @GetMapping("/roti/stok-count")
+    public ResponseEntity<?> countStokRoti(){
+        int stokRoti = rotiService.countStokRoti();
+        if (stokRoti == 0){
+            return new ResponseEntity<>(new CustomErrorType("Tidak ada roti yang tersedia"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(stokRoti, HttpStatus.OK);
     }
 }

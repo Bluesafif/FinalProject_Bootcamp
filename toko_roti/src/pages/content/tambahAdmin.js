@@ -47,22 +47,34 @@ class AddAdmin extends Component {
                 },
                 body: JSON.stringify(objekAdd),
             })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (typeof json.errorMessage !== "undefined") {
-                        alert(json.errorMessage);
-                    } else if (typeof json.errorMessage === "undefined") {
-                        alert(
-                            json.errorMessage
-                        );
-                        this.props.history.push("/admin-pengguna");
-                    }
-                })
-                .catch((e) => {
-                    window.alert(e);
-                });
+            .then((response) => response.json())
+            .then((json) => {
+                if (typeof json.errorMessage !== "undefined") {
+                    alert(json.errorMessage);
+                } else if (typeof json.errorMessage === "undefined") {
+                    alert(
+                        json.errorMessage
+                    );
+                }
+                // this.props.history.push("/admin-pengguna");
+            })
+            .catch((e) => {
+                window.alert(e);
+            });
+            this.reset()
         }
     };
+
+    reset = () => {
+        this.setState({
+            idUser: "",
+            namaLengkap: "",
+            username: "",
+            nomorTelepon: "",
+            email: "",
+            alamat: ""
+        })
+    }
 
     render() {
         return (
@@ -121,7 +133,7 @@ class AddAdmin extends Component {
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default">Reset</Button>
+                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button type="submit" className="btn btn-success" name="edit" onClick={this.doTambahAdmin}>Simpan</Button>
                                         </div>
                                     </div>

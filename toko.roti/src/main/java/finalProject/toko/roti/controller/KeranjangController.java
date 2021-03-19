@@ -60,8 +60,15 @@ public class KeranjangController {
             return new ResponseEntity<>(new CustomErrorType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
         } else {
             keranjangService.saveDetail(keranjang);
-            System.out.println("keranjang :"+ keranjang);
             return new ResponseEntity<>(new CustomErrorType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
         }
+    }
+
+    //------------------Update Qty Cart Detail------------------//
+
+    @PutMapping("/update-qty")
+    public ResponseEntity<?> updateQtyDetail(@RequestParam String idDetail, int kuantitas) {
+        keranjangService.updateKuantitas(idDetail, kuantitas);
+        return new ResponseEntity<>(new CustomErrorType("Data berhasil diedit"), HttpStatus.CREATED);
     }
 }

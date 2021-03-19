@@ -3,8 +3,35 @@ import React, { Component } from 'react';
 class DashboardAdmin extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            count: ""
+        }
     }
+
+    rotiCreated = () => {
+        fetch('http://localhost:8080/roti/master/roti/stok-count', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: json
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
+
+    componentDidMount(){
+        this.rotiCreated()
+    }
+
     render() {
         return (
             <div>
@@ -19,7 +46,7 @@ class DashboardAdmin extends Component {
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
                                 <div className="icon"><i className="fa fa-arrow-down" /></div>
-                                <div className="count">0</div>
+                                <div className="count">{this.state.count}</div>
                                 <h3>Roti Terbuat</h3>
                             </div>
                         </div>

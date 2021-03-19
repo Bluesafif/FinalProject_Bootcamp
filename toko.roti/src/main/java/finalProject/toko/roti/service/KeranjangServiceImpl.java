@@ -19,7 +19,7 @@ public class KeranjangServiceImpl implements KeranjangService{
         Keranjang pd;
         try{
             pd = keranjangRepository.findAll(idUser);
-        }catch (IndexOutOfBoundsException e){
+        }catch (EmptyResultDataAccessException e){
             System.out.println(e);
             pd = null;
         }
@@ -44,6 +44,13 @@ public class KeranjangServiceImpl implements KeranjangService{
     public void saveDetail(Keranjang keranjang) {
         synchronized (this) {
             keranjangRepository.saveDetail(keranjang);
+        }
+    }
+
+    @Override
+    public void updateKuantitas(String idDetail, int kuantitas) {
+        synchronized (this) {
+            keranjangRepository.updateKuantitas(idDetail, kuantitas);
         }
     }
 }

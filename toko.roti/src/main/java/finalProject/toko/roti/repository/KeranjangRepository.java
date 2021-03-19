@@ -12,4 +12,6 @@ public interface KeranjangRepository {
     void saveKeranjang(Keranjang keranjang);
 
     void saveDetail(Keranjang keranjang);
+
+    void updateKuantitas(String idDetail, int kuantitas);
 }

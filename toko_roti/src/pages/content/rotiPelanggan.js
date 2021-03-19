@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import rotiGambar from '../../assets/roti.jpg'
 import { connect } from 'react-redux';
+import $ from "jquery";
 
 class RotiPelangganContent extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class RotiPelangganContent extends Component {
             roti: [],
             rotiListView: {},
             keranjang: {},
+            rotiList: [],
             qty: 1
         }
     }
@@ -49,27 +51,32 @@ class RotiPelangganContent extends Component {
                 "Access-Control-Allow-Origin": "*",
             }
         })
-            .then((response) => response.json())
-            .then((json) => {
-                this.setState({
-                    keranjang: json,
-                });
-            })
-            .catch(() => {
-                alert("failed fetching data");
+        .then((response) => response.json())
+        .then((json) => {
+            this.setState({
+                keranjang: json
             });
+            if ($.isEmptyObject(json) === true) {
+                this.setState({
+                    rotiList: []
+                });
+            } else {
+                this.setState({
+                    rotiList: this.state.keranjang.rotiList
+                });
+            }
+        })
+        .catch(() => {
+        });
     }
 
     addToCart = () => {
-        
-        if (this.state.keranjang === 0) {
+        this.getKeranjang()
+        if ($.isEmptyObject(this.state.keranjang) === true) {
             const objekAdd = {
                 idUser: this.props.userLogin.idUser,
-                detailKeranjang:
-                    {
-                        idRoti: this.state.rotiListView.idRoti,
-                        kuantitas: this.state.qty
-                    }
+                idRoti: this.state.rotiListView.idRoti,
+                kuantitas: this.state.qty
             };
             fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
                 method: "POST",
@@ -80,19 +87,18 @@ class RotiPelangganContent extends Component {
                 },
                 body: JSON.stringify(objekAdd)
             })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (typeof json.errorMessage !== "undefined") {
-                        alert(json.errorMessage);
-                    } else if (typeof json.errorMessage === "undefined") {
-                        alert(
-                            json.errorMessage
-                        );
-                    }
-                })
-                .catch(() => {
-                    alert("failed fetching data");
-                });
+            .then((response) => response.json())
+            .then((json) => {
+                if (typeof json.errorMessage !== "undefined") {
+                    alert(json.errorMessage);
+                } else if (typeof json.errorMessage === "undefined") {
+                    alert(
+                        json.errorMessage
+                    );
+                }
+            })
+            .catch(() => {
+            });
         } else {
             const objekAdd2 = {
                 idUser: this.props.userLogin.idUser,
@@ -100,16 +106,25 @@ class RotiPelangganContent extends Component {
                 idRoti: this.state.rotiListView.idRoti,
                 kuantitas: this.state.qty
             }
-            console.log(this.state.keranjang.idKeranjang);
-            fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(objekAdd2)
-            })
+            let check;
+            for (let i = 0; i < this.state.rotiList.length; i++) {
+                if (this.state.rotiList[i].idRoti === objekAdd2.idRoti) {
+                    check = true
+                    break;
+                } else {
+                    check = false
+                }
+            }
+            if (check === false || this.state.rotiList.length === 0) {
+                fetch(`http://localhost:8080/roti/keranjang/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify(objekAdd2)
+                })
                 .then((response) => response.json())
                 .then((json) => {
                     if (typeof json.errorMessage !== "undefined") {
@@ -118,21 +133,26 @@ class RotiPelangganContent extends Component {
                         alert(
                             json.errorMessage
                         );
+                        window.location.reload();
                     }
                 })
                 .catch(() => {
                     alert("failed fetching data");
                 });
+            } else {
+                alert("Roti Sudah Tersedia di Keranjang")
+            }
         }
     }
 
     componentDidMount() {
         this.fetchRoti()
         this.getKeranjang()
-
     }
+    
     render() {
         console.log(this.state.keranjang);
+        console.log(this.state.rotiList);
         return (
             <>
                 <div>
@@ -162,11 +182,12 @@ class RotiPelangganContent extends Component {
                                                                     <img src={rotiGambar} alt="..." className="default-img" />
                                                                 </div>
                                                                 <div className="product-content">
-                                                                    <div class="product-header"></div>
-                                                                    <h3 className="b-s" title="Kacang Mede Original" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>{roti.namaRoti}</h3>
+                                                                    <div className="product-header"></div>
+                                                                    <h3 className="b-s" title="Kacang Mede Original" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>{roti.namaRoti} &nbsp;
+                                                                    {roti.stokRoti === 0 && <span className="badge badge-danger">Habis</span>}</h3>
                                                                 </div>
-                                                                <div class="product-realprice">&nbsp;</div>
-                                                                <div class="product-price">
+                                                                <div className="product-realprice">&nbsp;</div>
+                                                                <div className="product-price">
                                                                     <span>&nbsp;&nbsp;Rp. {roti.hargaSatuan}</span>
                                                                 </div>
                                                             </div>
@@ -219,7 +240,10 @@ class RotiPelangganContent extends Component {
                                         </tr>
                                     </tbody>
                                 </table>
-                                <button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
+                                {this.state.rotiListView.stokRoti === 0
+                                    ?<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" disabled="disabled"><i className="fa fa-times" /> Stok Habis</button>
+                                    :<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
+                                }
                             </div>
                         </div>
                     </div>

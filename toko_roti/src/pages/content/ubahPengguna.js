@@ -69,22 +69,31 @@ class UbahPengguna extends Component {
             },
             body: JSON.stringify(objekUbah)
         })
-            .then((response) => response.json())
-            .then(json => {
-                if (typeof json.errorMessage !== "undefined") {
-                    alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
-                    alert(
-                        json.errorMessage
-                    );
-                }
-                this.props.history.push("/admin-pengguna")
-            })
-            .catch((e) => {
-                window.alert(e);
-            });
-            
-        }
+        .then((response) => response.json())
+        .then(json => {
+            if (typeof json.errorMessage !== "undefined") {
+                alert(json.errorMessage);
+            } else if (typeof json.errorMessage === "undefined") {
+                alert(
+                    json.errorMessage
+                );
+            }
+            this.props.history.push("/admin-pengguna")
+        })
+        .catch((e) => {
+            window.alert(e);
+        });
+    }
+
+    reset = () => {
+        this.setState({
+            namaLengkap: this.state.userProfil.namaLengkap,
+            username: this.state.userProfil.username,
+            nomorTelepon: this.state.userProfil.nomorTelepon,
+            email: this.state.userProfil.email,
+            alamat: this.state.userProfil.alamat
+        })
+    }
 
     render() {
         return (
@@ -143,7 +152,7 @@ class UbahPengguna extends Component {
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default">Reset</Button>
+                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button type="submit" className="btn btn-success" name="edit" onClick={this.saveUbah}>Simpan</Button>
                                         </div>
                                     </div>

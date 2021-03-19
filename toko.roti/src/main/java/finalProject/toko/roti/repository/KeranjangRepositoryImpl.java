@@ -20,6 +20,7 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
     @Override
     public Keranjang findAll(String idUser) {
         Keranjang keranjang;
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+idUser);
         keranjang = jdbcTemplate.queryForObject("SELECT * FROM keranjang " +
                         "WHERE idUser='" + idUser + "'",
                 (rs, rowNum) ->
@@ -62,23 +63,26 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
         String uuid = String.valueOf(UUID.randomUUID());
         jdbcTemplate.update("INSERT INTO keranjang (idKeranjang, idUser, tglKeranjang, statusKeranjang) VALUES (?,?,?,'1')",
                 uuid, keranjang.getIdUser(), new Date()
-                );
-        for (Roti roti : keranjang.getRotiList()) {
-            String uuid2 = String.valueOf(UUID.randomUUID());
-            jdbcTemplate.update("INSERT INTO detailKeranjang (idDetail, idKeranjang, idRoti, kuantitas) VALUES (?,?,?,?)",
-                    uuid2, uuid, roti.getIdRoti(), roti.getKuantitas()
-            );
-        }
+        );
+        String uuid2 = String.valueOf(UUID.randomUUID());
+        jdbcTemplate.update("INSERT INTO detailKeranjang (idDetail, idKeranjang, idRoti, kuantitas) VALUES (?,?,?,?)",
+                uuid2, uuid, keranjang.getIdRoti(), 1
+        );
     }
 
     @Override
     public void saveDetail(Keranjang keranjang) {
             String uuid2 = String.valueOf(UUID.randomUUID());
-            System.out.println("keranjang.getIdKeranjang()"+keranjang.getIdKeranjang());
-            System.out.println("keranjang.getIdRoti()"+keranjang.getIdRoti());
             jdbcTemplate.update("INSERT INTO detailKeranjang (idDetail, idKeranjang, idRoti, kuantitas) VALUES (?,?,?,?)",
                     uuid2, keranjang.getIdKeranjang(), keranjang.getIdRoti(), 1
             );
 
+    }
+
+    @Override
+    public void updateKuantitas(String idDetail, int kuantitas) {
+        jdbcTemplate.update("UPDATE detailKeranjang SET kuantitas=? WHERE idDetail=?",
+                kuantitas, idDetail
+                );
     }
 }

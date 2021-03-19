@@ -98,4 +98,12 @@ public class RotiRepositoryImpl implements RotiRepository{
                 Integer.class);
         return countRoti;
     }
+
+    @Override
+    public int countStokRoti() {
+        int stokRoti;
+        stokRoti = jdbcTemplate.queryForObject("SELECT SUM(stokRoti) AS Jumlah FROM roti WHERE statusROti=1",
+                Integer.class);
+        return stokRoti;
+    }
 }
