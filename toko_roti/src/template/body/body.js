@@ -12,6 +12,7 @@ class Body extends Component {
             <Switch>
                 <Route exact path="/login" component={props =>   <Login {...props} />}/>
                 <Route path="/register" component={props =>   <Register {...props} />}/>
+                <Route path="/ubah-password" component={props =>   <UbahPassword {...props} />}/>
                 <Route path="/admin" component={props =>   <HomeAdmin {...props} />}/>
                 <Route path="/admin-roti" component={props =>   <RotiAdmin {...props} />}/>
                 <Route path="/admin-laporan" component={props =>   <Laporan {...props} />}/>
@@ -25,7 +26,6 @@ class Body extends Component {
                 <Route path="/pelanggan-keranjang" component={props =>   <Keranjang {...props} />}/>
                 <Route path="/pelanggan-editpelanggan/:idUser" component={props =>   <EditPenggunaPel {...props} />}/>
                 <Route path="/data-pelanggan" component={props =>   <Profil {...props} />}/>
-                <Route path="/ubah-password" component={props =>   <UbahPassword {...props} />}/>
             </Switch>
         );
     }

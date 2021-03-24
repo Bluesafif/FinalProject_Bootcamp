@@ -9,6 +9,8 @@ public class Roti {
     private int hargaLusin;
     private String keterangan;
     private boolean statusRoti;
+    private int harga;
+    private int totalHarga;
     private String jenisRoti;
     private int kuantitas;
     private String idDetail;
@@ -39,7 +41,7 @@ public class Roti {
         this.jenisRoti = jenisRoti;
     }
 
-    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti, String jenisRoti, int kuantitas, String idDetail) {
+    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti, int harga, int totalHarga, int kuantitas) {
         this.idRoti = idRoti;
         this.namaRoti = namaRoti;
         this.idJenisRoti = idJenisRoti;
@@ -48,6 +50,21 @@ public class Roti {
         this.hargaLusin = hargaLusin;
         this.keterangan = keterangan;
         this.statusRoti = statusRoti;
+        this.harga = harga;
+        this.totalHarga = totalHarga;
+        this.kuantitas = kuantitas;
+    }
+
+    public Roti(String idRoti, String namaRoti, String idJenisRoti, int stokRoti, int hargaSatuan, int hargaLusin, String keterangan, boolean statusRoti, int totalHarga, String jenisRoti, int kuantitas, String idDetail) {
+        this.idRoti = idRoti;
+        this.namaRoti = namaRoti;
+        this.idJenisRoti = idJenisRoti;
+        this.stokRoti = stokRoti;
+        this.hargaSatuan = hargaSatuan;
+        this.hargaLusin = hargaLusin;
+        this.keterangan = keterangan;
+        this.statusRoti = statusRoti;
+        this.totalHarga = totalHarga;
         this.jenisRoti = jenisRoti;
         this.kuantitas = kuantitas;
         this.idDetail = idDetail;
@@ -115,6 +132,22 @@ public class Roti {
 
     public void setStatusRoti(boolean statusRoti) {
         this.statusRoti = statusRoti;
+    }
+
+    public int getHarga() {
+        return harga;
+    }
+
+    public void setHarga(int harga) {
+        this.harga = harga;
+    }
+
+    public int getTotalHarga() {
+        return totalHarga;
+    }
+
+    public void setTotalHarga(int totalHarga) {
+        this.totalHarga = totalHarga;
     }
 
     public String getJenisRoti() {

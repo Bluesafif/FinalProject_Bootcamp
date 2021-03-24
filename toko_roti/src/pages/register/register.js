@@ -71,14 +71,25 @@ class Register extends Component {
         }
     };
 
+    validation = () => {
+        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
+            this.props.history.push("/admin")
+        }
+    }
+
     render() {
+        this.validation()
         return (
             <body className="coverbg">
                 <div className="regis_wrapper">
                     <section className="login_content">
                         <div className="form">
-                            <img src={logo} height="125" alt="Logo" />
-                            <h4>Silahkan,<br />Buat Akun Baru</h4>
+                            <img src={logo} height="150" alt="Logo" />
+                            <h4>Buat Akun Baru</h4>
                             <div>
                                 <Input type="text" className="form-control" name="namaLengkap" placeholder="Nama Lengkap" required="required" onChange={this.setValue} value={this.state.namaLengkap} />
                             </div>
@@ -88,9 +99,9 @@ class Register extends Component {
                             <div>
                                 <Input type="text" className="form-control" name="nomorTelepon" placeholder="Nomor Telepon" required="required" onChange={this.setValue} value={this.state.nomorTelepon} />
                             </div>
-                            <div>
+                            <span>
                                 <Input type="email" className="form-control" name="email" placeholder="Surat Elektronik" required="required" onChange={this.setValue} value={this.state.email} />
-                            </div>
+                            </span>
                             <div>
                                 <Input type="text" className="form-control" name="username" placeholder="Nama Pengguna" required="required" onChange={this.setValue} value={this.state.username} />
                             </div>
@@ -101,7 +112,7 @@ class Register extends Component {
                                 <Input type="password" className="form-control" name="passwordUlangi" placeholder="Masukkan Ulang Kata Sandi" required="required" onChange={this.setValue} value={this.state.passwordUlangi} />
                             </div>
                             <div>
-                                <Button className="btn btn-success form-control" onClick={this.doRegis}>Buat Akun</Button>
+                                <Button className="btn btn-success form-control margin-top" onClick={this.doRegis}>Buat Akun</Button>
                             </div>
                             <div className="clearfix" />
                             <div className="separator">

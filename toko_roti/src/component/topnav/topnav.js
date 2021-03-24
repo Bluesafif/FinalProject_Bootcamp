@@ -50,7 +50,7 @@ class Topnav extends Component {
         return (
             <div className="top_nav">
                 <div className="nav_menu">
-                    <nav className="nav navbar-nav">
+                    <div className="nav navbar-nav">
                         <ul className=" navbar-right">
                             <li className="nav-item dropdown open" style={{ paddingLeft: 15 }}>
                                 <Link className="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
@@ -62,7 +62,7 @@ class Topnav extends Component {
                                 </div>
                             </li>
                         </ul>
-                    </nav>
+                    </div>
                 </div>
             </div>
         );

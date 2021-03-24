@@ -9,7 +9,6 @@ public class Keranjang {
     private Date tglKeranjang;
     private boolean statusKeranjang;
     List<Roti> rotiList;
-    private String detailKeranjang;
 
     private String idRoti;
 

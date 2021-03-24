@@ -2,13 +2,26 @@ import React, { Component } from 'react';
 import { Sidebar, MenuProfile, Topnav } from '../../component'
 import DashboardAdmin from '../content/dashboardAdmin.js'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 class HomeAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
     }
-    render() { 
+
+    validation = () => {
+        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === false) {
+            this.props.history.push("/login")
+        }
+    }
+
+    render() {
+        this.validation()
         return ( 
             <body className="nav-md">
                 <div className="container body">
@@ -34,5 +47,16 @@ class HomeAdmin extends Component {
         );
     }
 }
+
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
  
-export default HomeAdmin;
+export default connect(mapStateToProps, mapDispatchToProps)(HomeAdmin);

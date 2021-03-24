@@ -11,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/roti")
@@ -46,6 +43,14 @@ public class KeranjangController {
     @DeleteMapping("/detail-keranjang/{idDetail}")
     public ResponseEntity<?> deleteDetail(@PathVariable("idDetail") String idDetail) {
         keranjangService.deleteDetailById(idDetail);
+        return new ResponseEntity<>(new CustomErrorType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
+    }
+
+    //------------------Delete All Cart And Cart Detail------------------//
+
+    @DeleteMapping("/allDetail-keranjang/")
+    public ResponseEntity<?> deleteAllDetail(@RequestParam String idDetail, String idKeranjang) {
+        keranjangService.deleteAllById(idDetail, idKeranjang);
         return new ResponseEntity<>(new CustomErrorType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
     }
 

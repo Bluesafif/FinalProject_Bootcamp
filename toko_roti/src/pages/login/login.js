@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Button } from "../../component";
 import logo from "../../assets/logo.png";
-import { Link, Redirect } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { connect } from 'react-redux';
 
 class Login extends Component {
@@ -64,10 +64,18 @@ class Login extends Component {
         }
     }
 
-    render() {
-        if (this.props.isLogin) {
-            return <Redirect to="/admin" />
+    validation = () => {
+        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
+            this.props.history.push("/pelanggan");
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
+            this.props.history.push("/admin")
         }
+    }
+
+    render() {
+        this.validation()
         const { username, password } = this.state;
         return (
             <div className="coverbg">
@@ -75,7 +83,7 @@ class Login extends Component {
                     <div className="animate form login_form">
                         <section className="login_content">
                             <div className="form">
-                                <img src={logo} height="125" alt="Logo" />
+                                <img src={logo} height="150" alt="Logo" />
                                 <h4>Silahkan,<br />Masuk ke Akun Anda</h4>
                                 <div>
                                     <Input type="text" name="username" className="form-control input" placeholder="Nama Pengguna" required="required" onChange={this.setValue} />
@@ -84,7 +92,7 @@ class Login extends Component {
                                     <Input type="password" name="password" className="form-control input" placeholder="Kata Sandi" required="required" onChange={this.setValue} />
                                 </div>
                                 <div>
-                                    <Button className="btn btn-success form-control" onClick={() => this.doLogin({username, password})}>Masuk</Button>
+                                    <Button className="btn btn-success form-control margin-top" onClick={() => this.doLogin({username, password})}>Masuk</Button>
                                 </div>
                                 <div className="clearfix" />
                                 <div className="separator">

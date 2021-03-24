@@ -4,7 +4,9 @@ class DashboardAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            count: ""
+            count: 0,
+            rotiTerjual: 0,
+            jumlahPendapatan: 0
         }
     }
 
@@ -28,8 +30,48 @@ class DashboardAdmin extends Component {
             });
     }
 
+    rotiSold = () => {
+        fetch(`http://localhost:8080/roti/laporan/allrotiterjual`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    rotiTerjual: json,
+                });
+            })
+            .catch(() => {
+            })
+    }
+
+    pendapatan = () => {
+        fetch(`http://localhost:8080/roti/laporan/allpendapatancount`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    jumlahPendapatan: json,
+                });
+            })
+            .catch(() => {
+            })
+    }
+
     componentDidMount(){
         this.rotiCreated()
+        this.rotiSold()
+        this.pendapatan()
     }
 
     render() {
@@ -53,14 +95,14 @@ class DashboardAdmin extends Component {
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
                                 <div className="icon"><i className="fa fa-arrow-up" /></div>
-                                <div className="count">0</div>
+                                <div className="count">{this.state.rotiTerjual}</div>
                                 <h3>Roti Terjual</h3>
                             </div>
                         </div>
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
                                 <div className="icon"><i className="fa fa-money" /></div>
-                                <div className="count">0</div>
+                                <div className="count">Rp. {this.state.jumlahPendapatan}</div>
                                 <h3>Pendapatan Sebulan</h3>
                             </div>
                         </div>

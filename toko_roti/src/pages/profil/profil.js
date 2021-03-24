@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import { SidebarPel, MenuProfile, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import DataPelanggan from '../content/dataPelanggan'
+import { connect } from 'react-redux';
 
 class Profil extends Component {
     constructor(props) {
         super(props);
         this.state = {}
     }
+
+    validation = () => {
+        if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
+            this.props.history.push("/admin")
+        } else if (this.props.checkLogin === false) {
+            this.props.history.push("/login")
+        }
+    }
+    
     render() {
+        this.validation()
         return (
             <body className="nav-md">
                 <div className="container body">
@@ -35,4 +46,15 @@ class Profil extends Component {
     }
 }
 
-export default Profil;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profil);

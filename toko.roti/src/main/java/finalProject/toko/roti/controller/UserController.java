@@ -120,27 +120,32 @@ public class UserController {
     //------------------Change Password------------------// (check)
 
     @PutMapping("/changePass")
-    public ResponseEntity<?> changePass(@RequestBody User user) {
+    public ResponseEntity<?> changePass(@RequestParam String passwordLama, @RequestBody User user) {
         if (user.getPassword().isBlank()){
             return new ResponseEntity<>(new CustomErrorType("Password tidak boleh kosong!"), HttpStatus.BAD_REQUEST);
         } else {
-            if (Pattern.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,8}$", user.getPassword())) {
-                try {
-                    User findUser = userService.findByUsername(user.getUsername());
-                    if (findUser != null) {
-                        findUser.setPassword(user.getPassword());
-                        findUser.setUsername(user.getUsername());
-                        userService.updatePassword(findUser);
-                        return new ResponseEntity<>(new CustomErrorType("Berhasil melakukan perubahan password"), HttpStatus.CREATED);
-                    } else {
-                        return new ResponseEntity<>(new CustomErrorType("Pelanggan dengan username = '" + user.getUsername() + "' telah tersedia"), HttpStatus.CONFLICT);
+            User userCheck = userService.findByUsername(user.getUsername());
+            if (encoder.matches((CharSequence) passwordLama, userCheck.getPassword())){
+                if (Pattern.matches("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,8}$", user.getPassword())) {
+                    try {
+                        User findUser = userService.findByUsername(user.getUsername());
+                        if (findUser != null) {
+                            findUser.setPassword(user.getPassword());
+                            findUser.setUsername(user.getUsername());
+                            userService.updatePassword(findUser);
+                            return new ResponseEntity<>(new CustomErrorType("Berhasil melakukan perubahan password"), HttpStatus.CREATED);
+                        } else {
+                            return new ResponseEntity<>(new CustomErrorType("Pelanggan dengan username = '" + user.getUsername() + "' telah tersedia"), HttpStatus.CONFLICT);
+                        }
+                    } catch (DataAccessException e) {
+                        e.printStackTrace();
+                        return new ResponseEntity<>(new CustomErrorType("Gagal melakukan perubahan password"), HttpStatus.BAD_GATEWAY);
                     }
-                } catch (DataAccessException e) {
-                    e.printStackTrace();
-                    return new ResponseEntity<>(new CustomErrorType("Gagal melakukan perubahan password"), HttpStatus.BAD_GATEWAY);
+                } else {
+                    return new ResponseEntity<>(new CustomErrorType("Password harus terdiri dari 6 sampai 8 karakter, dengan huruf besar dan kecil serta angka"), HttpStatus.BAD_REQUEST);
                 }
             } else {
-                return new ResponseEntity<>(new CustomErrorType("Password harus terdiri dari 6 sampai 8 karakter, dengan huruf besar dan kecil serta angka"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new CustomErrorType("Password lama salah"), HttpStatus.NOT_FOUND);
             }
         }
     }

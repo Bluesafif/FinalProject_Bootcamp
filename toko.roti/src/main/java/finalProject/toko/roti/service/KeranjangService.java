@@ -14,4 +14,6 @@ public interface KeranjangService {
     void saveDetail(Keranjang keranjang);
 
     void updateKuantitas(String idDetail, int kuantitas);
+
+    void deleteAllById(String idDetail, String idKeranjang);
 }

@@ -137,8 +137,10 @@ class RotiPelangganContent extends Component {
                     }
                 })
                 .catch(() => {
-                    alert("failed fetching data");
-                });
+                })
+                .finally(() => {
+                    window.location.reload();
+                })
             } else {
                 alert("Roti Sudah Tersedia di Keranjang")
             }
@@ -151,8 +153,6 @@ class RotiPelangganContent extends Component {
     }
     
     render() {
-        console.log(this.state.keranjang);
-        console.log(this.state.rotiList);
         return (
             <>
                 <div>

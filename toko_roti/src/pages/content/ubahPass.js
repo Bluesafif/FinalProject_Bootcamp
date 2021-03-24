@@ -6,6 +6,7 @@ class UbahPassword extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            passwordLama: "",
             password : "",
             passwordUlangi: "",
             userProfil: {}
@@ -44,22 +45,20 @@ class UbahPassword extends Component {
 
     updatePassword = () => {
         let obj = this.state;
-        console.log(obj.password);
-        console.log(obj.passwordUlangi);
         if (
-            obj.password === "" ||
+            obj.passwordLama === "" || obj.password === "" ||
             obj.passwordUlangi === ""
         ) {
-            alert("password baru dan Konfirmasi password baru wajib diisi");
+            alert("Password baru dan Konfirmasi password baru wajib diisi");
         } else if (obj.password !== obj.passwordUlangi) {
             alert("Password dan Konfirmasi password baru tidak sesuai");
         } else {
             const dataPassword = {
                 username: this.props.userLogin.username,
-                password: this.state.password,
+                password: this.state.password
             };
-            fetch("http://localhost:8080/roti/master/changePass", {
-                method: "put",
+            fetch(`http://localhost:8080/roti/master/changePass?passwordLama=`+obj.passwordLama+``, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json; ; charset=utf-8",
                     "Access-Control-Allow-Headers": "Authorization, Content-Type",
@@ -83,8 +82,17 @@ class UbahPassword extends Component {
                 })
                 .catch((e) => {
                 });
+                this.reset()
         }
     };
+
+    reset = () => {
+        this.setState({
+            passwordLama: "",
+            password: "",
+            passwordUlangi: ""
+        })
+    }
 
     componentDidMount() {
         this.getProfil()
@@ -117,6 +125,14 @@ class UbahPassword extends Component {
                                     </div><br />
                                     <div>
                                         <br /> <br />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Lama<span className="required"> :</span>
+                                        </Label>
+                                        <div className="col-md-6 col-sm-6 col-xs-12">
+                                            <Input type="password" id="pass_lama" name="passwordLama" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                        </div>
+                                    </div><br />
+                                    <div>
+                                        <br /> <br />
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Baru<span className="required"> :</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
@@ -135,7 +151,7 @@ class UbahPassword extends Component {
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default">Reset</Button>
+                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button className="btn btn-success" defaultValue="Simpan" name="submit" onClick={this.updatePassword}>Simpan</Button>
                                         </div>
                                     </div>

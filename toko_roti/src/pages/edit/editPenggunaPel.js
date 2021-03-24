@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import { SidebarPel, MenuProfile, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import UbahPenggunaPel from '../content/ubahPenggunaPel.js'
+import { connect } from 'react-redux';
 
 class EditPenggunaPel extends Component {
     constructor(props) {
         super(props);
         this.state = {  }
     }
-    render() { 
+
+    validation = () => {
+        if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
+            this.props.history.push("/admin")
+        } else if (this.props.checkLogin === false) {
+            this.props.history.push("/login")
+        }
+    }
+    
+    render() {
+        this.validation()
         return (
             <body className="nav-md">
                 <div className="container body">
@@ -35,4 +46,15 @@ class EditPenggunaPel extends Component {
     }
 }
  
-export default EditPenggunaPel;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditPenggunaPel);

@@ -130,25 +130,99 @@ class DetailKeranjang extends Component {
 
     delete = (idDetail) => {
         if (window.confirm("Apakah anda yakin ingin menghapus?")) {
-            fetch(`http://localhost:8080/roti/detail-keranjang/` + idDetail, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                }
-            })
-                .then((response) => response.json())
-                .then((json) => {
-                    this.setState({
-                        keranjang: json,
-                    });
+            if (this.state.rotiList.length > 1) {
+                fetch(`http://localhost:8080/roti/detail-keranjang/` + idDetail, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    }
                 })
-                .catch(() => {
-                });
-                window.alert("Anda telah berhasil menghapus!")
-                this.fetchKeranjang()
+                    .then((response) => response.json())
+                    .then((json) => {
+                        this.setState({
+                            keranjang: json,
+                        });
+                    })
+                    .catch(() => {
+                    });
+                    window.alert("Anda telah berhasil menghapus!")
+            } else if (this.state.rotiList.length <= 1) {
+                let idKeranjang = this.state.keranjang.idKeranjang
+                fetch(`http://localhost:8080/roti/allDetail-keranjang/?idDetail=`+ idDetail +`&idKeranjang=`+idKeranjang+``, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((json) => {
+                        this.setState({
+                            keranjang: json,
+                        });
+                    })
+                    .catch(() => {
+                    });
+                    window.alert("Anda telah berhasil menghapus!")
+                    window.location.reload();
+                }
+            this.fetchKeranjang()
         }
+    }
+
+    checkout = () => {
+        let listRoti = []
+        for (let i = 0; i < this.state.rotiList.length; i++) {
+            let hargaTmp = 0
+            if (this.state.rotiList[i].kuantitas >= 12) {
+                hargaTmp = this.state.rotiList[i].hargaLusin
+            } else {
+                hargaTmp = this.state.rotiList[i].hargaSatuan
+            }
+
+            let isi= {
+                idRoti: this.state.rotiList[i].idRoti,
+                harga: hargaTmp,
+                kuantitas: this.state.rotiList[i].kuantitas,
+                totalHarga: this.state.rotiList[i].totalHarga
+            }
+            listRoti.push(isi)
+        }
+        const objekCheckout = {
+            idKeranjang: this.state.keranjang.idKeranjang,
+            idUser: this.props.userLogin.idUser,
+            jumlahTotal: this.state.jumlahTotal,
+            diskon: this.state.diskon,
+            jumlahPembayaran: this.state.jumlahPembayaran,
+            rotiList: listRoti
+        }
+
+        fetch(`http://localhost:8080/roti/laporan`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(objekCheckout)
+        })
+        .then((response) => response.json())
+        .then((json) => {
+            if (typeof json.errorMessage !== "undefined") {
+                alert(json.errorMessage);
+            } else if (typeof json.errorMessage === "undefined") {
+                alert(
+                    json.errorMessage
+                );
+            }
+            window.location.reload();
+        })
+        .catch(() => {
+            alert("failed fetching data");
+        });
     }
 
     componentDidMount() {
@@ -156,8 +230,8 @@ class DetailKeranjang extends Component {
     }
 
     render() {
+        console.log(this.state.keranjang);
         console.log(this.state.rotiList);
-        console.log(this.state.kuantitas);
         return (
             <div>
                 <div className="">
@@ -264,7 +338,7 @@ class DetailKeranjang extends Component {
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Button className="btn btn-success control-label col-md-3 col-sm-3 col-xs-12">Checkout</Button>
+                                        <Button className="btn btn-success control-label col-md-3 col-sm-3 col-xs-12" onClick={() => this.checkout()}>Checkout</Button>
                                     </div>
                                 </div>
                             </div>
@@ -277,13 +351,14 @@ class DetailKeranjang extends Component {
 }
 
 const mapStateToProps = state => ({
-    userLogin: state.AReducer.dataUser
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
 })
 
 const mapDispatchToProps = dispatch => {
     return {
-        logout: () => dispatch({ type: "LOGOUT_SUCCESS" })
     }
 }
-
+ 
 export default connect(mapStateToProps, mapDispatchToProps)(DetailKeranjang);

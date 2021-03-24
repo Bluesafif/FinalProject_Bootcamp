@@ -34,6 +34,13 @@ public class KeranjangServiceImpl implements KeranjangService{
     }
 
     @Override
+    public void deleteAllById(String idDetail, String idKeranjang) {
+        synchronized (this) {
+            keranjangRepository.deleteAllById(idDetail, idKeranjang);
+        }
+    }
+
+    @Override
     public void saveKeranjang(Keranjang keranjang) {
         synchronized (this) {
             keranjangRepository.saveKeranjang(keranjang);

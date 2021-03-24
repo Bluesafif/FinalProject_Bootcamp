@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Repository("KeranjangRepository")
@@ -20,7 +18,6 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
     @Override
     public Keranjang findAll(String idUser) {
         Keranjang keranjang;
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa "+idUser);
         keranjang = jdbcTemplate.queryForObject("SELECT * FROM keranjang " +
                         "WHERE idUser='" + idUser + "'",
                 (rs, rowNum) ->
@@ -32,7 +29,7 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
                         )
         );
         String idKeranjang = keranjang.getIdKeranjang();
-        keranjang.setRotiList(jdbcTemplate.query("SELECT b.*, c.jenisRoti, a.kuantitas, a.idDetail " +
+        keranjang.setRotiList(jdbcTemplate.query("SELECT b.*, IF(a.kuantitas>=12, (a.kuantitas*b.hargaLusin), (a.kuantitas*b.hargaSatuan)) AS \"totalHarga\", c.jenisRoti, a.kuantitas, a.idDetail " +
                         "FROM detailKeranjang a JOIN roti b JOIN jenisRoti c ON a.idRoti=b.idRoti AND b.idJenisRoti=c.idJenisRoti " +
                         "WHERE a.idKeranjang='" + idKeranjang + "'",
                 (rs, rowNum) ->
@@ -45,6 +42,7 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
                                 rs.getInt("hargaLusin"),
                                 rs.getString("keterangan"),
                                 rs.getBoolean("statusRoti"),
+                                rs.getInt("totalHarga"),
                                 rs.getString("jenisRoti"),
                                 rs.getInt("kuantitas"),
                                 rs.getString("idDetail")
@@ -56,6 +54,12 @@ public class KeranjangRepositoryImpl implements KeranjangRepository {
     @Override
     public void deleteDetailById(String idDetail) {
         jdbcTemplate.update("DELETE FROM detailKeranjang WHERE idDetail='"+idDetail+"'");
+    }
+
+    @Override
+    public void deleteAllById(String idDetail, String idKeranjang) {
+        jdbcTemplate.update("DELETE FROM detailKeranjang WHERE idDetail='"+idDetail+"'");
+        jdbcTemplate.update("DELETE FROM keranjang WHERE idKeranjang='"+idKeranjang+"'");
     }
 
     @Override

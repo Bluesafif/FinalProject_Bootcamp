@@ -12,14 +12,25 @@ class AddRoti extends Component {
             hargaSatuan: "",
             hargaLusin: "",
             keterangan: "",
+            image: null,
             jenisRoti:[]
         }
+        this.onImageChange = this.onImageChange.bind(this);
     }
     setValue = el => {
         this.setState({
             [el.target.name]: el.target.value
         })
     }
+
+    onImageChange = event => {
+        if (event.target.files && event.target.files[0]) {
+            let img = event.target.files[0];
+            this.setState({
+                image: URL.createObjectURL(img)
+            });
+        }
+    };
 
     doTambahRoti = () => {
         let obj = this.state;
@@ -39,10 +50,10 @@ class AddRoti extends Component {
                 stokRoti: this.state.stokRoti,
                 hargaSatuan: this.state.hargaSatuan,
                 hargaLusin: this.state.hargaLusin,
-                keterangan: this.state.keterangan
+                keterangan: this.state.keterangan,
+                gambarRoti: this.state.image
             };
 
-            console.log(objekAdd);
             fetch("http://localhost:8080/roti/master/save-roti", {
                 method: "POST",
                 headers: {
@@ -155,6 +166,12 @@ class AddRoti extends Component {
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">Keterangan</Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Textarea type="text" name="keterangan" className="form-control col-md-7 col-xs-12" required="required" value={this.state.keterangan} onChange={this.setValue} />
+                                        </div>
+                                    </div>
+                                    <div className="item form-group">
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Unggah Foto</Label>
+                                        <div className="col-md-3 col-sm-6 col-xs-12">
+                                            <Input type="file" name="myImage" onChange={this.onImageChange} />
                                         </div>
                                     </div>
                                     <div className="ln_solid" />
