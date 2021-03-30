@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findAll() {
-        List<User> userList = userRepository.findAll();
+    public List<User> findAll(int page, int limit) {
+        List<User> userList = userRepository.findAll(page, limit);
         return userList;
     }
 
@@ -88,5 +88,27 @@ public class UserServiceImpl implements UserService{
         synchronized (this) {
             userRepository.passwordDefult(user);
         }
+    }
+
+    @Override
+    public int countAllUser() {
+        return userRepository.countAllUser();
+    }
+
+    @Override
+    public void ubahMember(String idUser) {
+        synchronized (this) {
+            userRepository.ubahMember(idUser);
+        }
+    }
+
+    @Override
+    public List<User> findSearch(String search, int page, int limit) {
+        return userRepository.findSearch(search, page, limit);
+    }
+
+    @Override
+    public int countSearch(String search) {
+        return userRepository.countSearch(search);
     }
 }

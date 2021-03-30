@@ -83,10 +83,20 @@ class UbahPenggunaPel extends Component {
             .catch((e) => {
                 window.alert(e);
             });
-            
-        }
 
-    render() { 
+    }
+
+    reset = () => {
+        this.setState({
+            namaLengkap: this.state.userProfil.namaLengkap,
+            username: this.state.userProfil.username,
+            nomorTelepon: this.state.userProfil.nomorTelepon,
+            email: this.state.userProfil.email,
+            alamat: this.state.userProfil.alamat
+        })
+    }
+
+    render() {
         return (
             <div className>
                 <div className="page-title">
@@ -143,7 +153,7 @@ class UbahPenggunaPel extends Component {
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default">Reset</Button>
+                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button type="submit" className="btn btn-success" name="edit" onClick={this.saveUbah}>Simpan</Button>
                                         </div>
                                     </div>
@@ -156,5 +166,5 @@ class UbahPenggunaPel extends Component {
         );
     }
 }
- 
+
 export default UbahPenggunaPel;

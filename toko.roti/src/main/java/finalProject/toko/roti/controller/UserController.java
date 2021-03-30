@@ -153,12 +153,23 @@ public class UserController {
     //------------------Get All Data------------------// (check)
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> listAllUser(){
-        List<User> userList = userService.findAll();
+    public ResponseEntity<List<User>> listAllUser(@RequestParam int page, int limit){
+        List<User> userList = userService.findAll(page, limit);
         if (userList.isEmpty()) {
             return new ResponseEntity<>(userList, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    //------------------Count All User------------------// (check)
+
+    @GetMapping("/user-count")
+    public ResponseEntity<?> countUser(){
+        int listUser = userService.countAllUser();
+        if (listUser == 0){
+            return new ResponseEntity<>(listUser, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listUser,HttpStatus.OK);
     }
 
     //------------------Update a Data------------------// (check)
@@ -276,5 +287,42 @@ public class UserController {
 
         userService.passwordDefault(users);
         return new ResponseEntity<>(new CustomErrorType("Password Berhasil Diubah Menjadi Default!"), HttpStatus.OK);
+    }
+
+    //------------------Change Status to Member------------------//
+
+    @PutMapping("/status-member")
+    public ResponseEntity<?> ubahRole(@RequestParam String idUser){
+        User users = userService.findById(idUser);
+
+        if (users == null){
+            return new ResponseEntity<>(new CustomErrorType("Tidak dapat mengubah data user. User dengan id "
+                    + idUser + " tidak tersedia."), HttpStatus.NOT_FOUND);
+        }
+
+        userService.ubahMember(idUser);
+        return new ResponseEntity<>(new CustomErrorType("Selamat Anda Telah Menjadi Member!"), HttpStatus.OK);
+    }
+
+    //------------------Searching User------------------//
+
+    @GetMapping("/user/searchadmin")
+    public ResponseEntity<?> searchingUser(@RequestParam String search, int page, int limit){
+        List<User> userList = userService.findSearch(search, page, limit);
+        if (userList.isEmpty()) {
+            return new ResponseEntity<>(userList, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    //------------------Count Searching User------------------//
+
+    @GetMapping("/user/searchadmincount")
+    public ResponseEntity<?> searchingUserCount(@RequestParam String search){
+        int listUser = userService.countSearch(search);
+        if (listUser == 0){
+            return new ResponseEntity<>(listUser, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listUser,HttpStatus.OK);
     }
 }

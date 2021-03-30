@@ -25,10 +25,6 @@ class DataPelanggan extends Component {
           this.setState({ 
               userProfil: json
           });
-          if(typeof json.errorMessage !== 'undefined')
-          {
-            
-          }
       })
       .catch((e) => {
           console.log(e);

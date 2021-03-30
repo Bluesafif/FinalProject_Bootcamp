@@ -23,8 +23,8 @@ public class LaporanServiceImpl implements LaporanService{
     }
 
     @Override
-    public List<Laporan> findAllCustomer(String idUser) {
-        List<Laporan> laporanList = laporanRepository.findAllCustomer(idUser);
+    public List<Laporan> findAllCustomer(String idUser, int page, int limit) {
+        List<Laporan> laporanList = laporanRepository.findAllCustomer(idUser, page, limit);
         return laporanList;
     }
 
@@ -39,8 +39,8 @@ public class LaporanServiceImpl implements LaporanService{
     }
 
     @Override
-    public List<Laporan> findAll() {
-        List<Laporan> laporanList = laporanRepository.findAll();
+    public List<Laporan> findAll(int page, int limit) {
+        List<Laporan> laporanList = laporanRepository.findAll(page, limit);
         return laporanList;
     }
 
@@ -52,5 +52,26 @@ public class LaporanServiceImpl implements LaporanService{
     @Override
     public int countPendapatanRoti() {
         return laporanRepository.countPendapatanRoti();
+    }
+
+    @Override
+    public int findAllCountLaporan(String idUser) {
+        return laporanRepository.findAllCountLaporan(idUser);
+    }
+
+    @Override
+    public int countAllLaporan() {
+        return laporanRepository.countAllLaporan();
+    }
+
+    @Override
+    public List<Laporan> findAllMonth(int page, int limit, int bulan, int tahun, String namaPembeli, String namaRoti) {
+        List<Laporan> laporanList = laporanRepository.findAllMonth(page, limit, bulan, tahun, namaPembeli, namaRoti);
+        return laporanList;
+    }
+
+    @Override
+    public int countAllLaporanMonth(int bulan, int tahun, String namaPembeli, String namaRoti) {
+        return laporanRepository.countAllLaporanMonth(bulan, tahun, namaPembeli, namaRoti);
     }
 }

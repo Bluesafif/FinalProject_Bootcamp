@@ -9,7 +9,10 @@ class UbahPassword extends Component {
             passwordLama: "",
             password : "",
             passwordUlangi: "",
-            userProfil: {}
+            userProfil: {},
+            type:"password",
+            type2:"password",
+            type3:"password"
         }
     }
 
@@ -94,6 +97,45 @@ class UbahPassword extends Component {
         })
     }
 
+    hideshow = () => {
+        if(this.state.type === "password"){
+            this.setState({
+                type: "text"
+            })
+        }
+        else{
+            this.setState({
+                type: "password"
+            })
+        }
+    }
+
+    hideshow2 = () => {
+        if(this.state.type2 === "password"){
+            this.setState({
+                type2: "text"
+            })
+        }
+        else{
+            this.setState({
+                type2: "password"
+            })
+        }
+    }
+
+    hideshow3 = () => {
+        if(this.state.type3 === "password"){
+            this.setState({
+                type3: "text"
+            })
+        }
+        else{
+            this.setState({
+                type3: "password"
+            })
+        }
+    }
+
     componentDidMount() {
         this.getProfil()
     }
@@ -128,7 +170,13 @@ class UbahPassword extends Component {
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Lama<span className="required"> :</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="password" id="pass_lama" name="passwordLama" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <Input type={this.state.type} id="pass_lama" name="passwordLama" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <span className="eye-password-form">
+                                                <i className={ this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                id="togglePassword"
+                                                onClick={() => this.hideshow()}
+                                                />
+                                            </span>
                                         </div>
                                     </div><br />
                                     <div>
@@ -136,7 +184,13 @@ class UbahPassword extends Component {
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Baru<span className="required"> :</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="password" id="pass_baru" name="password" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <Input type={this.state.type2} id="pass_baru" name="password" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <span className="eye-password-form">
+                                                <i className={ this.state.type2 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                id="togglePassword"
+                                                onClick={() => this.hideshow2()}
+                                                />
+                                            </span>
                                         </div>
                                     </div><br />
                                     <div>
@@ -144,7 +198,13 @@ class UbahPassword extends Component {
                                         <label className="control-label col-md-3 col-sm-3 col-xs-12">Ulangi Password Baru<span className="required"> :</span>
                                         </label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="password" id="pass_baru" name="passwordUlangi" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <Input type={this.state.type3} id="pass_baru" name="passwordUlangi" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
+                                            <span className="eye-password-form">
+                                                <i className={ this.state.type3 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                id="togglePassword"
+                                                onClick={() => this.hideshow3()}
+                                                />
+                                            </span>
                                         </div>
                                     </div>
                                     <br /><br />

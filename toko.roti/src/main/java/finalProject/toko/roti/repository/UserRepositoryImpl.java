@@ -86,9 +86,17 @@ public class UserRepositoryImpl implements UserRepository{
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll(int page, int limit) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM user",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page-1) * limit;
+
         List<User> userList;
-        userList = jdbcTemplate.query("SELECT * FROM user ORDER BY role, namaLengkap ASC",
+        userList = jdbcTemplate.query("SELECT * FROM user ORDER BY role, namaLengkap ASC LIMIT "+start+","+limit+"",
                 (rs, rowNum)->
                         new User(
                                 rs.getString("idUser"),
@@ -123,5 +131,58 @@ public class UserRepositoryImpl implements UserRepository{
     public void passwordDefult(User user) {
         jdbcTemplate.update("UPDATE user SET password=MD5('User123') WHERE idUser=?",
                 user.getIdUser());
+    }
+
+    @Override
+    public int countAllUser() {
+        int countUser;
+        countUser = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM user",
+                Integer.class);
+        return countUser;
+    }
+
+    @Override
+    public void ubahMember(String idUser) {
+        jdbcTemplate.update("UPDATE user SET role='Member' WHERE idUser='"+idUser+"'");
+    }
+
+    @Override
+    public List<User> findSearch(String search, int page, int limit) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM user",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page-1) * limit;
+
+        List<User> userList;
+        userList = jdbcTemplate.query("SELECT * FROM user " +
+                        "WHERE idUser LIKE '%"+search+"%' OR username LIKE '%"+search+"%' OR namaLengkap LIKE '%"+search+"%' OR role LIKE '%"+search+"%' " +
+                        "ORDER BY role, namaLengkap ASC LIMIT "+start+","+limit+"",
+                (rs, rowNum)->
+                        new User(
+                                rs.getString("idUser"),
+                                rs.getString("username"),
+                                rs.getString("namaLengkap"),
+                                rs.getString("password"),
+                                rs.getString("alamat"),
+                                rs.getString("nomorTelepon"),
+                                rs.getString("email"),
+                                rs.getBoolean("status"),
+                                rs.getString("role"),
+                                rs.getDate("tanggalRegistrasi")
+                        )
+        );
+        return userList;
+    }
+
+    @Override
+    public int countSearch(String search) {
+        int countUser;
+        countUser = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM user " +
+                        "WHERE idUser LIKE '%"+search+"%' OR username LIKE '%"+search+"%' OR namaLengkap LIKE '%"+search+"%' OR role LIKE '%"+search+"%'",
+                Integer.class);
+        return countUser;
     }
 }

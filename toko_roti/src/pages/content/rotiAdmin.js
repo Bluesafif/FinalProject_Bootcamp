@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-// import Pagination from '@material-ui/lab/Pagination';
+import Pagination from '@material-ui/lab/Pagination';
+import { connect } from 'react-redux';
 
 class RotiAdminContent extends Component {
     constructor(props) {
@@ -8,14 +9,35 @@ class RotiAdminContent extends Component {
         this.state = {
             roti: [],
             rotiListView: {},
-            offset: 0,
+            page: 1,
             limit: 5,
-            count: ""
+            count: 0,
+            search: ""
         }
     }
 
-    fetchRoti = () => {
-        fetch(`http://localhost:8080/roti/master/roti?limit=`+this.state.limit+`&offset=`+this.state.offset+'', {
+    setValue = el => {
+        this.setState({
+            [el.target.name]: el.target.value
+        })
+    }
+
+    handleChange = (event, value) => {
+        this.setState({
+            page: value
+        })
+        if (this.state.search === "") {
+            this.fetchRoti(value, 5);
+        } else {
+            this.search(value, 5)
+        }
+    }
+
+    fetchRoti = (page, limit) => {
+        if (page === undefined) {
+            page = 1
+        }
+        fetch(`http://localhost:8080/roti/master/roti?limit=` + this.state.limit + `&page=` + page + '', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -34,8 +56,48 @@ class RotiAdminContent extends Component {
             });
     };
 
+    search = (page, limit) => {
+        this.getCountSearch()
+        fetch(`http://localhost:8080/roti/master/roti/searchadmin?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    roti: json,
+                });
+            })
+            .catch(() => {
+            })
+    }
+
     getCount = () => {
-        fetch('http://localhost:8080/roti/master/roti-count/', {
+        fetch(`http://localhost:8080/roti/master/roti-count/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
+    
+    getCountSearch = () => {
+        fetch(`http://localhost:8080/roti/master/roti/searchadmincount?idUser=${encodeURIComponent(this.props.userLogin.idUser)}&search=`+this.state.search+``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -54,15 +116,6 @@ class RotiAdminContent extends Component {
             });
     }
 
-    handleChange = (event, value) => {
-
-        this.setState({
-            offset: value
-        })
-        console.log("value", value);
-        this.fetchRoti(value, 5);
-    }
-
     view = (index) => {
         const rotiView = this.state.roti[index]
         this.setState({
@@ -70,8 +123,8 @@ class RotiAdminContent extends Component {
         })
     }
 
-    resetStatus = (idRoti) =>{
-        fetch(`http://localhost:8080/roti/master/roti/status/`+idRoti, {
+    resetStatus = (idRoti) => {
+        fetch(`http://localhost:8080/roti/master/roti/status/` + idRoti, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -79,27 +132,29 @@ class RotiAdminContent extends Component {
                 "Access-Control-Allow-Origin": "*",
             }
         })
-        .then((response) => response.json())
-        .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-                alert(json.errorMessage);
-            } else if (typeof json.errorMessage === "undefined") {
-                alert(
-                    json.errorMessage
-                );
-            }
-            this.fetchRoti()
-        })
-        .catch((e) => {
-            window.alert(e);
-        });
+            .then((response) => response.json())
+            .then((json) => {
+                if (typeof json.errorMessage !== "undefined") {
+                    alert(json.errorMessage);
+                } else if (typeof json.errorMessage === "undefined") {
+                    alert(
+                        json.errorMessage
+                    );
+                }
+                this.fetchRoti()
+            })
+            .catch((e) => {
+                window.alert(e);
+            });
     }
 
     componentDidMount() {
         this.fetchRoti()
         this.getCount()
     }
+
     render() {
+        console.log(this.state.count);
         return (
             <>
                 <div>
@@ -118,8 +173,14 @@ class RotiAdminContent extends Component {
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
+                                        <div className="input-group">
+                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
+                                            <button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                <i className="fa fa-search" />
+                                            </button>
+                                        </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table id="surat_masuk" className="table table-striped table-bordered table-hover">
+                                            <table className="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -134,17 +195,25 @@ class RotiAdminContent extends Component {
                                                         this.state.roti.map((roti, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{index + 1}</center></td>
+                                                                    <td><center>{(5*(this.state.page - 1)+(index + 1))}</center></td>
                                                                     <td>{roti.namaRoti}</td>
                                                                     <td><center>Rp. {roti.hargaSatuan}</center></td>
                                                                     <td><center>{roti.stokRoti}</center></td>
                                                                     <td>
                                                                         <center>
-                                                                            <Link to={"/admin-editroti/"+roti.idRoti}>
-                                                                                <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
-                                                                            </Link>
-                                                                            <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-trash-o" /></button>
-                                                                            <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                            { roti.statusRoti === true
+                                                                            ? <>
+                                                                                <Link to={"/admin-editroti/" + roti.idRoti}>
+                                                                                    <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                </Link>
+                                                                                <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-trash-o" /></button>
+                                                                                <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                            </>
+                                                                            : <>
+                                                                                <button className="text-white btn btn-success" title="Aktivasi" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-check" /></button>
+                                                                                <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                            </>
+                                                                            }
                                                                         </center>
                                                                     </td>
                                                                 </tr>
@@ -153,10 +222,10 @@ class RotiAdminContent extends Component {
                                                     }
                                                 </tbody>
                                             </table>
-                                            {/* <div className="pagination float-right"> */}
-                                                {/* <Typography>Page: {page}</Typography> */}
-                                                {/* <Pagination count={this.state.count} offset={this.state.offset} onChange={this.handleChange} /> */}
-                                            {/* </div> */}
+                                        </div>
+                                        <div className="pagination float-right">
+                                            {/* <Typography>Page: {page}</Typography> */}
+                                            <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                                         </div>
                                     </div>
                                 </div>
@@ -211,4 +280,15 @@ class RotiAdminContent extends Component {
     }
 }
 
-export default RotiAdminContent;
+const mapStateToProps = state => ({
+    checkLogin: state.AReducer.isLogin,
+    userLogin: state.AReducer.dataUser,
+    users: state.UReducer.users
+})
+
+const mapDispatchToProps = dispatch => {
+    return {
+    }
+}
+ 
+export default connect(mapStateToProps, mapDispatchToProps)(RotiAdminContent);

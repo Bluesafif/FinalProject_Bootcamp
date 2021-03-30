@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import rotiGambar from '../../assets/roti.jpg'
 import { connect } from 'react-redux';
 import $ from "jquery";
+import Pagination from '@material-ui/lab/Pagination';
 
 class RotiPelangganContent extends Component {
     constructor(props) {
@@ -11,12 +12,25 @@ class RotiPelangganContent extends Component {
             rotiListView: {},
             keranjang: {},
             rotiList: [],
-            qty: 1
+            qty: 1,
+            page: 1,
+            limit: 8,
+            count: 0
         }
     }
 
-    fetchRoti = () => {
-        fetch(`http://localhost:8080/roti/master/roti`, {
+    handleChange = (event, value) => {
+        this.setState({
+            page: value
+        })
+        this.fetchRoti(value, 8);
+    }
+
+    fetchRoti = (page, limit) => {
+        if (page === undefined) {
+            page = 1
+        }
+        fetch(`http://localhost:8080/roti/master/roti?limit=` + this.state.limit + `&page=` + page + '', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -34,6 +48,26 @@ class RotiPelangganContent extends Component {
                 alert("failed fetching data");
             });
     };
+
+    getCount = () => {
+        fetch(`http://localhost:8080/roti/master/roti-count/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
 
     view = (index) => {
         const rotiView = this.state.roti[index]
@@ -129,6 +163,7 @@ class RotiPelangganContent extends Component {
                 .then((json) => {
                     if (typeof json.errorMessage !== "undefined") {
                         alert(json.errorMessage);
+                        window.location.reload();
                     } else if (typeof json.errorMessage === "undefined") {
                         alert(
                             json.errorMessage
@@ -150,6 +185,7 @@ class RotiPelangganContent extends Component {
     componentDidMount() {
         this.fetchRoti()
         this.getKeranjang()
+        this.getCount()
     }
     
     render() {
@@ -171,9 +207,15 @@ class RotiPelangganContent extends Component {
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
+                                        <div className="input-group">
+                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
+                                            <button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                <i className="fa fa-search" />
+                                            </button>
+                                        </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
                                             {
-                                                this.state.roti.map((roti, index) => {
+                                                this.state.roti.filter(status => status.statusRoti === true).map((roti, index) => {
                                                     return (
                                                         <>
                                                         <div className="row row-content padding">
@@ -196,6 +238,9 @@ class RotiPelangganContent extends Component {
                                                     )
                                                 })
                                             }
+                                        </div>
+                                        <div className="pagination float-right">
+                                            <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                                         </div>
                                     </div>
                                 </div>

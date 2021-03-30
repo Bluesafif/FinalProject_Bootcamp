@@ -15,9 +15,32 @@ class DetailKeranjang extends Component {
             jumlahTotal: 0,
             diskon: 0,
             kuantitas: [],
-            jumlahPembayaran: 0
+            jumlahPembayaran: 0,
+            userProfil: {}
         }
     }
+
+    getProfil = () => {
+        fetch(`http://localhost:8080/roti/master/profil/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+          method: "GET",
+          headers: {
+              "Content-Type": "application/json; ; charset=utf-8",
+              "Access-Control-Allow-Headers": "Authorization, Content-Type",
+              "Access-Control-Allow-Origin": "*"
+          }
+      })
+      .then(response => response.json())
+      .then(json => {
+          this.setState({ 
+              userProfil: json
+          });
+          this.fetchKeranjang()
+      })
+      .catch((e) => {
+          console.log(e);
+          
+      });
+      };
 
     setValueHarga = (value,idDetail) => {
         fetch(`http://localhost:8080/roti/update-qty?idDetail=`+idDetail+`&kuantitas=`+value+``, {
@@ -59,7 +82,7 @@ class DetailKeranjang extends Component {
                     rotiList: this.state.keranjang.rotiList,
                 });
             }
-            if (this.props.userLogin.role === "Member") {
+            if (this.state.userProfil.role === "Member") {
                 let qty = [];
                 for (let i = 0; i < this.state.rotiList.length; i++) {
                     qty.push(this.state.rotiList[i].kuantitas)
@@ -91,7 +114,7 @@ class DetailKeranjang extends Component {
                 this.setState({
                     diskon: this.state.jumlahTotal * 0.1
                 })
-            } else if (this.props.userLogin.role === "Umum") {
+            } else if (this.state.userProfil.role === "Umum") {
                 let qty = [];
                 for (let i = 0; i < this.state.rotiList.length; i++) {
                     qty.push(this.state.rotiList[i].kuantitas)
@@ -185,6 +208,7 @@ class DetailKeranjang extends Component {
 
             let isi= {
                 idRoti: this.state.rotiList[i].idRoti,
+                namaRoti: this.state.rotiList[i].namaRoti,
                 harga: hargaTmp,
                 kuantitas: this.state.rotiList[i].kuantitas,
                 totalHarga: this.state.rotiList[i].totalHarga
@@ -226,12 +250,14 @@ class DetailKeranjang extends Component {
     }
 
     componentDidMount() {
+        this.getProfil()
         this.fetchKeranjang()
     }
 
     render() {
         console.log(this.state.keranjang);
         console.log(this.state.rotiList);
+        console.log(this.state.kuantitas);
         return (
             <div>
                 <div className="">

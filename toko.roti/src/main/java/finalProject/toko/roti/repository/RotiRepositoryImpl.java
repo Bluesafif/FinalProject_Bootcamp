@@ -14,9 +14,17 @@ public class RotiRepositoryImpl implements RotiRepository{
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Roti> findAll(String paginationSelect) {
+    public List<Roti> findAll(int page, int limit) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM roti",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page-1) * limit;
+
         List<Roti> rotiList;
-        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti WHERE a.statusRoti='1' ORDER BY a.idRoti ASC "+paginationSelect,
+        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti ORDER BY a.statusRoti DESC, a.namaRoti ASC LIMIT "+start+","+limit+"",
                 (rs, rowNum)->
                         new Roti(
                                 rs.getString("idRoti"),
@@ -92,7 +100,7 @@ public class RotiRepositoryImpl implements RotiRepository{
     }
 
     @Override
-    public int findAllCountObat() {
+    public int findAllCountRoti() {
         int countRoti;
         countRoti = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM roti",
                 Integer.class);
@@ -102,8 +110,64 @@ public class RotiRepositoryImpl implements RotiRepository{
     @Override
     public int countStokRoti() {
         int stokRoti;
-        stokRoti = jdbcTemplate.queryForObject("SELECT SUM(stokRoti) AS Jumlah FROM roti WHERE statusROti=1",
+        stokRoti = jdbcTemplate.queryForObject("SELECT SUM(stokRoti) AS Jumlah FROM roti WHERE statusRoti=1",
                 Integer.class);
         return stokRoti;
+    }
+
+    @Override
+    public int findAllCountRotiPelanggan() {
+        int countRoti;
+        countRoti = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM roti WHERE statusRoti=1",
+                Integer.class);
+        return countRoti;
+    }
+
+    @Override
+    public List<Roti> findSearch(String search, int page, int limit) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM roti",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page-1) * limit;
+
+        List<Roti> rotiList;
+        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti " +
+                        "WHERE a.namaRoti LIKE '%"+search+"%' OR a.hargaSatuan LIKE '%"+search+"%' OR a.hargaLusin LIKE '%"+search+"%' " +
+                        "ORDER BY a.statusRoti DESC, a.namaRoti ASC LIMIT "+start+","+limit+"",
+                (rs, rowNum)->
+                        new Roti(
+                                rs.getString("idRoti"),
+                                rs.getString("namaRoti"),
+                                rs.getString("idJenisRoti"),
+                                rs.getInt("stokRoti"),
+                                rs.getInt("hargaSatuan"),
+                                rs.getInt("hargaLusin"),
+                                rs.getString("keterangan"),
+                                rs.getBoolean("statusRoti"),
+                                rs.getString("jenisRoti")
+                        )
+        );
+        return rotiList;
+    }
+
+    @Override
+    public int countSearch(String search) {
+        int countRoti;
+        countRoti = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM roti " +
+                        "WHERE namaRoti LIKE '%"+search+"%' OR hargaSatuan LIKE '%"+search+"%' OR hargaLusin LIKE '%"+search+"%'",
+                Integer.class);
+        return countRoti;
+    }
+
+    @Override
+    public int countSearchPelanggan(String search) {
+        int countRoti;
+        countRoti = jdbcTemplate.queryForObject("SELECT COUNT(*) as count FROM roti " +
+                        "WHERE statusRoti='1' AND namaRoti LIKE '%"+search+"%' OR hargaSatuan LIKE '%"+search+"%' OR hargaLusin LIKE '%"+search+"%'",
+                Integer.class);
+        return countRoti;
     }
 }

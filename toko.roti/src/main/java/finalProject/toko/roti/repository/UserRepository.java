@@ -18,11 +18,19 @@ public interface UserRepository {
 
     void updateUser(User user);
 
-    List<User> findAll();
+    List<User> findAll(int page, int limit);
 
     boolean isTeleponExist (String username);
 
     void status(User user);
 
     void passwordDefult(User user);
+
+    int countAllUser();
+
+    void ubahMember(String idUser);
+
+    List<User> findSearch(String search, int page, int limit);
+
+    int countSearch(String search);
 }

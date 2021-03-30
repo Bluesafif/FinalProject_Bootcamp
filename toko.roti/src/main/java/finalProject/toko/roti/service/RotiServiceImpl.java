@@ -14,8 +14,8 @@ public class RotiServiceImpl implements RotiService{
     RotiRepository rotiRepository;
 
     @Override
-    public List<Roti> findAll(String paginationSelect) {
-        List<Roti> rotiList = rotiRepository.findAll(paginationSelect);
+    public List<Roti> findAll(int page, int limit) {
+        List<Roti> rotiList = rotiRepository.findAll(page, limit);
         return rotiList;
     }
 
@@ -65,12 +65,32 @@ public class RotiServiceImpl implements RotiService{
     }
 
     @Override
-    public int findAllCountObat() {
-        return rotiRepository.findAllCountObat();
+    public int findAllCountRoti() {
+        return rotiRepository.findAllCountRoti();
     }
 
     @Override
     public int countStokRoti() {
         return rotiRepository.countStokRoti();
+    }
+
+    @Override
+    public int findAllCountRotiPelanggan() {
+        return rotiRepository.findAllCountRotiPelanggan();
+    }
+
+    @Override
+    public List<Roti> findSearch(String search, int page, int limit) {
+        return rotiRepository.findSearch(search, page, limit);
+    }
+
+    @Override
+    public int countSearch(String search) {
+        return rotiRepository.countSearch(search);
+    }
+
+    @Override
+    public int countSearchPelanggan(String search) {
+        return rotiRepository.countSearchPelanggan(search);
     }
 }

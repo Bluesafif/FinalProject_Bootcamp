@@ -14,7 +14,9 @@ class Register extends Component {
             email: "",
             username: "",
             password: "",
-            passwordUlangi: ""
+            passwordUlangi: "",
+            type:"password",
+            type2:"password"
         }
     }
 
@@ -22,6 +24,32 @@ class Register extends Component {
         this.setState({
             [el.target.name]: el.target.value
         })
+    }
+
+    hideshow = () => {
+        if(this.state.type === "password"){
+            this.setState({
+                type: "text"
+            })
+        }
+        else{
+            this.setState({
+                type: "password"
+            })
+        }
+    }
+
+    hideshow2 = () => {
+        if(this.state.type2 === "password"){
+            this.setState({
+                type2: "text"
+            })
+        }
+        else{
+            this.setState({
+                type2: "password"
+            })
+        }
     }
 
     doRegis = () => {
@@ -106,10 +134,22 @@ class Register extends Component {
                                 <Input type="text" className="form-control" name="username" placeholder="Nama Pengguna" required="required" onChange={this.setValue} value={this.state.username} />
                             </div>
                             <div>
-                                <Input type="password" className="form-control" name="password" placeholder="Kata Sandi" required="required" onChange={this.setValue} value={this.state.password} />
+                                <Input type={this.state.type} className="form-control input" name="password" placeholder="Kata Sandi" required="required" onChange={this.setValue} value={this.state.password} />
+                                <span className="eye-password">
+                                    <i className={ this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                       id="togglePassword"
+                                       onClick={() => this.hideshow()}
+                                    />
+                                </span>
                             </div>
                             <div>
-                                <Input type="password" className="form-control" name="passwordUlangi" placeholder="Masukkan Ulang Kata Sandi" required="required" onChange={this.setValue} value={this.state.passwordUlangi} />
+                                <Input type={this.state.type2} className="form-control input" name="passwordUlangi" placeholder="Masukkan Ulang Kata Sandi" required="required" onChange={this.setValue} value={this.state.passwordUlangi} />
+                                <span className="eye-password">
+                                    <i className={ this.state.type2 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                       id="togglePassword"
+                                       onClick={() => this.hideshow2()}
+                                    />
+                                </span>
                             </div>
                             <div>
                                 <Button className="btn btn-success form-control margin-top" onClick={this.doRegis}>Buat Akun</Button>

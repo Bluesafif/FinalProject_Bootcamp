@@ -1,19 +1,44 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { Input, Label } from '../../component';
+import { Input, Button } from '../../component';
 import { connect } from 'react-redux';
+import Pagination from '@material-ui/lab/Pagination';
 
 class DataPengguna extends Component {
     constructor(props) {
         super(props);
         this.state = {
             pengguna: [],
-            usersView: {}
+            usersView: {},
+            page: 1,
+            limit: 5,
+            count: 0,
+            search: ""
         }
     }
 
-    fetchPengguna = () => {
-        fetch(`http://localhost:8080/roti/master/user`, {
+    setValue = el => {
+        this.setState({
+            [el.target.name]: el.target.value
+        })
+    }
+
+    handleChange = (event, value) => {
+        this.setState({
+            page: value
+        })
+        if (this.state.search === "") {
+            this.fetchPengguna(value, 5);
+        } else {
+            this.search(value, 5)
+        }
+    }
+
+    fetchPengguna = (page, limit) => {
+        if (page === undefined) {
+            page = 1
+        }
+        fetch(`http://localhost:8080/roti/master/user?limit=` + this.state.limit + `&page=` + page + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -31,6 +56,66 @@ class DataPengguna extends Component {
                 alert("failed fetching data");
             });
     };
+
+    search = (page, limit) => {
+        this.getCountSearch()
+        fetch(`http://localhost:8080/roti/master/user/searchadmin?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    pengguna: json,
+                });
+            })
+            .catch(() => {
+            })
+    }
+
+    getCount = () => {
+        fetch('http://localhost:8080/roti/master/user-count/', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
+
+    getCountSearch = () => {
+        fetch(`http://localhost:8080/roti/master/user/searchadmincount?search=`+this.state.search+``, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
 
     view = (index) => {
         const userView = this.state.pengguna[index]
@@ -91,6 +176,7 @@ class DataPengguna extends Component {
 
     componentDidMount() {
         this.fetchPengguna()
+        this.getCount()
     }
 
     render() {
@@ -112,18 +198,14 @@ class DataPengguna extends Component {
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
-                                        <div className="row">
-                                            <div className="col-lg-6">
-                                                <div className="input-group">
-                                                    <span className="input-group-btn">
-                                                        <Label className="btn btn-default">Cari :</Label>
-                                                    </span>
-                                                    <Input type="text" className="form-control" placeholder="Cari..." />
-                                                </div>
-                                            </div>
+                                        <div className="input-group">
+                                            <Input type="search" className="form-control col-md-7" placeholder="Pencarian Id User, Nama Lengkap, Nama Pengguna, dan Peran" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
+                                            <Button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                <i className="fa fa-search" />
+                                            </Button>
                                         </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table id="surat_masuk" className="table table-striped table-bordered table-hover">
+                                            <table className="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
                                                         <th><center>No</center></th>
@@ -140,8 +222,8 @@ class DataPengguna extends Component {
                                                         this.state.pengguna.map((user, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{index + 1}</center></td>
-                                                                    <td>{user.idUser}</td>
+                                                                    <td><center>{(5*(this.state.page - 1)+(index + 1))}</center></td>
+                                                                    <td>{user.idUser.substring(0,8)}</td>
                                                                     <td>{user.namaLengkap}</td>
                                                                     <td>{user.username}</td>
                                                                     <td><center>{user.role}</center></td>
@@ -179,6 +261,10 @@ class DataPengguna extends Component {
                                                     }
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        <div className="pagination float-right">
+                                            {/* <Typography>Page: {page}</Typography> */}
+                                            <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                                         </div>
                                     </div>
                                 </div>

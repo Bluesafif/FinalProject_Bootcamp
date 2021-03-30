@@ -1,7 +1,9 @@
 package finalProject.toko.roti.controller;
 
 import finalProject.toko.roti.model.Roti;
+import finalProject.toko.roti.model.User;
 import finalProject.toko.roti.service.RotiService;
+import finalProject.toko.roti.service.UserService;
 import finalProject.toko.roti.util.CustomErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -24,18 +25,14 @@ public class RotiController {
     @Autowired
     RotiService rotiService;
 
+    @Autowired
+    UserService userService;
+
     //------------------Get All Roti------------------//
 
     @GetMapping("/roti")
-    public ResponseEntity<List<Roti>> listAllRoti(@RequestParam Map<Object, Object> pagination){
-        String paginationSelect = "";
-        if (pagination.containsKey("limit")){
-            paginationSelect += " LIMIT " + pagination.get("limit");
-        }
-        if(pagination.containsKey("offset")){
-            paginationSelect += " OFFSET " + pagination.get("offset");
-        }
-        List<Roti> rotiList = rotiService.findAll(paginationSelect);
+    public ResponseEntity<List<Roti>> listAllRoti(@RequestParam int page, int limit){
+        List<Roti> rotiList = rotiService.findAll(page, limit);
         if (rotiList.isEmpty()) {
             return new ResponseEntity<>(rotiList, HttpStatus.NOT_FOUND);
         }
@@ -45,12 +42,19 @@ public class RotiController {
     //------------------Count All Roti------------------//
 
     @GetMapping("/roti-count/")
-    public ResponseEntity<?> countRoti(){
-        int listRoti = rotiService.findAllCountObat();
-        if (listRoti == 0){
-            return new ResponseEntity<>(listRoti, HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> countRoti(@RequestParam String idUser){
+        User users = userService.findById(idUser);
+
+        int listRoti;
+        if (users.getRole().equals("Admin")){
+            listRoti = rotiService.findAllCountRoti();
+            return new ResponseEntity<>(listRoti,HttpStatus.OK);
+        } else if (users.getRole().equals("Umum") || users.getRole().equals("Member")){
+            listRoti = rotiService.findAllCountRotiPelanggan();
+            return new ResponseEntity<>(listRoti,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Tidak ada!", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(listRoti,HttpStatus.OK);
     }
 
     //------------------Save a Data------------------//
@@ -163,5 +167,34 @@ public class RotiController {
             return new ResponseEntity<>(new CustomErrorType("Tidak ada roti yang tersedia"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(stokRoti, HttpStatus.OK);
+    }
+
+    //------------------Searching Roti------------------//
+
+    @GetMapping("/roti/searchadmin")
+    public ResponseEntity<?> searchingRoti(@RequestParam String search, int page, int limit){
+        List<Roti> rotiList = rotiService.findSearch(search, page, limit);
+        if (rotiList.isEmpty()) {
+            return new ResponseEntity<>(rotiList, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(rotiList, HttpStatus.OK);
+    }
+
+    //------------------Count Searching Roti------------------//
+
+    @GetMapping("/roti/searchadmincount")
+    public ResponseEntity<?> searchingRotiCount(@RequestParam String search, String idUser){
+        User users = userService.findById(idUser);
+
+        int listRoti;
+        if (users.getRole().equals("Admin")){
+            listRoti = rotiService.countSearch(search);
+            return new ResponseEntity<>(listRoti,HttpStatus.OK);
+        } else if (users.getRole().equals("Umum") || users.getRole().equals("Member")){
+            listRoti = rotiService.countSearchPelanggan(search);
+            return new ResponseEntity<>(listRoti,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Tidak ada!", HttpStatus.NOT_FOUND);
+        }
     }
 }

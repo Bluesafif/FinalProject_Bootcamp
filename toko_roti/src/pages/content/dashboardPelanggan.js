@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import rotiGambar from '../../assets/roti.jpg'
+import Pagination from '@material-ui/lab/Pagination';
 
 class DashboardPelanggan extends Component {
     constructor(props) {
@@ -11,12 +12,56 @@ class DashboardPelanggan extends Component {
             bulan: 0,
             tahun: 0,
             count: 0,
-            jumlah: 0
+            jumlah: 0,
+            page: 1,
+            limit: 5,
+            hal: 0,
+            userProfil: {}
         }
     }
 
-    fetchLaporan = () => {
-        fetch(`http://localhost:8080/roti/laporancustomer/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+    getProfil = () => {
+        fetch(`http://localhost:8080/roti/master/profil/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    userProfil: json
+                });
+                if (this.state.userProfil.role === "Umum") {
+                    if (this.state.jumlah >= 500000 || this.state.count >= 100) {
+                        this.upgrade()
+                    }
+                } else if (this.state.userProfil.role === "Member") {
+                    let date = new Date()
+                    if (this.state.laporan[0].tglBeli - date >= 14) {
+                        this.downgrade()
+                    }
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+            });
+    };
+
+    handleChange = (event, value) => {
+        this.setState({
+            page: value
+        })
+        this.fetchLaporan(value, 3);
+    }
+
+    fetchLaporan = (page, limit) => {
+        if (page === undefined) {
+            page = 1
+        }
+        fetch(`http://localhost:8080/roti/laporancustomer/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}&limit=` + this.state.limit + `&page=` + page + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -32,6 +77,26 @@ class DashboardPelanggan extends Component {
             })
             .catch(() => {
             })
+    }
+
+    getCount = () => {
+        fetch(`http://localhost:8080/roti/laporancustomer-count?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    hal: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
     }
 
     fetchCountPembelian = () => {
@@ -79,24 +144,51 @@ class DashboardPelanggan extends Component {
         })
     }
 
+    upgrade = () => {
+        fetch(`http://localhost:8080/roti/master/status-member?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                if (typeof json.errorMessage !== "undefined") {
+                    alert(json.errorMessage);
+                } else if (typeof json.errorMessage === "undefined") {
+                    alert(
+                        json.errorMessage
+                    );
+                    window.location.reload()
+                }
+            })
+            .catch(() => {
+            })
+    }
+
     componentDidMount() {
+        this.getProfil()
         this.fetchLaporan()
         this.fetchCountPembelian()
         this.fetchCountTotal()
+        this.getCount()
 
         let date = new Date();
         let month = date.getMonth();
         let year = date.getFullYear();
-        let arrMonth = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"]
+        let arrMonth = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
 
         this.setState({
             bulan: arrMonth[month],
             tahun: year
         })
     }
-    
+
     render() {
-        console.log(this.state.laporanView);
+        console.log(this.state.userProfil);
+        console.log(this.state.laporan);
         return (
             <>
                 <div>
@@ -113,9 +205,12 @@ class DashboardPelanggan extends Component {
                         <div className="row top_tiles">
                             <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div className="background tile-stats">
-                                    <div className="icon"><i className="fa fa-check" /></div>
+                                    { this.state.userProfil.role === "Member"
+                                        ? <div className="icon"><i className="fa fa-check blue" /></div>
+                                        : <div className="icon"><i className="fa fa-check" /></div>
+                                    }
                                     <div className="count">Status</div>
-                                    <h3>{this.props.userLogin.role}</h3>
+                                    <h3>{this.state.userProfil.role}</h3>
                                 </div>
                             </div>
                             <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -180,7 +275,7 @@ class DashboardPelanggan extends Component {
                                                     return (
                                                         <>
                                                             <tr align="center">
-                                                                <td>{index + 1}</td>
+                                                                <td>{(5*(this.state.page - 1)+(index + 1))}</td>
                                                                 <td>{laporan.idLaporan}</td>
                                                                 <td>{laporan.jumlahKuantitas}</td>
                                                                 <td>{laporan.tglBeli}</td>
@@ -195,6 +290,10 @@ class DashboardPelanggan extends Component {
                                             }
                                         </tbody>
                                     </table>
+                                </div>
+                                <div className="pagination float-right">
+                                    {/* <Typography>Page: {page}</Typography> */}
+                                    <Pagination count={this.state.hal} page={this.state.page} onChange={this.handleChange} />
                                 </div>
                             </div>
                         </div>

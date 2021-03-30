@@ -9,6 +9,7 @@ class Login extends Component {
         super(props);
         this.state = {
             username: "",
+            type:"password",
             password: "",
             users: {}
         }
@@ -47,7 +48,6 @@ class Login extends Component {
                 this.setState({
                     users:json
                 });
-                console.log("Data ",this.state.users);
             if(this.state.users.role === "Admin"){
                 this.props.submitLogin({ data: this.state.users});
                 this.props.history.push("/admin");
@@ -74,7 +74,22 @@ class Login extends Component {
         }
     }
 
+    hideshow = () => {
+        
+        if(this.state.type === "password"){
+            this.setState({
+                type: "text"
+            })
+        }
+        else{
+            this.setState({
+                type: "password"
+            })
+        }
+    }
+
     render() {
+        console.log(this.state.type);
         this.validation()
         const { username, password } = this.state;
         return (
@@ -89,7 +104,13 @@ class Login extends Component {
                                     <Input type="text" name="username" className="form-control input" placeholder="Nama Pengguna" required="required" onChange={this.setValue} />
                                 </div>
                                 <div>
-                                    <Input type="password" name="password" className="form-control input" placeholder="Kata Sandi" required="required" onChange={this.setValue} />
+                                    <Input type={this.state.type} name="password" className="form-control" placeholder="Kata Sandi" required="required" onChange={this.setValue} />
+                                    <span className="eye-password">
+                                        <i className={ this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                           id="togglePassword"
+                                           onClick={() => this.hideshow()}
+                                        />
+                                    </span>
                                 </div>
                                 <div>
                                     <Button className="btn btn-success form-control margin-top" onClick={() => this.doLogin({username, password})}>Masuk</Button>
