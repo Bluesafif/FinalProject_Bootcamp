@@ -2,7 +2,6 @@ package finalProject.toko.roti.repository;
 
 import finalProject.toko.roti.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +17,7 @@ public class UserRepositoryImpl implements UserRepository{
 
     @Override
     public User findByUsername(String username) {
-        return jdbcTemplate.query("SELECT * FROM user WHERE username=?",
+        return jdbcTemplate.query("SELECT * FROM user WHERE BINARY username=?",
                     preparedStatement -> {
                         preparedStatement.setString(1, username);
                     },
@@ -184,5 +183,38 @@ public class UserRepositoryImpl implements UserRepository{
                         "WHERE idUser LIKE '%"+search+"%' OR username LIKE '%"+search+"%' OR namaLengkap LIKE '%"+search+"%' OR role LIKE '%"+search+"%'",
                 Integer.class);
         return countUser;
+    }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        String query = "SELECT COUNT(*) FROM user WHERE email =?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, email);
+        return count > 0;
+    }
+
+    @Override
+    public void ubahUmum(String idUser) {
+        jdbcTemplate.update("UPDATE user SET role='Umum' WHERE idUser='"+idUser+"'");
+    }
+
+    @Override
+    public boolean isUsernameExistEdit(String username, String idUser) {
+        String query = "SELECT COUNT(*) FROM user WHERE username =? AND idUser <> ?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, username, idUser);
+        return count > 0;
+    }
+
+    @Override
+    public boolean isTeleponExistEdit(String nomorTelepon, String idUser) {
+        String query = "SELECT COUNT(*) FROM user WHERE nomorTelepon =? AND idUser <> ?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, nomorTelepon, idUser);
+        return count > 0;
+    }
+
+    @Override
+    public boolean isEmailExistEdit(String email, String idUser) {
+        String query = "SELECT COUNT(*) FROM user WHERE email =? AND idUser <> ?";
+        int count = jdbcTemplate.queryForObject(query, Integer.class, email, idUser);
+        return count > 0;
     }
 }

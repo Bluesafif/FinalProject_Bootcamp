@@ -21,7 +21,7 @@ class DashboardPelanggan extends Component {
     }
 
     getProfil = () => {
-        fetch(`http://localhost:8080/roti/master/profil/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+        fetch(`http://localhost:8080/roti/master/profil/?idUser=${this.props.userLogin.idUser}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -111,7 +111,7 @@ class DashboardPelanggan extends Component {
             .then((response) => response.json())
             .then((json) => {
                 this.setState({
-                    count: json,
+                    count: Number(json),
                 });
             })
             .catch(() => {
@@ -130,7 +130,7 @@ class DashboardPelanggan extends Component {
             .then((response) => response.json())
             .then((json) => {
                 this.setState({
-                    jumlah: json,
+                    jumlah: Number(json),
                 });
             })
             .catch(() => {
@@ -186,9 +186,14 @@ class DashboardPelanggan extends Component {
         })
     }
 
+    formatRupiah = (bilangan) => {
+        var reverse = bilangan.toString().split("").reverse().join(""),
+          ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join(".").split("").reverse().join("");
+        return ribuan;
+    };
+
     render() {
-        console.log(this.state.userProfil);
-        console.log(this.state.laporan);
         return (
             <>
                 <div>
@@ -223,7 +228,7 @@ class DashboardPelanggan extends Component {
                             <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div className="tile-stats">
                                     <div className="icon"><i className="fa fa-money" /></div>
-                                    <div className="count">Rp. {this.state.jumlah}</div>
+                                    <div className="count">Rp. {this.formatRupiah(this.state.jumlah)}</div>
                                     <h3>Biaya Pengeluaran</h3>
                                 </div>
                             </div>
@@ -269,26 +274,35 @@ class DashboardPelanggan extends Component {
                                                 <th><center>Action</center></th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            {
-                                                this.state.laporan.map((laporan, index) => {
-                                                    return (
-                                                        <>
-                                                            <tr align="center">
-                                                                <td>{(5*(this.state.page - 1)+(index + 1))}</td>
-                                                                <td>{laporan.idLaporan}</td>
-                                                                <td>{laporan.jumlahKuantitas}</td>
-                                                                <td>{laporan.tglBeli}</td>
-                                                                <td>Rp. {laporan.jumlahPembayaran}</td>
-                                                                <td>
-                                                                    <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                </td>
-                                                            </tr>
-                                                        </>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
+                                        { this.state.laporan.length === 0
+                                        ?
+                                            <tbody>
+                                                <tr align="center">
+                                                    <td colSpan="6">Belum ada pembelian di bulan {this.state.bulan}&nbsp;{this.state.tahun}</td>
+                                                </tr>
+                                            </tbody>
+                                        :
+                                            <tbody>
+                                                {
+                                                    this.state.laporan.map((laporan, index) => {
+                                                        return (
+                                                            <>
+                                                                <tr align="center">
+                                                                    <td>{(5*(this.state.page - 1)+(index + 1))}</td>
+                                                                    <td>{laporan.idLaporan}</td>
+                                                                    <td>{laporan.jumlahKuantitas}</td>
+                                                                    <td>{laporan.tglBeli}</td>
+                                                                    <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
+                                                                    <td>
+                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                    </td>
+                                                                </tr>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </tbody>
+                                        }
                                     </table>
                                 </div>
                                 <div className="pagination float-right">

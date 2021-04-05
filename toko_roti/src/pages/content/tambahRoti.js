@@ -41,7 +41,11 @@ class AddRoti extends Component {
             obj.hargaSatuan === "" || obj.hargaLusin === "" ||
             obj.keterangan === ""
         ) {
-            alert("Semua Data wajib diisi");
+            alert("Semua data wajib diisi");
+        }else if(obj.idRoti.length > 10){
+            alert("ID Roti terlalu panjang. Maksimal 10 karakter")
+        }else if(obj.namaRoti.length > 50){
+            alert("Nama Roti terlalu panjang. Maksimal 50 karakter")
         } else {
             const objekAdd = {
                 idRoti: this.state.idRoti,
@@ -65,14 +69,14 @@ class AddRoti extends Component {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    if (typeof json.errorMessage !== "undefined") {
-                        alert(json.errorMessage);
-                    } else if (typeof json.errorMessage === "undefined") {
+                    if (typeof json.successMessage !== "undefined") {
+                        alert(json.successMessage);
+                        this.props.history.push("/admin-roti");
+                    } else if (typeof json.errorMessage !== "undefined") {
                         alert(
                             json.errorMessage
                         );
                     }
-                    this.props.history.push("/admin-roti");
                 })
                 .catch((e) => {
                     window.alert(e);
@@ -99,6 +103,18 @@ class AddRoti extends Component {
                 alert("failed fetching data");
             });
     };
+
+    reset = () => {
+        this.setState({
+            idRoti: "",
+            namaRoti: "",
+            idJenisRoti: "",
+            stokRoti: "",
+            hargaSatuan: "",
+            hargaLusin: "",
+            keterangan: ""
+        })
+    }
 
     componentDidMount(){
         this.fetchJenis()
@@ -168,16 +184,10 @@ class AddRoti extends Component {
                                             <Textarea type="text" name="keterangan" className="form-control col-md-7 col-xs-12" required="required" value={this.state.keterangan} onChange={this.setValue} />
                                         </div>
                                     </div>
-                                    <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Unggah Foto</Label>
-                                        <div className="col-md-3 col-sm-6 col-xs-12">
-                                            <Input type="file" name="myImage" onChange={this.onImageChange} />
-                                        </div>
-                                    </div>
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default">Reset</Button>
+                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button type="submit" className="btn btn-success" name="edit" onClick={this.doTambahRoti}>Simpan</Button>
                                         </div>
                                     </div>

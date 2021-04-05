@@ -22,7 +22,7 @@ class DashboardAdmin extends Component {
             .then(response => response.json())
             .then(json => {
                 this.setState({
-                    count: json
+                    count: Number(json)
                 });
             })
             .catch((e) => {
@@ -42,7 +42,7 @@ class DashboardAdmin extends Component {
             .then((response) => response.json())
             .then((json) => {
                 this.setState({
-                    rotiTerjual: json,
+                    rotiTerjual: Number(json),
                 });
             })
             .catch(() => {
@@ -61,12 +61,19 @@ class DashboardAdmin extends Component {
             .then((response) => response.json())
             .then((json) => {
                 this.setState({
-                    jumlahPendapatan: json,
+                    jumlahPendapatan: Number(json),
                 });
             })
             .catch(() => {
             })
     }
+
+    formatRupiah = (bilangan) => {
+        var reverse = bilangan.toString().split("").reverse().join(""),
+          ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join(".").split("").reverse().join("");
+        return ribuan;
+    };
 
     componentDidMount(){
         this.rotiCreated()
@@ -102,7 +109,7 @@ class DashboardAdmin extends Component {
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
                                 <div className="icon"><i className="fa fa-money" /></div>
-                                <div className="count">Rp. {this.state.jumlahPendapatan}</div>
+                                <div className="count">Rp. {this.formatRupiah(this.state.jumlahPendapatan)}</div>
                                 <h3>Pendapatan Sebulan</h3>
                             </div>
                         </div>

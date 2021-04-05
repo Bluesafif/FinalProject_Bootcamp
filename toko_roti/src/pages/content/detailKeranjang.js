@@ -274,6 +274,15 @@ class DetailKeranjang extends Component {
                                     <h2>Detail Keranjang</h2>
                                     <div className="clearfix" />
                                 </div>
+                                <div className="alert alert-info alert-dismissible bg-blue-sky" role="alert">
+                                        <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <p><strong>Keterangan:</strong></p>
+                                        <ul>
+                                            <li><strong>Harga:</strong> Harga akan berubah menjadi harga lusinan jika <strong>Kuantitas ROTI</strong> yang dibeli melebihi 12 buah.</li>
+                                            <li><strong>Diskon:</strong> Diskon sebesar 10% akan diberikan apabila status Pembeli sebagai <strong>"MEMBER"</strong>.</li>
+                                        </ul>
+                                    </div>
                                 <div className="x_content">
                                     <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
                                         <table id="surat_masuk" className="table table-striped table-bordered table-hover">
@@ -345,27 +354,33 @@ class DetailKeranjang extends Component {
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Total</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahTotal}</Label>
+                                    { this.state.rotiList.length !== 0
+                                    ?
+                                    <>
+                                        <div className="item form-group">
+                                            <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Total</Label>
+                                            <div className="col-md-6 col-sm-6 col-xs-12">
+                                                <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahTotal}</Label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Diskon</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.diskon}</Label>
+                                        <div className="item form-group">
+                                            <Label className="control-label col-md-3 col-sm-3 col-xs-12">Diskon</Label>
+                                            <div className="col-md-6 col-sm-6 col-xs-12">
+                                                <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.diskon}</Label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Pembayaran</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahPembayaran}</Label>
+                                        <div className="item form-group">
+                                            <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Pembayaran</Label>
+                                            <div className="col-md-6 col-sm-6 col-xs-12">
+                                                <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahPembayaran}</Label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="item form-group">
-                                        <Button className="btn btn-success control-label col-md-3 col-sm-3 col-xs-12" onClick={() => this.checkout()}>Checkout</Button>
-                                    </div>
+                                        <div className="item form-group">
+                                            <Button className="btn btn-success control-label col-md-3 col-sm-3 col-xs-12" onClick={() => this.checkout()}>Checkout</Button>
+                                        </div>
+                                    </>
+                                    : <></>
+                                    }
                                 </div>
                             </div>
                         </div>

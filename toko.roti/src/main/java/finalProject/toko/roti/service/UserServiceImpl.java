@@ -111,4 +111,31 @@ public class UserServiceImpl implements UserService{
     public int countSearch(String search) {
         return userRepository.countSearch(search);
     }
+
+    @Override
+    public boolean isEmailExist(String email) {
+        return userRepository.isEmailExist(email);
+    }
+
+    @Override
+    public void ubahUmum(String idUser) {
+        synchronized (this) {
+            userRepository.ubahUmum(idUser);
+        }
+    }
+
+    @Override
+    public boolean isUsernameExistEdit(String username, String idUser) {
+        return userRepository.isUsernameExistEdit(username, idUser);
+    }
+
+    @Override
+    public boolean isTeleponExistEdit(String nomorTelepon, String idUser) {
+        return userRepository.isTeleponExistEdit(nomorTelepon, idUser);
+    }
+
+    @Override
+    public boolean isEmailExistEdit(String email, String idUser) {
+        return userRepository.isEmailExistEdit(email, idUser);
+    }
 }

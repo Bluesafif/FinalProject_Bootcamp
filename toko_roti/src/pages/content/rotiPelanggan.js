@@ -182,6 +182,13 @@ class RotiPelangganContent extends Component {
         }
     }
 
+    formatRupiah = (bilangan) => {
+        var reverse = bilangan.toString().split("").reverse().join(""),
+          ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join(".").split("").reverse().join("");
+        return ribuan;
+    };
+
     componentDidMount() {
         this.fetchRoti()
         this.getKeranjang()
@@ -221,16 +228,20 @@ class RotiPelangganContent extends Component {
                                                         <div className="row row-content padding">
                                                             <div className="product-wrap mb-20">
                                                                 <div className="product-img b-s" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>
-                                                                    <img src={rotiGambar} alt="..." className="default-img" />
+                                                                    <img src={rotiGambar} alt="..." className="default-img" title={roti.namaRoti}/>
                                                                 </div>
                                                                 <div className="product-content">
-                                                                    <div className="product-header"></div>
-                                                                    <h3 className="b-s" title="Kacang Mede Original" data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>{roti.namaRoti} &nbsp;
-                                                                    {roti.stokRoti === 0 && <span className="badge badge-danger">Habis</span>}</h3>
+                                                                    <div className="product-header">
+                                                                        <h3 title={roti.namaRoti} data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>{roti.namaRoti}</h3>
+                                                                    </div>
+                                                                    <h6 data-toggle="modal" data-target="#exampleModal" onClick={() => this.view(index)}>
+                                                                        Stok: {roti.stokRoti}
+                                                                        &nbsp;
+                                                                        {roti.stokRoti === 0 && <span className="badge badge-danger">Habis</span>}
+                                                                    </h6>
                                                                 </div>
-                                                                <div className="product-realprice">&nbsp;</div>
                                                                 <div className="product-price">
-                                                                    <span>&nbsp;&nbsp;Rp. {roti.hargaSatuan}</span>
+                                                                    <span>&nbsp;&nbsp;Rp. {this.formatRupiah(roti.hargaSatuan)}</span>
                                                                 </div>
                                                             </div>
                                                         </div>

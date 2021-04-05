@@ -52,37 +52,48 @@ class UbahPengguna extends Component {
     }
 
     saveUbah = () => {
-        const objekUbah = {
-            namaLengkap: this.state.namaLengkap,
-            username: this.state.username,
-            nomorTelepon: this.state.nomorTelepon,
-            email: this.state.email,
-            alamat: this.state.alamat
-        };
-
-        fetch(`http://localhost:8080/roti/master/user/${this.props.match.params.idUser}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json; ; charset=utf-8",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "Access-Control-Allow-Origin": "*"
-            },
-            body: JSON.stringify(objekUbah)
-        })
-        .then((response) => response.json())
-        .then(json => {
-            if (typeof json.errorMessage !== "undefined") {
-                alert(json.errorMessage);
-            } else if (typeof json.errorMessage === "undefined") {
-                alert(
-                    json.errorMessage
-                );
-            }
-            this.props.history.push("/admin-pengguna")
-        })
-        .catch((e) => {
-            window.alert(e);
-        });
+        let obj = this.state
+        if (
+            obj.namaLengkap === "" || obj.username === "" ||
+            obj.nomorTelepon === "" || obj.email === "" ||
+            obj.alamat === ""
+        ) {
+            alert("Semua data wajib diisi");
+        } else if (obj.namaLengkap.length > 50) {
+            alert("Nama Lengkap terlalu panjang, maksimal 50 karakter.")
+        } else {
+            const objekUbah = {
+                namaLengkap: this.state.namaLengkap,
+                username: this.state.username,
+                nomorTelepon: this.state.nomorTelepon,
+                email: this.state.email,
+                alamat: this.state.alamat
+            };
+    
+            fetch(`http://localhost:8080/roti/master/user/${this.props.match.params.idUser}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*"
+                },
+                body: JSON.stringify(objekUbah)
+            })
+            .then((response) => response.json())
+            .then(json => {
+                if (typeof json.errorMessage !== "undefined") {
+                    alert(json.errorMessage);
+                } else if (typeof json.successMessage !== "undefined") {
+                    alert(
+                        json.successMessage
+                    );
+                    this.props.history.push("/admin-pengguna");
+                }
+            })
+            .catch((e) => {
+                window.alert(e);
+            });
+        }
     }
 
     reset = () => {

@@ -9,15 +9,15 @@ public interface LaporanService {
 
     List<Laporan> findAllCustomer(String idUser, int page, int limit);
 
-    int countAllKuantitasRoti(String idUser);
+    String countAllKuantitasRoti(String idUser);
 
-    int countPengeluaranRoti(String idUser);
+    String countPengeluaranRoti(String idUser);
 
     List<Laporan> findAll(int page, int limit);
 
-    int countAllRotiTerjual();
+    String countAllRotiTerjual();
 
-    int countPendapatanRoti();
+    String countPendapatanRoti();
 
     int findAllCountLaporan(String idUser);
 
@@ -26,4 +26,6 @@ public interface LaporanService {
     List<Laporan> findAllMonth(int page, int limit, int bulan, int tahun, String namaPembeli, String namaRoti);
 
     int countAllLaporanMonth(int bulan, int tahun, String namaPembeli, String namaRoti);
+
+    Laporan cariLaporan(String idUser);
 }

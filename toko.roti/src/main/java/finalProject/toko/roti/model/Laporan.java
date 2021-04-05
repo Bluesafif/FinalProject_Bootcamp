@@ -15,6 +15,7 @@ public class Laporan {
     private String namaLengkap;
     private int jumlahKuantitas;
     List<Roti> rotiList;
+    private int selisih;
 
     public Laporan() {
     }
@@ -42,6 +43,10 @@ public class Laporan {
         this.statusLaporan = statusLaporan;
         this.namaLengkap = namaLengkap;
         this.jumlahKuantitas = jumlahKuantitas;
+    }
+
+    public Laporan(int selisih) {
+        this.selisih = selisih;
     }
 
     public String getIdLaporan() {
@@ -132,6 +137,14 @@ public class Laporan {
         this.rotiList = rotiList;
     }
 
+    public int getSelisih() {
+        return selisih;
+    }
+
+    public void setSelisih(int selisih) {
+        this.selisih = selisih;
+    }
+
     @Override
     public String toString() {
         return "Laporan{" +
@@ -146,6 +159,7 @@ public class Laporan {
                 ", namaLengkap='" + namaLengkap + '\'' +
                 ", jumlahKuantitas=" + jumlahKuantitas +
                 ", rotiList=" + rotiList +
+                ", selisih=" + selisih +
                 '}';
     }
 }

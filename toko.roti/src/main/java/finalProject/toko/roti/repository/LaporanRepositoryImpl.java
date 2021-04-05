@@ -48,6 +48,11 @@ public class LaporanRepositoryImpl implements LaporanRepository{
         if (page > numPages) page = numPages;
         int start = (page-1) * limit;
 
+        if(numPages == 0){
+            start=0;
+            limit=0;
+        }
+
         List<Laporan> laporanList;
         laporanList = jdbcTemplate.query("SELECT b.*, SUM(a.kuantitas) AS jumlahKuantitas FROM detailLaporan a JOIN laporan b ON a.idLaporan=b.idLaporan " +
                         "WHERE b.idUser='" + idUser + "' AND MONTH(b.tglBeli)=MONTH(NOW()) AND YEAR(b.tglBeli)=YEAR(NOW()) " +
@@ -90,18 +95,18 @@ public class LaporanRepositoryImpl implements LaporanRepository{
     }
 
     @Override
-    public int countAllKuantitasRoti(String idUser) {
-        int kuantitasRoti;
+    public String countAllKuantitasRoti(String idUser) {
+        String kuantitasRoti;
         kuantitasRoti = jdbcTemplate.queryForObject("SELECT SUM(a.kuantitas) AS Jumlah FROM detailLaporan a JOIN laporan b ON a.idLaporan=b.idLaporan WHERE b.idUser='"+idUser+"' AND MONTH(b.tglBeli)=MONTH(NOW()) AND YEAR(b.tglBeli)=YEAR(NOW())",
-                Integer.class);
+                String.class);
         return kuantitasRoti;
     }
 
     @Override
-    public int countPengeluaranRoti(String idUser) {
-        int pengeluaranRoti;
+    public String countPengeluaranRoti(String idUser) {
+        String pengeluaranRoti;
         pengeluaranRoti = jdbcTemplate.queryForObject("SELECT SUM(jumlahPembayaran) AS jumlah FROM laporan WHERE idUser='"+idUser+"' AND MONTH(tglBeli)=MONTH(NOW()) AND YEAR(tglBeli)=YEAR(NOW())",
-                Integer.class);
+                String.class);
         return pengeluaranRoti;
     }
 
@@ -115,6 +120,11 @@ public class LaporanRepositoryImpl implements LaporanRepository{
         if (page < 1) page = 1;
         if (page > numPages) page = numPages;
         int start = (page-1) * limit;
+
+        if(numPages == 0){
+            start=0;
+            limit=0;
+        }
 
         List<Laporan> laporanList;
         laporanList = jdbcTemplate.query("SELECT b.*, c.namaLengkap, SUM(a.kuantitas) AS jumlahKuantitas " +
@@ -160,18 +170,18 @@ public class LaporanRepositoryImpl implements LaporanRepository{
     }
 
     @Override
-    public int countAllRotiTerjual() {
-        int rotiTerjual;
+    public String countAllRotiTerjual() {
+        String rotiTerjual;
         rotiTerjual = jdbcTemplate.queryForObject("SELECT SUM(a.kuantitas) AS Jumlah FROM detailLaporan a JOIN laporan b ON a.idLaporan=b.idLaporan WHERE MONTH(b.tglBeli)=MONTH(NOW()) AND YEAR(b.tglBeli)=YEAR(NOW())",
-                Integer.class);
+                String.class);
         return rotiTerjual;
     }
 
     @Override
-    public int countPendapatanRoti() {
-        int pendapatanRoti;
+    public String countPendapatanRoti() {
+        String pendapatanRoti;
         pendapatanRoti = jdbcTemplate.queryForObject("SELECT SUM(jumlahPembayaran) AS jumlah FROM laporan WHERE MONTH(tglBeli)=MONTH(NOW()) AND YEAR(tglBeli)=YEAR(NOW())",
-                Integer.class);
+                String.class);
         return pendapatanRoti;
     }
 
@@ -203,6 +213,11 @@ public class LaporanRepositoryImpl implements LaporanRepository{
         if (page < 1) page = 1;
         if (page > numPages) page = numPages;
         int start = (page-1) * limit;
+
+        if(numPages == 0){
+            start=0;
+            limit=0;
+        }
 
         List<Laporan> laporanList;
         laporanList = jdbcTemplate.query("SELECT b.*, c.namaLengkap, d.namaRoti, SUM(a.kuantitas) AS jumlahKuantitas " +
@@ -252,9 +267,20 @@ public class LaporanRepositoryImpl implements LaporanRepository{
         int countLaporan;
         countLaporan = jdbcTemplate.queryForObject("SELECT COUNT(*) as count " +
                         "FROM detailLaporan a JOIN laporan b JOIN user c JOIN roti d ON a.idLaporan=b.idLaporan AND b.idUser=c.idUser AND a.idRoti=d.idRoti " +
-                        "WHERE MONTH(b.tglBeli)="+bulan+" AND YEAR(b.tglBeli)="+tahun+" AND c.namaLengkap LIKE '%"+namaPembeli+"%' AND d.namaRoti LIKE '%"+namaRoti+"%' " +
-                        "GROUP BY a.idLaporan",
+                        "WHERE MONTH(b.tglBeli)="+bulan+" AND YEAR(b.tglBeli)="+tahun+" AND c.namaLengkap LIKE '%"+namaPembeli+"%' AND d.namaRoti LIKE '%"+namaRoti+"%'",
                 Integer.class);
         return countLaporan;
+    }
+
+    @Override
+    public Laporan cariLaporan(String idUser) {
+        return jdbcTemplate.query("SELECT DATE(NOW())-MAX(DATE(tglBeli)) as 'selisih' FROM laporan WHERE idUser=?",
+                preparedStatement -> {
+                    preparedStatement.setString(1, idUser);
+                },
+                (rs, rowNum) ->
+                        new Laporan(
+                                rs.getInt("selisih")
+                        )).get(0);
     }
 }

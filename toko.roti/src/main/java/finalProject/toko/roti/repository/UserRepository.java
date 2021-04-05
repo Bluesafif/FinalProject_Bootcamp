@@ -33,4 +33,14 @@ public interface UserRepository {
     List<User> findSearch(String search, int page, int limit);
 
     int countSearch(String search);
+
+    boolean isEmailExist(String email);
+
+    void ubahUmum(String idUser);
+
+    boolean isUsernameExistEdit(String username, String idUser);
+
+    boolean isTeleponExistEdit(String nomorTelepon, String idUser);
+
+    boolean isEmailExistEdit(String email, String idUser);
 }

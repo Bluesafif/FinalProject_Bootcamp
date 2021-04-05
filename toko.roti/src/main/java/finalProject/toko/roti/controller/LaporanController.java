@@ -120,9 +120,10 @@ public class LaporanController {
 
     @GetMapping("/laporan/allkuantitascount")
     public ResponseEntity<?> countAllKuantitasRoti(@RequestParam String idUser){
-        int kuantitasRoti = laporanService.countAllKuantitasRoti(idUser);
-        if (kuantitasRoti == 0){
-            return new ResponseEntity<>(new CustomErrorType("Tidak ada roti yang terbeli"), HttpStatus.NOT_FOUND);
+        String kuantitasRoti = laporanService.countAllKuantitasRoti(idUser);
+        if (kuantitasRoti == null){
+            int count = 0;
+            return new ResponseEntity<>(count, HttpStatus.OK);
         }
         return new ResponseEntity<>(kuantitasRoti, HttpStatus.OK);
     }
@@ -131,9 +132,10 @@ public class LaporanController {
 
     @GetMapping("/laporan/allpengeluarancount")
     public ResponseEntity<?> countPengeluaranRoti(@RequestParam String idUser){
-        int pengeluaranRoti = laporanService.countPengeluaranRoti(idUser);
-        if (pengeluaranRoti == 0){
-            return new ResponseEntity<>(new CustomErrorType("Tidak ada pengeluaran"), HttpStatus.NOT_FOUND);
+        String pengeluaranRoti = laporanService.countPengeluaranRoti(idUser);
+        if (pengeluaranRoti == null){
+            int count = 0;
+            return new ResponseEntity<>(count, HttpStatus.OK);
         }
         return new ResponseEntity<>(pengeluaranRoti, HttpStatus.OK);
     }
@@ -142,9 +144,10 @@ public class LaporanController {
 
     @GetMapping("/laporan/allrotiterjual")
     public ResponseEntity<?> countAllRotiTerjual(){
-        int kuantitasRoti = laporanService.countAllRotiTerjual();
-        if (kuantitasRoti == 0){
-            return new ResponseEntity<>(new CustomErrorType("Tidak ada roti yang terjual"), HttpStatus.NOT_FOUND);
+        String kuantitasRoti = laporanService.countAllRotiTerjual();
+        if (kuantitasRoti == null){
+            int count = 0;
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(kuantitasRoti, HttpStatus.OK);
     }
@@ -153,9 +156,10 @@ public class LaporanController {
 
     @GetMapping("/laporan/allpendapatancount")
     public ResponseEntity<?> countPendapatanRoti(){
-        int pendapatanRoti = laporanService.countPendapatanRoti();
-        if (pendapatanRoti == 0){
-            return new ResponseEntity<>(new CustomErrorType("Tidak ada pendapatan"), HttpStatus.NOT_FOUND);
+        String pendapatanRoti = laporanService.countPendapatanRoti();
+        if (pendapatanRoti == null){
+            int count = 0;
+            return new ResponseEntity<>(count, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(pendapatanRoti, HttpStatus.OK);
     }

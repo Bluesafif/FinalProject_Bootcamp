@@ -52,6 +52,16 @@ class UbahPenggunaPel extends Component {
     }
 
     saveUbah = () => {
+        let obj = this.state
+        if (
+            obj.namaLengkap === "" || obj.username === "" ||
+            obj.nomorTelepon === "" || obj.email === "" ||
+            obj.alamat === ""
+        ) {
+            alert("Semua data wajib diisi");
+        } else if (obj.namaLengkap.length > 50) {
+            alert("Nama Lengkap terlalu panjang, maksimal 50 karakter.")
+        } else {
         const objekUbah = {
             namaLengkap: this.state.namaLengkap,
             username: this.state.username,
@@ -73,17 +83,17 @@ class UbahPenggunaPel extends Component {
             .then(json => {
                 if (typeof json.errorMessage !== "undefined") {
                     alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
+                } else if (typeof json.successMessage !== "undefined") {
                     alert(
-                        json.errorMessage
+                        json.successMessage
                     );
+                    this.props.history.push("/data-pelanggan")
                 }
-                this.props.history.push("/data-pelanggan")
             })
             .catch((e) => {
                 window.alert(e);
             });
-
+        }
     }
 
     reset = () => {

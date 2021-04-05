@@ -12,7 +12,7 @@ class UbahRoti extends Component {
             hargaSatuan: "",
             hargaLusin: "",
             keterangan: "",
-            jenisRoti:[],
+            jenisRoti: [],
             operator: "tambah",
             tambahRoti: ""
         }
@@ -78,19 +78,19 @@ class UbahRoti extends Component {
     };
 
     saveUbah = () => {
-        let stokUbah
+        let stokUbah = 0
 
         if (this.state.operator === "tambah") {
             stokUbah = this.state.stokRoti + Number(this.state.tambahRoti);
-        } else {
+        } else if (this.state.operator === "kurang") {
             if (Number(this.state.tambahRoti > 0)) {
-                if (this.state.stokRoti >= Number(this.state.tambahRoti)) {
-                    stokUbah = this.state.stokRoti - Number(this.state.tambahRoti);
-                } else {
+                if (Number(this.state.stokRoti) < Number(this.state.tambahRoti)) {
                     stokUbah = this.state.stokRoti
                     alert("Input Roti Tidak Boleh Lebih Besar Dari Stok Roti")
+                } else if (Number(this.state.stokRoti) >= Number(this.state.tambahRoti)) {
+                    stokUbah = this.state.stokRoti - Number(this.state.tambahRoti);
                 }
-            } else {
+            } else if (Number(this.state.tambahRoti <= 0)) {
                 stokUbah = this.state.stokRoti
                 alert("Input Roti Tidak Boleh Kurang dari 0")
             }
@@ -118,18 +118,18 @@ class UbahRoti extends Component {
             .then(json => {
                 if (typeof json.errorMessage !== "undefined") {
                     alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
+                } else if (typeof json.successMessage !== "undefined") {
                     alert(
-                        json.errorMessage
+                        json.successMessage
                     );
+                    this.props.history.push("/admin-roti")
                 }
-                this.props.history.push("/admin-roti")
             })
             .catch((e) => {
                 window.alert(e);
             });
-            
-        }
+
+    }
 
     render() {
         return (
@@ -217,5 +217,5 @@ class UbahRoti extends Component {
         );
     }
 }
- 
+
 export default UbahRoti;

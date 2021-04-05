@@ -4729,8 +4729,8 @@ ul.verticle_bars li {
 
 .alert-info {
   color: #E9EDEF;
-  background-color: rgba(52, 152, 219, 0.88);
-  border-color: rgba(52, 152, 219, 0.88); }
+  background-color: #007bff;
+  border-color: #007bff; }
 
 .alert-warning {
   color: #E9EDEF;
@@ -4830,6 +4830,10 @@ ul.notifications {
   text-align: center;
   background-color: #eee;
   border: 1px solid #ccc; }
+
+.padding_bottom{
+  padding-bottom: 22px;
+}
 
 .img-circle {
   border-radius: 50%; }

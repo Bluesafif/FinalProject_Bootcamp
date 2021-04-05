@@ -39,7 +39,7 @@ class TambahAdmin extends Component {
                         </div>
                         <Topnav />
                         <div className="right_col" role="main">
-                            <AddAdmin />
+                            <AddAdmin {...this.props}/>
                         </div>
                     </div>
                 </div>

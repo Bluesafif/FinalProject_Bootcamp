@@ -194,7 +194,7 @@ class DataPengguna extends Component {
                             <div className="col-md-12 col-sm-12 col-xs-12">
                                 <div className="x_panel">
                                     <div className="x_title">
-                                        <h2>Data Pengguna</h2>&nbsp; &nbsp;<Link to="/admin-tambahpengguna" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Admin</Link>
+                                        <h2>Data Pengguna</h2>&nbsp; &nbsp;<Link to="/admin-tambahpengguna" className="btn btn-primary btn-sm float-right"><i className="fa fa-plus" /> Tambah Data Admin</Link>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">

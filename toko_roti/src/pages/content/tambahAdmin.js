@@ -29,6 +29,10 @@ class AddAdmin extends Component {
             obj.email === "" || obj.alamat === ""
         ) {
             alert("Semua Data wajib diisi");
+        } else if(obj.idUser.length > 10){
+            alert("ID User terlalu panjang. Maksimal 10 karakter")
+        } else if(obj.namaLengkap.length > 50){
+            alert("Nama Lengkap terlalu panjang. Maksimal 50 karakter")
         } else {
             const objekAdd = {
                 idUser: this.state.idUser,
@@ -51,12 +55,12 @@ class AddAdmin extends Component {
             .then((json) => {
                 if (typeof json.errorMessage !== "undefined") {
                     alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
+                } else if (typeof json.successMessage !== "undefined") {
                     alert(
-                        json.errorMessage
+                        json.successMessage
                     );
+                    this.props.history.push("/admin-pengguna");
                 }
-                // this.props.history.push("/admin-pengguna");
             })
             .catch((e) => {
                 window.alert(e);

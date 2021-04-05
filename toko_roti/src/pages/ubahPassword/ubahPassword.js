@@ -9,7 +9,15 @@ class UbahPassword extends Component {
         super(props);
         this.state = {  }
     }
+
+    validation = () => {
+        if (this.props.checkLogin === false) {
+            this.props.history.push("/login")
+        }
+    }
+
     render() { 
+        this.validation()
         return (
             <body className="nav-md">
                 <div className="container body">

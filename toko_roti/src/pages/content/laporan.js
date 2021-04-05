@@ -83,7 +83,7 @@ class LaporanContent extends Component {
         let date = new Date()
         let bulan = date.getMonth()
         let year = date.getFullYear();
-        if (this.state.bulan === bulan && this.state.tahun === year) {
+        if (this.state.bulan === bulan && this.state.tahun === year && this.state.namaPembeli === "" && this.state.namaRoti === "") {
             this.fetchLaporan(value, 5);
         } else {
             this.fetchLaporanMonth(value, 5)
@@ -197,6 +197,13 @@ class LaporanContent extends Component {
         })
     }
 
+    formatRupiah = (bilangan) => {
+        var reverse = bilangan.toString().split("").reverse().join(""),
+          ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join(".").split("").reverse().join("");
+        return ribuan;
+      };
+
     render() {
         return (
             <>
@@ -257,9 +264,9 @@ class LaporanContent extends Component {
                                                                         <td>{laporan.namaLengkap}</td>
                                                                         <td>{laporan.jumlahKuantitas}</td>
                                                                         <td>{laporan.tglBeli}</td>
-                                                                        <td>Rp. {laporan.jumlahTotal}</td>
-                                                                        <td>Rp. {laporan.diskon}</td>
-                                                                        <td>Rp. {laporan.jumlahPembayaran}</td>
+                                                                        <td>Rp. {this.formatRupiah(laporan.jumlahTotal)}</td>
+                                                                        <td>Rp. {this.formatRupiah(laporan.diskon)}</td>
+                                                                        <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
                                                                         <td>
                                                                             <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
                                                                         </td>

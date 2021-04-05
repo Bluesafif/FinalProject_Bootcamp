@@ -53,6 +53,8 @@ class UbahPassword extends Component {
             obj.passwordUlangi === ""
         ) {
             alert("Password baru dan Konfirmasi password baru wajib diisi");
+        } else if (obj.passwordLama === obj.password) {
+            alert("Password lama dan Password baru tidak boleh sama")
         } else if (obj.password !== obj.passwordUlangi) {
             alert("Password dan Konfirmasi password baru tidak sesuai");
         } else {
@@ -73,11 +75,11 @@ class UbahPassword extends Component {
                 .then((json) => {
                     if (typeof json.errorMessage !== "undefined") {
                         alert(json.errorMessage);
-                    } else if (typeof json.errorMessage !== "undefined") {
+                    } else if (typeof json.successMessage !== "undefined") {
                         alert(
-                            json.errorMessage
+                            json.successMessage
                         );
-                        this.props.keluar()
+                        this.props.logout()
                         if (this.props.checkLogin === false) {
                             this.refreshPage()
                         }
@@ -85,17 +87,8 @@ class UbahPassword extends Component {
                 })
                 .catch((e) => {
                 });
-                this.reset()
         }
     };
-
-    reset = () => {
-        this.setState({
-            passwordLama: "",
-            password: "",
-            passwordUlangi: ""
-        })
-    }
 
     hideshow = () => {
         if(this.state.type === "password"){
@@ -138,6 +131,11 @@ class UbahPassword extends Component {
 
     componentDidMount() {
         this.getProfil()
+    }
+
+    doLogout = () => {
+        this.props.logout()
+        window.alert("Anda telah berhasil keluar!")
     }
 
     render() {
@@ -211,7 +209,6 @@ class UbahPassword extends Component {
                                     <div className="ln_solid" />
                                     <div className="form-group">
                                         <div className="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                            <Button type="reset" className="btn btn-default" onClick={this.reset}>Reset</Button>
                                             <Button className="btn btn-success" defaultValue="Simpan" name="submit" onClick={this.updatePassword}>Simpan</Button>
                                         </div>
                                     </div>
@@ -233,7 +230,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-      
+        logout: () => dispatch({ type: "LOGOUT_SUCCESS" })
     }
 }
 

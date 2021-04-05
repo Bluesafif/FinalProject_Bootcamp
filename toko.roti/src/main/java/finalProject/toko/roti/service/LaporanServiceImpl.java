@@ -29,12 +29,12 @@ public class LaporanServiceImpl implements LaporanService{
     }
 
     @Override
-    public int countAllKuantitasRoti(String idUser) {
+    public String countAllKuantitasRoti(String idUser) {
         return laporanRepository.countAllKuantitasRoti(idUser);
     }
 
     @Override
-    public int countPengeluaranRoti(String idUser) {
+    public String countPengeluaranRoti(String idUser) {
         return laporanRepository.countPengeluaranRoti(idUser);
     }
 
@@ -45,12 +45,12 @@ public class LaporanServiceImpl implements LaporanService{
     }
 
     @Override
-    public int countAllRotiTerjual() {
+    public String countAllRotiTerjual() {
         return laporanRepository.countAllRotiTerjual();
     }
 
     @Override
-    public int countPendapatanRoti() {
+    public String countPendapatanRoti() {
         return laporanRepository.countPendapatanRoti();
     }
 
@@ -73,5 +73,10 @@ public class LaporanServiceImpl implements LaporanService{
     @Override
     public int countAllLaporanMonth(int bulan, int tahun, String namaPembeli, String namaRoti) {
         return laporanRepository.countAllLaporanMonth(bulan, tahun, namaPembeli, namaRoti);
+    }
+
+    @Override
+    public Laporan cariLaporan(String idUser) {
+        return laporanRepository.cariLaporan(idUser);
     }
 }

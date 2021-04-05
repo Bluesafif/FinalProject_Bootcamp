@@ -39,7 +39,7 @@ class TambahRoti extends Component {
                         </div>
                         <Topnav />
                         <div className="right_col" role="main">
-                            <AddRoti />
+                            <AddRoti {...this.props}/>
                         </div>
                     </div>
                 </div>

@@ -84,13 +84,13 @@ class Register extends Component {
             })
                 .then((response) => response.json())
                 .then((json) => {
-                    if (typeof json.errorMessage !== "undefined") {
-                        alert(json.errorMessage);
-                    } else if (typeof json.errorMessage === "undefined") {
+                    if (typeof json.successMessage !== "undefined") {
+                        alert(json.successMessage);
+                        this.props.history.push("/login");
+                    } else if (typeof json.errorMessage !== "undefined") {
                         alert(
                             json.errorMessage
                         );
-                        this.props.history.push("/login");
                     }
                 })
                 .catch((e) => {

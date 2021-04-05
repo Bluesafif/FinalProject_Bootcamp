@@ -148,13 +148,19 @@ class RotiAdminContent extends Component {
             });
     }
 
+    formatRupiah = (bilangan) => {
+        var reverse = bilangan.toString().split("").reverse().join(""),
+          ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join(".").split("").reverse().join("");
+        return ribuan;
+    };
+
     componentDidMount() {
         this.fetchRoti()
         this.getCount()
     }
 
     render() {
-        console.log(this.state.count);
         return (
             <>
                 <div>
@@ -169,8 +175,15 @@ class RotiAdminContent extends Component {
                             <div className="col-md-12 col-sm-12 col-xs-12">
                                 <div className="x_panel">
                                     <div className="x_title">
-                                        <h2>Data Roti</h2>&nbsp; &nbsp;<Link to="/admin-tambahroti" className="btn btn-primary btn-sm"><i className="fa fa-plus" /> Tambah Data Roti</Link>
+                                        <h2>Data Roti</h2>&nbsp; &nbsp;<Link to="/admin-tambahroti" className="btn btn-primary btn-sm float-right"><i className="fa fa-plus" /> Tambah Data Roti</Link>
                                         <div className="clearfix" />
+                                    </div>
+                                    <div className="alert alert-info alert-dismissible bg-blue-sky" role="alert">
+                                        <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <p><strong>Keterangan:</strong></p>
+                                        &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="fa fa-trash-o" /></strong> Untuk mengubah status roti menjadi tidak aktif.<br/>
+                                        &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="fa fa-check" /></strong> Untuk mengubah status roti menjadi aktif.
                                     </div>
                                     <div className="x_content">
                                         <div className="input-group">
@@ -182,12 +195,16 @@ class RotiAdminContent extends Component {
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
                                             <table className="table table-striped table-bordered table-hover">
                                                 <thead>
+                                                    <tr align="center">
+                                                        <th rowSpan="2"><div className="padding_bottom">No</div></th>
+                                                        <th rowSpan="2"><div className="padding_bottom">Nama Roti</div></th>
+                                                        <th colSpan="2">Harga</th>
+                                                        <th rowSpan="2"><div className="padding_bottom">Stok</div></th>
+                                                        <th rowSpan="2"><div className="padding_bottom">Action</div></th>
+                                                    </tr>
                                                     <tr>
-                                                        <th><center>No</center></th>
-                                                        <th><center>Nama Roti</center></th>
-                                                        <th><center>Harga Satuan</center></th>
-                                                        <th><center>Stok</center></th>
-                                                        <th><center>Action</center></th>
+                                                        <th><center>Satuan</center></th>
+                                                        <th><center>Lusinan</center></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -197,7 +214,8 @@ class RotiAdminContent extends Component {
                                                                 <tr key={index}>
                                                                     <td><center>{(5*(this.state.page - 1)+(index + 1))}</center></td>
                                                                     <td>{roti.namaRoti}</td>
-                                                                    <td><center>Rp. {roti.hargaSatuan}</center></td>
+                                                                    <td><center>Rp. {this.formatRupiah(roti.hargaSatuan)}</center></td>
+                                                                    <td><center>Rp. {this.formatRupiah(roti.hargaLusin)}</center></td>
                                                                     <td><center>{roti.stokRoti}</center></td>
                                                                     <td>
                                                                         <center>
