@@ -5,6 +5,7 @@ import finalProject.toko.roti.model.Roti;
 import finalProject.toko.roti.service.LaporanService;
 import finalProject.toko.roti.service.RotiService;
 import finalProject.toko.roti.util.CustomErrorType;
+import finalProject.toko.roti.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class LaporanController {
         }
 
         laporanService.saveLaporan(laporan);
-        return new ResponseEntity<>(new CustomErrorType("Pembelian Berhasil"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new CustomSuccessType("Pembelian Berhasil"), HttpStatus.CREATED);
     }
 
     //------------------Get All Data------------------// (check)
@@ -87,6 +88,18 @@ public class LaporanController {
     @GetMapping("/laporanadminmonth")
     public ResponseEntity<List<Laporan>> listAllLaporanMonth(@RequestParam int page, int limit, int bulan, int tahun, String namaPembeli, String namaRoti) {
         List<Laporan> laporanList = laporanService.findAllMonth(page, limit, bulan, tahun, namaPembeli, namaRoti);
+        if (laporanList.isEmpty()) {
+            return new ResponseEntity<>(laporanList, HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(laporanList, HttpStatus.OK);
+        }
+    }
+
+    //------------------Get All Data------------------// (check)
+
+    @GetMapping("/laporanadminprint")
+    public ResponseEntity<List<Laporan>> listAllLaporanPrint(@RequestParam int bulan, int tahun, String namaPembeli, String namaRoti) {
+        List<Laporan> laporanList = laporanService.findAllPrint(bulan, tahun, namaPembeli, namaRoti);
         if (laporanList.isEmpty()) {
             return new ResponseEntity<>(laporanList, HttpStatus.NOT_FOUND);
         } else {

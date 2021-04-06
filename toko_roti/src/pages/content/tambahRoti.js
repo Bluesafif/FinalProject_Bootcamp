@@ -13,24 +13,14 @@ class AddRoti extends Component {
             hargaLusin: "",
             keterangan: "",
             image: null,
-            jenisRoti:[]
+            jenisRoti: []
         }
-        this.onImageChange = this.onImageChange.bind(this);
     }
     setValue = el => {
         this.setState({
             [el.target.name]: el.target.value
         })
     }
-
-    onImageChange = event => {
-        if (event.target.files && event.target.files[0]) {
-            let img = event.target.files[0];
-            this.setState({
-                image: URL.createObjectURL(img)
-            });
-        }
-    };
 
     doTambahRoti = () => {
         let obj = this.state;
@@ -42,9 +32,9 @@ class AddRoti extends Component {
             obj.keterangan === ""
         ) {
             alert("Semua data wajib diisi");
-        }else if(obj.idRoti.length > 10){
+        } else if (obj.idRoti.length > 10) {
             alert("ID Roti terlalu panjang. Maksimal 10 karakter")
-        }else if(obj.namaRoti.length > 50){
+        } else if (obj.namaRoti.length > 50) {
             alert("Nama Roti terlalu panjang. Maksimal 50 karakter")
         } else {
             const objekAdd = {
@@ -57,30 +47,29 @@ class AddRoti extends Component {
                 keterangan: this.state.keterangan,
                 gambarRoti: this.state.image
             };
-
-            fetch("http://localhost:8080/roti/master/save-roti", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(objekAdd),
-            })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (typeof json.successMessage !== "undefined") {
-                        alert(json.successMessage);
-                        this.props.history.push("/admin-roti");
-                    } else if (typeof json.errorMessage !== "undefined") {
-                        alert(
-                            json.errorMessage
-                        );
-                    }
+            if (window.confirm("Apakah form sudah terisi dengan benar?")) {
+                fetch("http://localhost:8080/roti/master/save-roti", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify(objekAdd),
                 })
-                .catch((e) => {
-                    window.alert(e);
-                });
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (typeof json.successMessage !== "undefined") {
+                            alert(json.successMessage);
+                            this.props.history.push("/admin-roti");
+                        } else if (typeof json.errorMessage !== "undefined") {
+                            alert(json.errorMessage);
+                        }
+                    })
+                    .catch((e) => {
+                        window.alert(e);
+                    });
+            }
         }
     };
 
@@ -116,7 +105,7 @@ class AddRoti extends Component {
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.fetchJenis()
     }
     render() {

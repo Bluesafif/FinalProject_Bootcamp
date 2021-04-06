@@ -41,9 +41,6 @@ class UbahPengguna extends Component {
                     email: this.state.userProfil.email,
                     alamat: this.state.userProfil.alamat
                 })
-                if (typeof json.errorMessage !== 'undefined') {
-
-                }
             })
             .catch((e) => {
                 console.log(e);
@@ -69,30 +66,32 @@ class UbahPengguna extends Component {
                 email: this.state.email,
                 alamat: this.state.alamat
             };
-    
-            fetch(`http://localhost:8080/roti/master/user/${this.props.match.params.idUser}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*"
-                },
-                body: JSON.stringify(objekUbah)
-            })
-            .then((response) => response.json())
-            .then(json => {
-                if (typeof json.errorMessage !== "undefined") {
-                    alert(json.errorMessage);
-                } else if (typeof json.successMessage !== "undefined") {
-                    alert(
-                        json.successMessage
-                    );
-                    this.props.history.push("/admin-pengguna");
-                }
-            })
-            .catch((e) => {
-                window.alert(e);
-            });
+
+            if (window.confirm("Apakah anda yakin ingin mengubah data?")) {
+                fetch(`http://localhost:8080/roti/master/user/${this.props.match.params.idUser}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*"
+                    },
+                    body: JSON.stringify(objekUbah)
+                })
+                    .then((response) => response.json())
+                    .then(json => {
+                        if (typeof json.errorMessage !== "undefined") {
+                            alert(json.errorMessage);
+                        } else if (typeof json.successMessage !== "undefined") {
+                            alert(
+                                json.successMessage
+                            );
+                            this.props.history.push("/admin-pengguna");
+                        }
+                    })
+                    .catch((e) => {
+                        window.alert(e);
+                    });
+            }
         }
     }
 

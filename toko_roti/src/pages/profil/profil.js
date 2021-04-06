@@ -14,7 +14,7 @@ class Profil extends Component {
         if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
             this.props.history.push("/admin")
         } else if (this.props.checkLogin === false) {
-            this.props.history.push("/login")
+            this.props.history.push("/")
         }
     }
     

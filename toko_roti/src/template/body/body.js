@@ -25,7 +25,7 @@ class Body extends Component {
                 <Route path="/pelanggan" component={props =>   <HomePelanggan {...props} />}/>
                 <Route path="/register" component={props =>   <Register {...props} />}/>
                 <Route path="/admin" component={props =>   <HomeAdmin {...props} />}/>
-                <Route exact path="/login" component={props =>   <Login {...props} />}/>
+                <Route exact path="/" component={props =>   <Login {...props} />}/>
             </Switch>
         );
     }

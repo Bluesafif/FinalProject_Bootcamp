@@ -186,8 +186,19 @@ public class RotiController {
     //------------------Searching Roti------------------//
 
     @GetMapping("/roti/searchadmin")
-    public ResponseEntity<?> searchingRoti(@RequestParam String search, int page, int limit){
+    public ResponseEntity<?> searchingRotiAdmin(@RequestParam String search, int page, int limit){
         List<Roti> rotiList = rotiService.findSearch(search, page, limit);
+        if (rotiList.isEmpty()) {
+            return new ResponseEntity<>(rotiList, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(rotiList, HttpStatus.OK);
+    }
+
+    //------------------Searching Roti------------------//
+
+    @GetMapping("/roti/searchpelanggan")
+    public ResponseEntity<?> searchingRotiPelanggan(@RequestParam String search, int page, int limit){
+        List<Roti> rotiList = rotiService.findSearchPelanggan(search, page, limit);
         if (rotiList.isEmpty()) {
             return new ResponseEntity<>(rotiList, HttpStatus.NOT_FOUND);
         }

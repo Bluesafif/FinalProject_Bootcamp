@@ -283,4 +283,49 @@ public class LaporanRepositoryImpl implements LaporanRepository{
                                 rs.getInt("selisih")
                         )).get(0);
     }
+
+    @Override
+    public List<Laporan> findAllPrint(int bulan, int tahun, String namaPembeli, String namaRoti) {
+        List<Laporan> laporanList;
+        laporanList = jdbcTemplate.query("SELECT b.*, c.namaLengkap, d.namaRoti, SUM(a.kuantitas) AS jumlahKuantitas " +
+                        "FROM detailLaporan a JOIN laporan b JOIN user c JOIN roti d ON a.idLaporan=b.idLaporan AND b.idUser=c.idUser AND a.idRoti=d.idRoti " +
+                        "WHERE MONTH(b.tglBeli)="+bulan+" AND YEAR(b.tglBeli)="+tahun+" AND c.namaLengkap LIKE '%"+namaPembeli+"%' AND d.namaRoti LIKE '%"+namaRoti+"%' " +
+                        "GROUP BY a.idLaporan ORDER BY b.tglBeli ASC",
+                (rs, rowNum) ->
+                        new Laporan(
+                                rs.getString("idLaporan"),
+                                rs.getString("idKeranjang"),
+                                rs.getString("idUser"),
+                                rs.getDate("tglBeli"),
+                                rs.getInt("jumlahTotal"),
+                                rs.getInt("diskon"),
+                                rs.getInt("jumlahPembayaran"),
+                                rs.getBoolean("statusLaporan"),
+                                rs.getString("namaLengkap"),
+                                rs.getInt("jumlahKuantitas")
+                        )
+        );
+        for (Laporan laporan : laporanList){
+            List<Roti> rotiList = new ArrayList<>();
+            String idLaporan = laporan.getIdLaporan();
+            rotiList = jdbcTemplate.query("SELECT b.*, a.harga, a.kuantitas, a.totalHarga FROM detailLaporan a JOIN roti b ON a.idRoti=b.idRoti WHERE a.idLaporan='"+idLaporan+"'",
+                    (rs, rowNum)->
+                            new Roti(
+                                    rs.getString("idRoti"),
+                                    rs.getString("namaRoti"),
+                                    rs.getString("idJenisRoti"),
+                                    rs.getInt("stokRoti"),
+                                    rs.getInt("hargaSatuan"),
+                                    rs.getInt("hargaLusin"),
+                                    rs.getString("keterangan"),
+                                    rs.getBoolean("statusRoti"),
+                                    rs.getInt("harga"),
+                                    rs.getInt("totalHarga"),
+                                    rs.getInt("kuantitas")
+                            )
+            );
+            laporan.setRotiList(rotiList);
+        }
+        return laporanList;
+    }
 }

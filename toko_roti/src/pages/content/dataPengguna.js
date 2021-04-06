@@ -59,7 +59,7 @@ class DataPengguna extends Component {
 
     search = (page, limit) => {
         this.getCountSearch()
-        fetch(`http://localhost:8080/roti/master/user/searchadmin?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
+        fetch(`http://localhost:8080/roti/master/user/searchadmin?search=` + this.state.search + `&page=` + page + `&limit=` + limit + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -98,7 +98,7 @@ class DataPengguna extends Component {
     }
 
     getCountSearch = () => {
-        fetch(`http://localhost:8080/roti/master/user/searchadmincount?search=`+this.state.search+``, {
+        fetch(`http://localhost:8080/roti/master/user/searchadmincount?search=` + this.state.search + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -123,55 +123,59 @@ class DataPengguna extends Component {
             usersView: userView
         })
     }
-    
-    resetStatus = (idUser) =>{
-        fetch(`http://localhost:8080/roti/master/user/status/`+idUser, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json; ; charset=utf-8",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-                alert(json.errorMessage);
-            } else if (typeof json.errorMessage === "undefined") {
-                alert(
-                    json.errorMessage
-                );
-            }
-            this.fetchPengguna()
-        })
-        .catch((e) => {
-            window.alert(e);
-        });
+
+    resetStatus = (idUser) => {
+        if (window.confirm("Apakah anda yakin ingin mengubah status?")) {
+            fetch(`http://localhost:8080/roti/master/user/status/` + idUser, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                }
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (typeof json.errorMessage !== "undefined") {
+                        alert(json.errorMessage);
+                    } else if (typeof json.successMessage !== "undefined") {
+                        alert(
+                            json.successMessage
+                        );
+                    }
+                    this.fetchPengguna()
+                })
+                .catch((e) => {
+                    window.alert(e);
+                });
+        }
     }
 
-    resetPassword = (idUser) =>{
-        fetch(`http://localhost:8080/roti/master/user/password/`+idUser, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json; ; charset=utf-8",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
-        .then((response) => response.json())
-        .then((json) => {
-            if (typeof json.errorMessage !== "undefined") {
-                alert(json.errorMessage);
-            } else if (typeof json.errorMessage === "undefined") {
-                alert(
-                    json.errorMessage
-                );
-            }
-            this.fetchPengguna()
-        })
-        .catch((e) => {
-            window.alert(e);
-        });
+    resetPassword = (idUser) => {
+        if (window.confirm("Apakah anda yakin ingin mengubah password menjadi default?")) {
+            fetch(`http://localhost:8080/roti/master/user/password/` + idUser, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*",
+                }
+            })
+                .then((response) => response.json())
+                .then((json) => {
+                    if (typeof json.errorMessage !== "undefined") {
+                        alert(json.errorMessage);
+                    } else if (typeof json.successMessage !== "undefined") {
+                        alert(
+                            json.successMessage
+                        );
+                    }
+                    this.fetchPengguna()
+                })
+                .catch((e) => {
+                    window.alert(e);
+                });
+        }
     }
 
     componentDidMount() {
@@ -199,7 +203,7 @@ class DataPengguna extends Component {
                                     </div>
                                     <div className="x_content">
                                         <div className="input-group">
-                                            <Input type="search" className="form-control col-md-7" placeholder="Pencarian Id User, Nama Lengkap, Nama Pengguna, dan Peran" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
+                                            <Input type="search" className="form-control col-md-7" placeholder="Pencarian Id User, Nama Lengkap, Nama Pengguna, dan Peran" onChange={this.setValue} value={this.state.search} name="search" />&nbsp; &nbsp;
                                             <Button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
                                                 <i className="fa fa-search" />
                                             </Button>
@@ -222,8 +226,8 @@ class DataPengguna extends Component {
                                                         this.state.pengguna.map((user, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{(5*(this.state.page - 1)+(index + 1))}</center></td>
-                                                                    <td>{user.idUser.substring(0,8)}</td>
+                                                                    <td><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
+                                                                    <td>{user.idUser.substring(0, 8)}</td>
                                                                     <td>{user.namaLengkap}</td>
                                                                     <td>{user.username}</td>
                                                                     <td><center>{user.role}</center></td>
@@ -233,25 +237,25 @@ class DataPengguna extends Component {
                                                                             {user.role === "Admin"
                                                                                 ? user.idUser === this.props.userLogin.idUser
                                                                                     ? <>
-                                                                                        <Link to={"/admin-editpengguna/"+user.idUser}>
+                                                                                        <Link to={"/admin-editpengguna/" + user.idUser}>
                                                                                             <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
                                                                                         </Link>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                                     : <>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                                 : user.role === "Member"
                                                                                     ? <>
                                                                                         <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
                                                                                         <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                                      </>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                    </>
                                                                                     : <>
                                                                                         <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
                                                                                         <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                                      </>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                    </>
                                                                             }
                                                                         </center>
                                                                     </td>
@@ -343,5 +347,5 @@ const mapDispatchToProps = dispatch => {
     return {
     }
 }
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(DataPengguna);

@@ -29,9 +29,9 @@ class AddAdmin extends Component {
             obj.email === "" || obj.alamat === ""
         ) {
             alert("Semua Data wajib diisi");
-        } else if(obj.idUser.length > 10){
+        } else if (obj.idUser.length > 10) {
             alert("ID User terlalu panjang. Maksimal 10 karakter")
-        } else if(obj.namaLengkap.length > 50){
+        } else if (obj.namaLengkap.length > 50) {
             alert("Nama Lengkap terlalu panjang. Maksimal 50 karakter")
         } else {
             const objekAdd = {
@@ -42,30 +42,29 @@ class AddAdmin extends Component {
                 email: this.state.email,
                 alamat: this.state.alamat
             };
-            fetch("http://localhost:8080/roti/master/save-admin", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(objekAdd),
-            })
-            .then((response) => response.json())
-            .then((json) => {
-                if (typeof json.errorMessage !== "undefined") {
-                    alert(json.errorMessage);
-                } else if (typeof json.successMessage !== "undefined") {
-                    alert(
-                        json.successMessage
-                    );
-                    this.props.history.push("/admin-pengguna");
-                }
-            })
-            .catch((e) => {
-                window.alert(e);
-            });
-            this.reset()
+            if (window.confirm("Apakah form sudah terisi dengan benar?")) {
+                fetch("http://localhost:8080/roti/master/save-admin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify(objekAdd),
+                })
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (typeof json.errorMessage !== "undefined") {
+                            alert(json.errorMessage);
+                        } else if (typeof json.successMessage !== "undefined") {
+                            alert(json.successMessage);
+                            this.props.history.push("/admin-pengguna");
+                        }
+                    })
+                    .catch((e) => {
+                        window.alert(e);
+                    });
+            }
         }
     };
 
@@ -97,7 +96,7 @@ class AddAdmin extends Component {
                                 <div className="clearfix" />
                             </div>
                             <div className="x_content">
-                                <div className="form-horizontal form-label-left" encType="multipart/form-data">
+                                <div className="form-horizontal form-label-left">
                                     <div className="item form-group">
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">ID Pengguna</Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
@@ -150,5 +149,5 @@ class AddAdmin extends Component {
         );
     }
 }
- 
+
 export default AddAdmin;

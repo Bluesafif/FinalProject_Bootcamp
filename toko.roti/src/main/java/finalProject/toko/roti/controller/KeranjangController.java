@@ -3,6 +3,7 @@ package finalProject.toko.roti.controller;
 import finalProject.toko.roti.model.Keranjang;
 import finalProject.toko.roti.service.KeranjangService;
 import finalProject.toko.roti.util.CustomErrorType;
+import finalProject.toko.roti.util.CustomSuccessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class KeranjangController {
     @DeleteMapping("/detail-keranjang/{idDetail}")
     public ResponseEntity<?> deleteDetail(@PathVariable("idDetail") String idDetail) {
         keranjangService.deleteDetailById(idDetail);
-        return new ResponseEntity<>(new CustomErrorType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new CustomSuccessType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
     }
 
     //------------------Delete All Cart And Cart Detail------------------//
@@ -51,7 +52,7 @@ public class KeranjangController {
     @DeleteMapping("/allDetail-keranjang/")
     public ResponseEntity<?> deleteAllDetail(@RequestParam String idDetail, String idKeranjang) {
         keranjangService.deleteAllById(idDetail, idKeranjang);
-        return new ResponseEntity<>(new CustomErrorType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new CustomSuccessType("Detail Berhasil Dihapus"),HttpStatus.NO_CONTENT);
     }
 
     //------------------Add to Cart------------------//
@@ -62,10 +63,10 @@ public class KeranjangController {
 
         if (keranjang1 == null) {
             keranjangService.saveKeranjang(keranjang);
-            return new ResponseEntity<>(new CustomErrorType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
+            return new ResponseEntity<>(new CustomSuccessType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
         } else {
             keranjangService.saveDetail(keranjang);
-            return new ResponseEntity<>(new CustomErrorType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
+            return new ResponseEntity<>(new CustomSuccessType("Roti Berhasil Dimasukkan Ke Keranjang"), HttpStatus.CREATED);
         }
     }
 
@@ -74,6 +75,6 @@ public class KeranjangController {
     @PutMapping("/update-qty")
     public ResponseEntity<?> updateQtyDetail(@RequestParam String idDetail, int kuantitas) {
         keranjangService.updateKuantitas(idDetail, kuantitas);
-        return new ResponseEntity<>(new CustomErrorType("Data berhasil diedit"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new CustomSuccessType("Data berhasil diedit"), HttpStatus.CREATED);
     }
 }

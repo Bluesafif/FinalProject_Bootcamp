@@ -16,7 +16,7 @@ class RotiAdmin extends Component {
         } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
             this.props.history.push("/pelanggan");
         } else if (this.props.checkLogin === false) {
-            this.props.history.push("/login")
+            this.props.history.push("/")
         }
     }
 

@@ -1912,7 +1912,7 @@ table.jambo_table {
   border: 1px solid rgba(221, 221, 221, 0.78); }
 
 table.jambo_table thead {
-  background: rgba(52, 73, 94, 0.94);
+  background: #6c757d;
   color: #ECF0F1; }
 
 table.jambo_table tbody tr:hover td {
@@ -2485,7 +2485,7 @@ h4.graph_title {
   height: 20px;
   color: #BAB8B8;
   position: absolute;
-  right: 53px;
+  right: 65px;
   top: 22px;
   z-index: 1; }
 

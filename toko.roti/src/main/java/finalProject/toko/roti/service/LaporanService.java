@@ -28,4 +28,6 @@ public interface LaporanService {
     int countAllLaporanMonth(int bulan, int tahun, String namaPembeli, String namaRoti);
 
     Laporan cariLaporan(String idUser);
+
+    List<Laporan> findAllPrint(int bulan, int tahun, String namaPembeli, String namaRoti);
 }

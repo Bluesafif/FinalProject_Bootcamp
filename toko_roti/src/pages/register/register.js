@@ -86,7 +86,7 @@ class Register extends Component {
                 .then((json) => {
                     if (typeof json.successMessage !== "undefined") {
                         alert(json.successMessage);
-                        this.props.history.push("/login");
+                        this.props.history.push("/");
                     } else if (typeof json.errorMessage !== "undefined") {
                         alert(
                             json.errorMessage
@@ -157,7 +157,7 @@ class Register extends Component {
                             <div className="clearfix" />
                             <div className="separator">
                                 <b><p className="change_link">Kembali ke Halaman
-                            <Link to="/login" className="to_register"> Masuk! </Link>
+                            <Link to="/" className="to_register"> Masuk! </Link>
                                 </p></b>
                                 <div>
                                     <p>©2021 UBW. Hak Cipta Dilindungi Undang-Undang.<br />Pengembang Aplikasi Oleh: Al Afif</p>

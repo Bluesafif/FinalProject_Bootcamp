@@ -41,9 +41,6 @@ class UbahPenggunaPel extends Component {
                     email: this.state.userProfil.email,
                     alamat: this.state.userProfil.alamat
                 })
-                if (typeof json.errorMessage !== 'undefined') {
-
-                }
             })
             .catch((e) => {
                 console.log(e);

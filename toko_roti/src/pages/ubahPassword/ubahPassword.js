@@ -12,7 +12,7 @@ class UbahPassword extends Component {
 
     validation = () => {
         if (this.props.checkLogin === false) {
-            this.props.history.push("/login")
+            this.props.history.push("/")
         }
     }
 

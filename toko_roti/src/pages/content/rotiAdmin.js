@@ -58,7 +58,7 @@ class RotiAdminContent extends Component {
 
     search = (page, limit) => {
         this.getCountSearch()
-        fetch(`http://localhost:8080/roti/master/roti/searchadmin?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
+        fetch(`http://localhost:8080/roti/master/roti/searchadmin?search=` + this.state.search + `&page=` + page + `&limit=` + limit + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -95,9 +95,9 @@ class RotiAdminContent extends Component {
                 alert(e);
             });
     }
-    
+
     getCountSearch = () => {
-        fetch(`http://localhost:8080/roti/master/roti/searchadmincount?idUser=${encodeURIComponent(this.props.userLogin.idUser)}&search=`+this.state.search+``, {
+        fetch(`http://localhost:8080/roti/master/roti/searchadmincount?idUser=${encodeURIComponent(this.props.userLogin.idUser)}&search=` + this.state.search + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -124,33 +124,35 @@ class RotiAdminContent extends Component {
     }
 
     resetStatus = (idRoti) => {
-        fetch(`http://localhost:8080/roti/master/roti/status/` + idRoti, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json; ; charset=utf-8",
-                "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                "Access-Control-Allow-Origin": "*",
-            }
-        })
-            .then((response) => response.json())
-            .then((json) => {
-                if (typeof json.errorMessage !== "undefined") {
-                    alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
-                    alert(
-                        json.errorMessage
-                    );
+        if (window.confirm("Apakah anda yakin ingin mengubah status roti?")) {
+            fetch(`http://localhost:8080/roti/master/roti/status/` + idRoti, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json; ; charset=utf-8",
+                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                    "Access-Control-Allow-Origin": "*",
                 }
-                this.fetchRoti()
             })
-            .catch((e) => {
-                window.alert(e);
-            });
+                .then((response) => response.json())
+                .then((json) => {
+                    if (typeof json.errorMessage !== "undefined") {
+                        alert(json.errorMessage);
+                    } else if (typeof json.successMessage !== "undefined") {
+                        alert(
+                            json.successMessage
+                        );
+                    }
+                    this.fetchRoti()
+                })
+                .catch((e) => {
+                    window.alert(e);
+                });
+        }
     }
 
     formatRupiah = (bilangan) => {
         var reverse = bilangan.toString().split("").reverse().join(""),
-          ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = reverse.match(/\d{1,3}/g);
         ribuan = ribuan.join(".").split("").reverse().join("");
         return ribuan;
     };
@@ -182,12 +184,12 @@ class RotiAdminContent extends Component {
                                         <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                                         </button>
                                         <p><strong>Keterangan:</strong></p>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="fa fa-trash-o" /></strong> Untuk mengubah status roti menjadi tidak aktif.<br/>
+                                        &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="far fa-trash-alt" /></strong> Untuk mengubah status roti menjadi tidak aktif.<br />
                                         &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="fa fa-check" /></strong> Untuk mengubah status roti menjadi aktif.
                                     </div>
                                     <div className="x_content">
                                         <div className="input-group">
-                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
+                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search" />&nbsp; &nbsp;
                                             <button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
                                                 <i className="fa fa-search" />
                                             </button>
@@ -202,9 +204,9 @@ class RotiAdminContent extends Component {
                                                         <th rowSpan="2"><div className="padding_bottom">Stok</div></th>
                                                         <th rowSpan="2"><div className="padding_bottom">Action</div></th>
                                                     </tr>
-                                                    <tr>
-                                                        <th><center>Satuan</center></th>
-                                                        <th><center>Lusinan</center></th>
+                                                    <tr align="center">
+                                                        <th>Satuan</th>
+                                                        <th>Lusinan</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -212,25 +214,25 @@ class RotiAdminContent extends Component {
                                                         this.state.roti.map((roti, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{(5*(this.state.page - 1)+(index + 1))}</center></td>
+                                                                    <td><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
                                                                     <td>{roti.namaRoti}</td>
                                                                     <td><center>Rp. {this.formatRupiah(roti.hargaSatuan)}</center></td>
                                                                     <td><center>Rp. {this.formatRupiah(roti.hargaLusin)}</center></td>
                                                                     <td><center>{roti.stokRoti}</center></td>
                                                                     <td>
                                                                         <center>
-                                                                            { roti.statusRoti === true
-                                                                            ? <>
-                                                                                <Link to={"/admin-editroti/" + roti.idRoti}>
-                                                                                    <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
-                                                                                </Link>
-                                                                                <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-trash-o" /></button>
-                                                                                <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                            </>
-                                                                            : <>
-                                                                                <button className="text-white btn btn-success" title="Aktivasi" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-check" /></button>
-                                                                                <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
-                                                                            </>
+                                                                            {roti.statusRoti === true
+                                                                                ? <>
+                                                                                    <Link to={"/admin-editroti/" + roti.idRoti}>
+                                                                                        <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                    </Link>
+                                                                                    <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="far fa-trash-alt" /></button>
+                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                </>
+                                                                                : <>
+                                                                                    <button className="text-white btn btn-success" title="Aktivasi" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-check" /></button>
+                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                </>
                                                                             }
                                                                         </center>
                                                                     </td>
@@ -308,5 +310,5 @@ const mapDispatchToProps = dispatch => {
     return {
     }
 }
- 
+
 export default connect(mapStateToProps, mapDispatchToProps)(RotiAdminContent);

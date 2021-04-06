@@ -75,13 +75,11 @@ class Login extends Component {
     }
 
     hideshow = () => {
-        
         if(this.state.type === "password"){
             this.setState({
                 type: "text"
             })
-        }
-        else{
+        }else{
             this.setState({
                 type: "password"
             })
@@ -89,7 +87,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log(this.state.type);
         this.validation()
         const { username, password } = this.state;
         return (

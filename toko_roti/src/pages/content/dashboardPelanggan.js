@@ -157,9 +157,9 @@ class DashboardPelanggan extends Component {
             .then((json) => {
                 if (typeof json.errorMessage !== "undefined") {
                     alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
+                } else if (typeof json.successMessage !== "undefined") {
                     alert(
-                        json.errorMessage
+                        json.successMessage
                     );
                     window.location.reload()
                 }
@@ -220,7 +220,7 @@ class DashboardPelanggan extends Component {
                             </div>
                             <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div className="tile-stats">
-                                    <div className="icon"><i className="fa fa-bread" /></div>
+                                    <div className="icon"><i className="fas fa-bread-slice" /></div>
                                     <div className="count">{this.state.count}</div>
                                     <h3>Jumlah Roti</h3>
                                 </div>
@@ -263,9 +263,9 @@ class DashboardPelanggan extends Component {
                                     <div className="clearfix" />
                                 </div>
                                 <div className="x_content">
-                                    <table id="surat_masuk" className="table table-striped table-bordered table-hover">
+                                    <table className="table table-striped jambo_table bulk_action">
                                         <thead>
-                                            <tr>
+                                            <tr className="headings">
                                                 <th><center>No</center></th>
                                                 <th><center>ID Laporan</center></th>
                                                 <th><center>Jumlah Beli</center></th>
@@ -294,7 +294,7 @@ class DashboardPelanggan extends Component {
                                                                     <td>{laporan.tglBeli}</td>
                                                                     <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
                                                                     <td>
-                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                     </td>
                                                                 </tr>
                                                             </>

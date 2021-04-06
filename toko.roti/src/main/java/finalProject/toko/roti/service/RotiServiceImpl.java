@@ -93,4 +93,9 @@ public class RotiServiceImpl implements RotiService{
     public int countSearchPelanggan(String search) {
         return rotiRepository.countSearchPelanggan(search);
     }
+
+    @Override
+    public List<Roti> findSearchPelanggan(String search, int page, int limit) {
+        return rotiRepository.findSearchPelanggan(search, page, limit);
+    }
 }

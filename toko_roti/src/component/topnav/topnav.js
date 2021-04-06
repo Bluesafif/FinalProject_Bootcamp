@@ -58,7 +58,7 @@ class Topnav extends Component {
                                 </Link>
                                 <div className="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                                     <Link to="/ubah-password" className="dropdown-item"> Ubah Password </Link>
-                                    <Link to="/login" className="dropdown-item"><i className="fa fa-sign-out pull-right" /> <div onClick={() => this.doLogout()}> Keluar</div></Link>
+                                    <Link to="/" className="dropdown-item"><div onClick={() => this.doLogout()}><i className="fas fa-sign-out-alt" /> Keluar</div></Link>
                                 </div>
                             </li>
                         </ul>

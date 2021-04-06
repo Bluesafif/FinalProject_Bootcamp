@@ -28,4 +28,6 @@ public interface RotiService {
     int countSearch(String search);
 
     int countSearchPelanggan(String search);
+
+    List<Roti> findSearchPelanggan(String search, int page, int limit);
 }

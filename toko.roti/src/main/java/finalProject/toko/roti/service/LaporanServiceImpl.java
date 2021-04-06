@@ -79,4 +79,10 @@ public class LaporanServiceImpl implements LaporanService{
     public Laporan cariLaporan(String idUser) {
         return laporanRepository.cariLaporan(idUser);
     }
+
+    @Override
+    public List<Laporan> findAllPrint(int bulan, int tahun, String namaPembeli, String namaRoti) {
+        List<Laporan> laporanList = laporanRepository.findAllPrint(bulan, tahun, namaPembeli, namaRoti);
+        return laporanList;
+    }
 }

@@ -94,14 +94,14 @@ class DashboardAdmin extends Component {
                     <div className="row top_tiles">
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
-                                <div className="icon"><i className="fa fa-arrow-down" /></div>
+                                <div className="icon"><i className="fas fa-bread-slice"/></div>
                                 <div className="count">{this.state.count}</div>
                                 <h3>Roti Terbuat</h3>
                             </div>
                         </div>
                         <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <div className="tile-stats">
-                                <div className="icon"><i className="fa fa-arrow-up" /></div>
+                                <div className="icon"><i className="fas fa-bread-slice"/></div>
                                 <div className="count">{this.state.rotiTerjual}</div>
                                 <h3>Roti Terjual</h3>
                             </div>

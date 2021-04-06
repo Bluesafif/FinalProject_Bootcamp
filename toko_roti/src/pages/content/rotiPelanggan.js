@@ -15,8 +15,15 @@ class RotiPelangganContent extends Component {
             qty: 1,
             page: 1,
             limit: 8,
-            count: 0
+            count: 0,
+            search: ""
         }
+    }
+
+    setValue = el => {
+        this.setState({
+            [el.target.name]: el.target.value
+        })
     }
 
     handleChange = (event, value) => {
@@ -49,8 +56,48 @@ class RotiPelangganContent extends Component {
             });
     };
 
+    search = (page, limit) => {
+        this.getCountSearch()
+        fetch(`http://localhost:8080/roti/master/roti/searchpelanggan?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    roti: json,
+                });
+            })
+            .catch(() => {
+            })
+    }
+
     getCount = () => {
         fetch(`http://localhost:8080/roti/master/roti-count/?idUser=${encodeURIComponent(this.props.userLogin.idUser)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({
+                    count: Math.ceil(Number(json) / this.state.limit)
+                });
+            })
+            .catch((e) => {
+                alert(e);
+            });
+    }
+
+    getCountSearch = () => {
+        fetch(`http://localhost:8080/roti/master/roti/searchadmincount?idUser=${encodeURIComponent(this.props.userLogin.idUser)}&search=`+this.state.search+``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -125,9 +172,9 @@ class RotiPelangganContent extends Component {
             .then((json) => {
                 if (typeof json.errorMessage !== "undefined") {
                     alert(json.errorMessage);
-                } else if (typeof json.errorMessage === "undefined") {
+                } else if (typeof json.successMessage !== "undefined") {
                     alert(
-                        json.errorMessage
+                        json.successMessage
                     );
                 }
             })
@@ -163,18 +210,13 @@ class RotiPelangganContent extends Component {
                 .then((json) => {
                     if (typeof json.errorMessage !== "undefined") {
                         alert(json.errorMessage);
-                        window.location.reload();
-                    } else if (typeof json.errorMessage === "undefined") {
+                    } else if (typeof json.successMessage !== "undefined") {
                         alert(
-                            json.errorMessage
+                            json.successMessage
                         );
-                        window.location.reload();
                     }
                 })
                 .catch(() => {
-                })
-                .finally(() => {
-                    window.location.reload();
                 })
             } else {
                 alert("Roti Sudah Tersedia di Keranjang")
@@ -298,7 +340,7 @@ class RotiPelangganContent extends Component {
                                 </table>
                                 {this.state.rotiListView.stokRoti === 0
                                     ?<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" disabled="disabled"><i className="fa fa-times" /> Stok Habis</button>
-                                    :<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fa fa-shopping-cart" /> Masukkan ke Keranjang</button>
+                                    :<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fas fa-cart-plus" /> Masukkan ke Keranjang</button>
                                 }
                             </div>
                         </div>

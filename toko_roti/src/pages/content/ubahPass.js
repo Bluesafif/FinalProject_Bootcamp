@@ -7,12 +7,12 @@ class UbahPassword extends Component {
         super(props);
         this.state = {
             passwordLama: "",
-            password : "",
+            password: "",
             passwordUlangi: "",
             userProfil: {},
-            type:"password",
-            type2:"password",
-            type3:"password"
+            type: "password",
+            type2: "password",
+            type3: "password"
         }
     }
 
@@ -36,9 +36,6 @@ class UbahPassword extends Component {
                 this.setState({
                     userProfil: json
                 });
-                if (typeof json.errorMessage !== 'undefined') {
-
-                }
             })
             .catch((e) => {
                 console.log(e);
@@ -47,56 +44,58 @@ class UbahPassword extends Component {
     };
 
     updatePassword = () => {
-        let obj = this.state;
-        if (
-            obj.passwordLama === "" || obj.password === "" ||
-            obj.passwordUlangi === ""
-        ) {
-            alert("Password baru dan Konfirmasi password baru wajib diisi");
-        } else if (obj.passwordLama === obj.password) {
-            alert("Password lama dan Password baru tidak boleh sama")
-        } else if (obj.password !== obj.passwordUlangi) {
-            alert("Password dan Konfirmasi password baru tidak sesuai");
-        } else {
-            const dataPassword = {
-                username: this.props.userLogin.username,
-                password: this.state.password
-            };
-            fetch(`http://localhost:8080/roti/master/changePass?passwordLama=`+obj.passwordLama+``, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json; ; charset=utf-8",
-                    "Access-Control-Allow-Headers": "Authorization, Content-Type",
-                    "Access-Control-Allow-Origin": "*",
-                },
-                body: JSON.stringify(dataPassword),
-            })
-                .then((response) => response.json())
-                .then((json) => {
-                    if (typeof json.errorMessage !== "undefined") {
-                        alert(json.errorMessage);
-                    } else if (typeof json.successMessage !== "undefined") {
-                        alert(
-                            json.successMessage
-                        );
-                        this.props.logout()
-                        if (this.props.checkLogin === false) {
-                            this.refreshPage()
-                        }
-                    }
+        if (window.confirm("Apakah anda yakin ingin mengubah password?")) {
+            let obj = this.state;
+            if (
+                obj.passwordLama === "" || obj.password === "" ||
+                obj.passwordUlangi === ""
+            ) {
+                alert("Password baru dan Konfirmasi password baru wajib diisi");
+            } else if (obj.passwordLama === obj.password) {
+                alert("Password lama dan Password baru tidak boleh sama")
+            } else if (obj.password !== obj.passwordUlangi) {
+                alert("Password dan Konfirmasi password baru tidak sesuai");
+            } else {
+                const dataPassword = {
+                    username: this.props.userLogin.username,
+                    password: this.state.password
+                };
+                fetch(`http://localhost:8080/roti/master/changePass?passwordLama=` + obj.passwordLama + ``, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json; ; charset=utf-8",
+                        "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                    body: JSON.stringify(dataPassword),
                 })
-                .catch((e) => {
-                });
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (typeof json.errorMessage !== "undefined") {
+                            alert(json.errorMessage);
+                        } else if (typeof json.successMessage !== "undefined") {
+                            alert(
+                                json.successMessage
+                            );
+                            this.props.logout()
+                            if (this.props.checkLogin === false) {
+                                this.refreshPage()
+                            }
+                        }
+                    })
+                    .catch((e) => {
+                    });
+            }
         }
     };
 
     hideshow = () => {
-        if(this.state.type === "password"){
+        if (this.state.type === "password") {
             this.setState({
                 type: "text"
             })
         }
-        else{
+        else {
             this.setState({
                 type: "password"
             })
@@ -104,12 +103,12 @@ class UbahPassword extends Component {
     }
 
     hideshow2 = () => {
-        if(this.state.type2 === "password"){
+        if (this.state.type2 === "password") {
             this.setState({
                 type2: "text"
             })
         }
-        else{
+        else {
             this.setState({
                 type2: "password"
             })
@@ -117,12 +116,12 @@ class UbahPassword extends Component {
     }
 
     hideshow3 = () => {
-        if(this.state.type3 === "password"){
+        if (this.state.type3 === "password") {
             this.setState({
                 type3: "text"
             })
         }
-        else{
+        else {
             this.setState({
                 type3: "password"
             })
@@ -170,9 +169,9 @@ class UbahPassword extends Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type} id="pass_lama" name="passwordLama" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
                                             <span className="eye-password-form">
-                                                <i className={ this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
-                                                id="togglePassword"
-                                                onClick={() => this.hideshow()}
+                                                <i className={this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                    id="togglePassword"
+                                                    onClick={() => this.hideshow()}
                                                 />
                                             </span>
                                         </div>
@@ -184,9 +183,9 @@ class UbahPassword extends Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type2} id="pass_baru" name="password" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
                                             <span className="eye-password-form">
-                                                <i className={ this.state.type2 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
-                                                id="togglePassword"
-                                                onClick={() => this.hideshow2()}
+                                                <i className={this.state.type2 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                    id="togglePassword"
+                                                    onClick={() => this.hideshow2()}
                                                 />
                                             </span>
                                         </div>
@@ -198,9 +197,9 @@ class UbahPassword extends Component {
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type3} id="pass_baru" name="passwordUlangi" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
                                             <span className="eye-password-form">
-                                                <i className={ this.state.type3 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
-                                                id="togglePassword"
-                                                onClick={() => this.hideshow3()}
+                                                <i className={this.state.type3 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
+                                                    id="togglePassword"
+                                                    onClick={() => this.hideshow3()}
                                                 />
                                             </span>
                                         </div>

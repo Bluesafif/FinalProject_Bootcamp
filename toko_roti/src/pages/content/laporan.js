@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Input, Button } from '../../component';
 import rotiGambar from '../../assets/roti.jpg'
 import Pagination from '@material-ui/lab/Pagination';
+import ReactToPrint from 'react-to-print';
+import PrintLaporan from '../laporan/printLaporan.js';
 
 class LaporanContent extends Component {
     constructor(props) {
@@ -66,7 +68,8 @@ class LaporanContent extends Component {
             ],
             pilihanTahun: [],
             namaPembeli: "",
-            namaRoti: ""
+            namaRoti: "",
+            laporanPrint: []
         }
     }
 
@@ -108,6 +111,7 @@ class LaporanContent extends Component {
                 this.setState({
                     laporan: json,
                 });
+                this.fetchLaporanPrint()
             })
             .catch(() => {
             })
@@ -127,6 +131,26 @@ class LaporanContent extends Component {
             .then((json) => {
                 this.setState({
                     laporan: json,
+                });
+                this.fetchLaporanPrint()
+            })
+            .catch(() => {
+            })
+    }
+
+    fetchLaporanPrint = (page, limit) => {
+        fetch(`http://localhost:8080/roti/laporanadminprint?bulan=` + this.state.bulan + `&tahun=` + this.state.tahun + `&namaPembeli=` + this.state.namaPembeli + `&namaRoti=` + this.state.namaRoti + ``, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                this.setState({
+                    laporanPrint: json,
                 });
             })
             .catch(() => {
@@ -154,7 +178,7 @@ class LaporanContent extends Component {
     }
 
     getCountMonth = () => {
-        fetch(`http://localhost:8080/roti/laporanallmonth-count?bulan=`+this.state.bulan+`&tahun=`+this.state.tahun+``, {
+        fetch(`http://localhost:8080/roti/laporanallmonth-count?bulan=`+this.state.bulan+`&tahun=`+this.state.tahun + `&namaPembeli=` + this.state.namaPembeli + `&namaRoti=` + this.state.namaRoti + ``, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json; ; charset=utf-8",
@@ -205,6 +229,7 @@ class LaporanContent extends Component {
       };
 
     render() {
+        console.log(this.state.laporanPrint);
         return (
             <>
                 <div>
@@ -220,6 +245,16 @@ class LaporanContent extends Component {
                                 <div className="x_panel">
                                     <div className="x_title">
                                         <h2>Data Laporan</h2>
+                                        <div className="float-right">
+                                            <ReactToPrint
+                                            trigger={() => {
+                                                return <Button className="btn btn-primary"><i className="fa fa-print" aria-hidden="true"></i></Button>;
+                                            }}
+                                            content={() => this.componentRef}
+                                            />
+                                            
+                                            <div className="clearfix" />
+                                        </div>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
@@ -268,7 +303,7 @@ class LaporanContent extends Component {
                                                                         <td>Rp. {this.formatRupiah(laporan.diskon)}</td>
                                                                         <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
                                                                         <td>
-                                                                            <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fa fa-file-text-o" /></button>
+                                                                            <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                         </td>
                                                                     </tr>
                                                                 </>
@@ -330,6 +365,22 @@ class LaporanContent extends Component {
                                         }
                                     </tbody>
                                 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="exampleModalLabel">Print</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <PrintLaporan ref={el => (this.componentRef = el)} printLaporan={this.state.laporanPrint} detail={this.state.laporanView}/>
                             </div>
                         </div>
                     </div>

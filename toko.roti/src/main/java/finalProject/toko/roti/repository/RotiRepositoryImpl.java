@@ -170,4 +170,34 @@ public class RotiRepositoryImpl implements RotiRepository{
                 Integer.class);
         return countRoti;
     }
+
+    @Override
+    public List<Roti> findSearchPelanggan(String search, int page, int limit) {
+        int numPages;
+        numPages = jdbcTemplate.query("SELECT COUNT(*) as count FROM roti WHERE statusRoti='1'",
+                (rs, rowNum) -> rs.getInt("count")).get(0);
+
+        if (page < 1) page = 1;
+        if (page > numPages) page = numPages;
+        int start = (page-1) * limit;
+
+        List<Roti> rotiList;
+        rotiList = jdbcTemplate.query("SELECT a.*, b.jenisRoti FROM roti a JOIN jenisRoti b ON a.idJenisRoti = b.idJenisRoti " +
+                        "WHERE a.statusRoti='1' AND a.namaRoti LIKE '%"+search+"%' OR a.hargaSatuan LIKE '%"+search+"%' OR a.hargaLusin LIKE '%"+search+"%' " +
+                        "ORDER BY a.statusRoti DESC, a.namaRoti ASC LIMIT "+start+","+limit+"",
+                (rs, rowNum)->
+                        new Roti(
+                                rs.getString("idRoti"),
+                                rs.getString("namaRoti"),
+                                rs.getString("idJenisRoti"),
+                                rs.getInt("stokRoti"),
+                                rs.getInt("hargaSatuan"),
+                                rs.getInt("hargaLusin"),
+                                rs.getString("keterangan"),
+                                rs.getBoolean("statusRoti"),
+                                rs.getString("jenisRoti")
+                        )
+        );
+        return rotiList;
+    }
 }
