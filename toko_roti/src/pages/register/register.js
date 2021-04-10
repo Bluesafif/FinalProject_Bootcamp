@@ -119,22 +119,22 @@ class Register extends Component {
                             <img src={logo} height="150" alt="Logo" />
                             <h4>Buat Akun Baru</h4>
                             <div>
-                                <Input type="text" className="form-control" name="namaLengkap" placeholder="Nama Lengkap" required="required" onChange={this.setValue} value={this.state.namaLengkap} />
+                                <Input type="text" className="form-control" name="namaLengkap" placeholder="Nama Lengkap *" required="required" onChange={this.setValue} value={this.state.namaLengkap} />
                             </div>
                             <div>
-                                <Input type="text" className="form-control" name="alamat" placeholder="Alamat" required="required" onChange={this.setValue} value={this.state.alamat} />
+                                <Input type="text" className="form-control" name="alamat" placeholder="Alamat *" required="required" onChange={this.setValue} value={this.state.alamat} />
                             </div>
                             <div>
-                                <Input type="text" className="form-control" name="nomorTelepon" placeholder="Nomor Telepon" required="required" onChange={this.setValue} value={this.state.nomorTelepon} />
+                                <Input type="text" className="form-control" name="nomorTelepon" placeholder="Nomor Telepon *" required="required" onChange={this.setValue} value={this.state.nomorTelepon} />
                             </div>
                             <span>
-                                <Input type="email" className="form-control" name="email" placeholder="Surat Elektronik" required="required" onChange={this.setValue} value={this.state.email} />
+                                <Input type="email" className="form-control" name="email" placeholder="Surat Elektronik *" required="required" onChange={this.setValue} value={this.state.email} />
                             </span>
                             <div>
-                                <Input type="text" className="form-control" name="username" placeholder="Nama Pengguna" required="required" onChange={this.setValue} value={this.state.username} />
+                                <Input type="text" className="form-control" name="username" placeholder="Nama Pengguna *" required="required" onChange={this.setValue} value={this.state.username} />
                             </div>
                             <div>
-                                <Input type={this.state.type} className="form-control input" name="password" placeholder="Kata Sandi" required="required" onChange={this.setValue} value={this.state.password} />
+                                <Input type={this.state.type} className="form-control input" name="password" placeholder="Kata Sandi *" required="required" onChange={this.setValue} value={this.state.password} />
                                 <span className="eye-password">
                                     <i className={ this.state.type === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
                                        id="togglePassword"
@@ -143,7 +143,7 @@ class Register extends Component {
                                 </span>
                             </div>
                             <div>
-                                <Input type={this.state.type2} className="form-control input" name="passwordUlangi" placeholder="Masukkan Ulang Kata Sandi" required="required" onChange={this.setValue} value={this.state.passwordUlangi} />
+                                <Input type={this.state.type2} className="form-control input" name="passwordUlangi" placeholder="Masukkan Ulang Kata Sandi *" required="required" onChange={this.setValue} value={this.state.passwordUlangi} />
                                 <span className="eye-password">
                                     <i className={ this.state.type2 === "password" ? "fa fa-eye-slash" : "fa fa-eye"}
                                        id="togglePassword"

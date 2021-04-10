@@ -45,7 +45,7 @@ class MenuProfile extends Component {
                     <img src={profilepic} alt="..." className="img-circle profile_img" />
                 </div>
                 <div className="profile_info">
-                    <span>Welcome,</span>
+                    <span>Selamat Datang,</span>
                     <h2>{this.state.userProfil.namaLengkap}</h2>
                 </div>
             </div>

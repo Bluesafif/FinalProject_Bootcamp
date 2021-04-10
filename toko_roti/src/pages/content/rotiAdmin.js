@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { Input, Button } from '../../component';
 import Pagination from '@material-ui/lab/Pagination';
 import { connect } from 'react-redux';
+import formatRupiah from '../../util/rupiah.js'
 
 class RotiAdminContent extends Component {
     constructor(props) {
@@ -12,11 +14,16 @@ class RotiAdminContent extends Component {
             page: 1,
             limit: 5,
             count: 0,
-            search: ""
+            search: "",
+            pageNew: 1
         }
     }
 
     setValue = el => {
+        if (el.target.name === "search" && el.target.value === "") {
+            this.fetchRoti(this.state.pageNew, this.state.limit)
+            this.getCount()
+        }
         this.setState({
             [el.target.name]: el.target.value
         })
@@ -58,6 +65,11 @@ class RotiAdminContent extends Component {
 
     search = (page, limit) => {
         this.getCountSearch()
+        if (page === undefined) {
+            this.setState({
+                page : 1
+            })
+        }
         fetch(`http://localhost:8080/roti/master/roti/searchadmin?search=` + this.state.search + `&page=` + page + `&limit=` + limit + ``, {
             method: "GET",
             headers: {
@@ -150,13 +162,6 @@ class RotiAdminContent extends Component {
         }
     }
 
-    formatRupiah = (bilangan) => {
-        var reverse = bilangan.toString().split("").reverse().join(""),
-            ribuan = reverse.match(/\d{1,3}/g);
-        ribuan = ribuan.join(".").split("").reverse().join("");
-        return ribuan;
-    };
-
     componentDidMount() {
         this.fetchRoti()
         this.getCount()
@@ -188,23 +193,27 @@ class RotiAdminContent extends Component {
                                         &nbsp; &nbsp; &nbsp; &nbsp;<strong><i className="fa fa-check" /></strong> Untuk mengubah status roti menjadi aktif.
                                     </div>
                                     <div className="x_content">
-                                        <div className="input-group">
-                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search" />&nbsp; &nbsp;
-                                            <button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
-                                                <i className="fa fa-search" />
-                                            </button>
+                                        <div className="col-md-5 col-sm-5">
+                                            <div className="input-group">
+                                                <Input type="search" className="form-control" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search" />
+                                                <span className="input-group-btn">
+                                                    <Button type="button" className="text-white btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                        <i className="fa fa-search" />
+                                                    </Button>
+                                                </span>
+                                            </div>
                                         </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table className="table table-striped table-bordered table-hover">
+                                            <table className="table table-striped jambo_table bulk_action">
                                                 <thead>
-                                                    <tr align="center">
-                                                        <th rowSpan="2"><div className="padding_bottom">No</div></th>
-                                                        <th rowSpan="2"><div className="padding_bottom">Nama Roti</div></th>
+                                                    <tr align="center" className="headings">
+                                                        <th rowSpan="2" style={{verticalAlign: "middle"}}>No</th>
+                                                        <th rowSpan="2" style={{verticalAlign: "middle"}}>Nama Roti</th>
                                                         <th colSpan="2">Harga</th>
-                                                        <th rowSpan="2"><div className="padding_bottom">Stok</div></th>
-                                                        <th rowSpan="2"><div className="padding_bottom">Action</div></th>
+                                                        <th rowSpan="2" style={{verticalAlign: "middle"}}>Stok</th>
+                                                        <th rowSpan="2" style={{verticalAlign: "middle"}}>Action</th>
                                                     </tr>
-                                                    <tr align="center">
+                                                    <tr align="center" className="headings">
                                                         <th>Satuan</th>
                                                         <th>Lusinan</th>
                                                     </tr>
@@ -214,24 +223,24 @@ class RotiAdminContent extends Component {
                                                         this.state.roti.map((roti, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
-                                                                    <td>{roti.namaRoti}</td>
-                                                                    <td><center>Rp. {this.formatRupiah(roti.hargaSatuan)}</center></td>
-                                                                    <td><center>Rp. {this.formatRupiah(roti.hargaLusin)}</center></td>
-                                                                    <td><center>{roti.stokRoti}</center></td>
-                                                                    <td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}>{roti.namaRoti}</td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{formatRupiah(roti.hargaSatuan)}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{formatRupiah(roti.hargaLusin)}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{roti.stokRoti}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}>
                                                                         <center>
                                                                             {roti.statusRoti === true
                                                                                 ? <>
                                                                                     <Link to={"/admin-editroti/" + roti.idRoti}>
-                                                                                        <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                        <Button className="buttons text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></Button>
                                                                                     </Link>
-                                                                                    <button className="btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="far fa-trash-alt" /></button>
-                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                    <Button className="buttons btn btn-danger" title="Hapus" onClick={() => this.resetStatus(roti.idRoti)}><i className="far fa-trash-alt" /></Button>
+                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="buttons btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                 </>
                                                                                 : <>
-                                                                                    <button className="text-white btn btn-success" title="Aktivasi" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-check" /></button>
-                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                    <Button className="buttons text-white btn btn-success" title="Aktivasi" onClick={() => this.resetStatus(roti.idRoti)}><i className="fa fa-check" /></Button>
+                                                                                    <button data-toggle="modal" data-target="#exampleModal" className="buttons btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                 </>
                                                                             }
                                                                         </center>

@@ -3,6 +3,7 @@ import { Button, Label, Input } from '../../component';
 import rotiGambar from '../../assets/roti.jpg'
 import { connect } from 'react-redux';
 import $ from "jquery";
+import formatRupiah from '../../util/rupiah.js'
 
 class DetailKeranjang extends Component {
     constructor(props) {
@@ -284,7 +285,7 @@ class DetailKeranjang extends Component {
                                 </div>
                                 <div className="x_content">
                                     <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                        <table id="surat_masuk" className="table table-striped table-bordered table-hover">
+                                        <table className="table table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr>
                                                     <th><center>Gambar</center></th>
@@ -297,51 +298,43 @@ class DetailKeranjang extends Component {
                                             </thead>
                                             <tbody>
                                                 {this.state.rotiList.length === 0
-                                                    ? <tr>
-                                                        <td colSpan="6" align="center">Keranjang Kosong</td>
-                                                    </tr>
+                                                    ? <>
+                                                        <tr>
+                                                            <td colSpan="6" align="center">Keranjang Kosong</td>
+                                                        </tr>
+                                                    </>
                                                     : <>
                                                         {
                                                             this.state.rotiList.map((detail, index) => {
                                                                 return (
                                                                     <>
-                                                                        <tr key={index}>
-                                                                            <td>
-                                                                                <center>
-                                                                                    <img src={rotiGambar} alt="..." className="keranjang-img" />
-                                                                                </center>
+                                                                        <tr key={index} align="center">
+                                                                            <td style={{verticalAlign: "middle", padding:"0.5rem"}}>
+                                                                                <img src={rotiGambar} alt="..." className="keranjang-img" />
                                                                             </td>
-                                                                            <td>
-                                                                                <center>
-                                                                                    {detail.namaRoti}
-                                                                                </center>
+                                                                            <td style={{verticalAlign: "middle"}}>
+                                                                                {detail.namaRoti}
                                                                             </td>
                                                                             {this.state.kuantitas[index] >= 12
-                                                                                ? <td>
-                                                                                    <center>
-                                                                                        Rp. {detail.hargaLusin}
-                                                                                    </center>
+                                                                                ? <td style={{verticalAlign: "middle"}}>
+                                                                                        {formatRupiah(detail.hargaLusin)}
                                                                                 </td>
-                                                                                : <td>
-                                                                                    <center>
-                                                                                        Rp. {detail.hargaSatuan}
-                                                                                    </center>
+                                                                                : <td style={{verticalAlign: "middle"}}>
+                                                                                        {formatRupiah(detail.hargaSatuan)}
                                                                                 </td>
                                                                             }
-                                                                            <td align="center">
-                                                                                <center>
-                                                                                    <Input className="col-md-12" type="number" name="kuantitas[index]" value={this.state.kuantitas[index]} onChange={event => { this.setValueHarga(event.target.value, detail.idDetail) }} min="1" max={detail.stokRoti}></Input>
-                                                                                </center>
+                                                                            <td style={{verticalAlign: "middle"}}>
+                                                                                <Input  className="col-md-12" 
+                                                                                        type="number" name="kuantitas[index]" 
+                                                                                        value={this.state.kuantitas[index]} 
+                                                                                        onChange={event => { this.setValueHarga(event.target.value, detail.idDetail) }} 
+                                                                                        min="1" max={detail.stokRoti} />
                                                                             </td>
-                                                                            <td>
-                                                                                <center>
-                                                                                    Rp. {this.state.totalHarga[index]}
-                                                                                </center>
+                                                                            <td style={{verticalAlign: "middle"}}>
+                                                                                Rp. {this.state.totalHarga[index]}
                                                                             </td>
-                                                                            <td>
-                                                                                <center>
-                                                                                    <Button className="btn btn-danger" title="Hapus" onClick={() => this.delete(detail.idDetail)} ><i className="far fa-trash-alt" /></Button>
-                                                                                </center>
+                                                                            <td style={{verticalAlign: "middle"}}>
+                                                                                <Button className="btn btn-danger" title="Hapus" onClick={() => this.delete(detail.idDetail)} ><i className="far fa-trash-alt" /></Button>
                                                                             </td>
                                                                         </tr>
                                                                     </>
@@ -359,19 +352,19 @@ class DetailKeranjang extends Component {
                                             <div className="item form-group">
                                                 <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Total</Label>
                                                 <div className="col-md-6 col-sm-6 col-xs-12">
-                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahTotal}</Label>
+                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: {formatRupiah(String(this.state.jumlahTotal))}</Label>
                                                 </div>
                                             </div>
                                             <div className="item form-group">
                                                 <Label className="control-label col-md-3 col-sm-3 col-xs-12">Diskon</Label>
                                                 <div className="col-md-6 col-sm-6 col-xs-12">
-                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.diskon}</Label>
+                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: {formatRupiah(String(this.state.diskon))}</Label>
                                                 </div>
                                             </div>
                                             <div className="item form-group">
                                                 <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jumlah Pembayaran</Label>
                                                 <div className="col-md-6 col-sm-6 col-xs-12">
-                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: Rp. {this.state.jumlahPembayaran}</Label>
+                                                    <Label className="control-label col-md-6 col-sm-3 col-xs-12">: {formatRupiah(String(this.state.jumlahPembayaran))}</Label>
                                                 </div>
                                             </div>
                                             <div className="item form-group">

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Input, Button } from '../../component';
+import { Input, Button, Select, Option } from '../../component';
 import rotiGambar from '../../assets/roti.jpg'
 import Pagination from '@material-ui/lab/Pagination';
 import ReactToPrint from 'react-to-print';
 import PrintLaporan from '../laporan/printLaporan.js';
+import formatRupiah from '../../util/rupiah.js'
 
 class LaporanContent extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class LaporanContent extends Component {
             bulan: 0,
             tahun: 0,
             page: 1,
+            pageNew: 1,
             limit: 5,
             count: 0,
             pilihanBulan: [
@@ -138,7 +140,7 @@ class LaporanContent extends Component {
             })
     }
 
-    fetchLaporanPrint = (page, limit) => {
+    fetchLaporanPrint = () => {
         fetch(`http://localhost:8080/roti/laporanadminprint?bulan=` + this.state.bulan + `&tahun=` + this.state.tahun + `&namaPembeli=` + this.state.namaPembeli + `&namaRoti=` + this.state.namaRoti + ``, {
             method: "GET",
             headers: {
@@ -221,15 +223,7 @@ class LaporanContent extends Component {
         })
     }
 
-    formatRupiah = (bilangan) => {
-        var reverse = bilangan.toString().split("").reverse().join(""),
-          ribuan = reverse.match(/\d{1,3}/g);
-        ribuan = ribuan.join(".").split("").reverse().join("");
-        return ribuan;
-      };
-
     render() {
-        console.log(this.state.laporanPrint);
         return (
             <>
                 <div>
@@ -247,46 +241,49 @@ class LaporanContent extends Component {
                                         <h2>Data Laporan</h2>
                                         <div className="float-right">
                                             <ReactToPrint
-                                            trigger={() => {
-                                                return <Button className="btn btn-primary"><i className="fa fa-print" aria-hidden="true"></i></Button>;
-                                            }}
-                                            content={() => this.componentRef}
+                                                trigger={() => {
+                                                    return <Button className="btn btn-primary"><i className="fa fa-print" aria-hidden="true"></i></Button>;
+                                                }}
+                                                content={() => this.componentRef}
                                             />
-                                            
                                             <div className="clearfix" />
                                         </div>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
-                                        <div className="input-group">
-                                            <select className="form-control" value={this.state.bulan} onChange={this.setValue} name="bulan">
-                                                {this.state.pilihanBulan.map((Item, idx) => (
-                                                    <option value={Item.bulan} key={idx}>{Item.namaBulan}</option>
-                                                ))}
-                                            </select> &nbsp; &nbsp;
-                                            <select className="form-control" value={this.state.tahun} onChange={this.setValue} name="tahun">
-                                                {this.state.pilihanTahun.map((Item, idx) => (
-                                                    <option value={Item} key={idx}>{Item}</option>
-                                                ))}
-                                            </select> &nbsp; &nbsp;
-                                            <Input type="search" className="form-control col-md-3" placeholder="Nama Pembeli" onChange={this.setValue} value={this.state.namaPembeli} name="namaPembeli"/> &nbsp; &nbsp;
-                                            <Input type="search" className="form-control col-md-3" placeholder="Nama Roti" onChange={this.setValue} value={this.state.namaRoti} name="namaRoti"/> &nbsp; &nbsp;
-                                            <Button className="btn btn-primary" onClick={() => this.fetchLaporanMonth(this.state.page, this.state.limit)}>
-                                                <i className="fa fa-search" aria-hidden="true"></i>
-                                            </Button>
+                                        <div className="col-md-12 col-sm-5">
+                                            <div className="input-group">
+                                                <Select className="form-control" value={this.state.bulan} onChange={this.setValue} name="bulan">
+                                                    {this.state.pilihanBulan.map((Item, idx) => (
+                                                        <Option value={Item.bulan} key={idx}>{Item.namaBulan}</Option>
+                                                    ))}
+                                                </Select> &nbsp; &nbsp;
+                                                <Select className="form-control" value={this.state.tahun} onChange={this.setValue} name="tahun">
+                                                    {this.state.pilihanTahun.map((Item, idx) => (
+                                                        <Option value={Item} key={idx}>{Item}</Option>
+                                                    ))}
+                                                </Select> &nbsp; &nbsp;
+                                                <Input type="search" className="form-control" placeholder="Nama Pembeli" onChange={this.setValue} value={this.state.namaPembeli} name="namaPembeli"/> &nbsp; &nbsp;
+                                                <Input type="search" className="form-control" placeholder="Nama Roti" onChange={this.setValue} value={this.state.namaRoti} name="namaRoti"/>
+                                                <span className="input-group-btn">
+                                                    <Button className="text-white btn btn-primary" onClick={() => this.fetchLaporanMonth(this.state.page, this.state.limit)}>
+                                                        <i className="fa fa-search" aria-hidden="true"></i>
+                                                    </Button>
+                                                </span>
+                                            </div>
                                         </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table className="table table-striped table-bordered table-hover">
+                                            <table className="table table-striped jambo_table bulk_action">
                                                 <thead>
-                                                    <tr>
-                                                        <th><center>No</center></th>
-                                                        <th><center>Nama Pembeli</center></th>
-                                                        <th><center>Jumlah Beli</center></th>
-                                                        <th><center>Tanggal Beli</center></th>
-                                                        <th><center>Biaya</center></th>
-                                                        <th><center>Diskon</center></th>
-                                                        <th><center>Total</center></th>
-                                                        <th><center>Action</center></th>
+                                                    <tr align="center" className="headings">
+                                                        <th>No</th>
+                                                        <th>Nama Pembeli</th>
+                                                        <th>Jumlah Beli</th>
+                                                        <th>Tanggal Beli</th>
+                                                        <th>Biaya</th>
+                                                        <th>Diskon</th>
+                                                        <th>Total</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -295,14 +292,14 @@ class LaporanContent extends Component {
                                                             return (
                                                                 <>
                                                                     <tr align="center">
-                                                                        <td>{(5*(this.state.page - 1)+(index + 1))}</td>
-                                                                        <td>{laporan.namaLengkap}</td>
-                                                                        <td>{laporan.jumlahKuantitas}</td>
-                                                                        <td>{laporan.tglBeli}</td>
-                                                                        <td>Rp. {this.formatRupiah(laporan.jumlahTotal)}</td>
-                                                                        <td>Rp. {this.formatRupiah(laporan.diskon)}</td>
-                                                                        <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
-                                                                        <td>
+                                                                        <td style={{verticalAlign: "middle"}}>{(5*(this.state.page - 1)+(index + 1))}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{laporan.namaLengkap}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{laporan.jumlahKuantitas}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{laporan.tglBeli}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{formatRupiah(laporan.jumlahTotal)}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{formatRupiah(laporan.diskon)}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>{formatRupiah(laporan.jumlahPembayaran)}</td>
+                                                                        <td style={{verticalAlign: "middle"}}>
                                                                             <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                         </td>
                                                                     </tr>
@@ -314,7 +311,6 @@ class LaporanContent extends Component {
                                             </table>
                                         </div>
                                         <div className="pagination float-right">
-                                            {/* <Typography>Page: {page}</Typography> */}
                                             <Pagination count={this.state.count} page={this.state.page} onChange={this.handleChange} />
                                         </div>
                                     </div>
@@ -335,14 +331,14 @@ class LaporanContent extends Component {
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <table className="table table-striped table-bordered table-hover">
+                                <table className="table table-striped jambo_table bulk_action">
                                     <thead>
-                                        <tr>
-                                            <th><center>Gambar</center></th>
-                                            <th><center>Nama Roti</center></th>
-                                            <th><center>Harga</center></th>
-                                            <th><center>Kuantitas</center></th>
-                                            <th><center>Total Harga</center></th>
+                                        <tr align="center" className="headings">
+                                            <th style={{verticalAlign: "middle"}}>Gambar</th>
+                                            <th style={{verticalAlign: "middle"}}>Nama Roti</th>
+                                            <th style={{verticalAlign: "middle"}}>Harga</th>
+                                            <th style={{verticalAlign: "middle"}}>Kuantitas</th>
+                                            <th style={{verticalAlign: "middle"}}>Total Harga</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -351,13 +347,13 @@ class LaporanContent extends Component {
                                                 return (
                                                     <>
                                                         <tr align="center">
-                                                            <td>
+                                                            <td style={{verticalAlign: "middle"}}>
                                                                 <img src={rotiGambar} alt="..." className="keranjang-img" />
                                                             </td>
-                                                            <td>{laporan.namaRoti}</td>
-                                                            <td>{laporan.harga}</td>
-                                                            <td>{laporan.kuantitas}</td>
-                                                            <td>Rp. {laporan.totalHarga}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{laporan.namaRoti}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{formatRupiah(laporan.harga)}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{laporan.kuantitas}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{formatRupiah(laporan.totalHarga)}</td>
                                                         </tr>
                                                     </>
                                                 )

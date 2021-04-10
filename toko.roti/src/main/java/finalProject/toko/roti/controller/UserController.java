@@ -1,6 +1,5 @@
 package finalProject.toko.roti.controller;
 
-
 import finalProject.toko.roti.model.Laporan;
 import finalProject.toko.roti.model.User;
 import finalProject.toko.roti.service.LaporanService;
@@ -49,16 +48,21 @@ public class UserController {
                     if (params.containsKey("password") && !String.valueOf(params.get("password")).isBlank()){
                         if (encoder.matches((CharSequence) params.get("password"), user.getPassword())){
                             if (user.isStatusUser() == true) {
-                                if (user.getRole().equals("Member")) {
-                                    Laporan laporan = laporanService.cariLaporan(user.getIdUser());
-                                    if (laporan.getSelisih() >= 14) {
-                                        userService.ubahUmum(user.getIdUser());
-                                        user = userService.findById(user.getIdUser());
-                                        return new ResponseEntity<>(user, HttpStatus.OK);
+                                if (!encoder.encode(user.getPassword()).equals("Admin123") || !encoder.encode(user.getPassword()).equals("User123")) {
+                                    if (user.getRole().equals("Member")) {
+                                        Laporan laporan = laporanService.cariLaporan(user.getIdUser());
+                                        if (laporan.getSelisih() >= 14) {
+                                            userService.ubahUmum(user.getIdUser());
+                                            user = userService.findById(user.getIdUser());
+                                            return new ResponseEntity<>(user, HttpStatus.OK);
+                                        } else {
+                                            return new ResponseEntity<>(user, HttpStatus.OK);
+                                        }
                                     } else {
                                         return new ResponseEntity<>(user, HttpStatus.OK);
                                     }
                                 } else {
+                                    user.setValidasiPass(true);
                                     return new ResponseEntity<>(user, HttpStatus.OK);
                                 }
                             } else {

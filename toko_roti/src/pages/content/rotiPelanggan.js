@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import rotiGambar from '../../assets/roti.jpg'
 import { connect } from 'react-redux';
+import { Input, Button } from '../../component';
 import $ from "jquery";
 import Pagination from '@material-ui/lab/Pagination';
+import formatRupiah from '../../util/rupiah.js'
 
 class RotiPelangganContent extends Component {
     constructor(props) {
@@ -14,13 +16,18 @@ class RotiPelangganContent extends Component {
             rotiList: [],
             qty: 1,
             page: 1,
-            limit: 8,
+            limit: 10,
             count: 0,
-            search: ""
+            search: "",
+            pageNew: 1
         }
     }
 
     setValue = el => {
+        if (el.target.name === "search" && el.target.value === "") {
+            this.fetchRoti(this.state.pageNew, this.state.limit)
+            this.getCount()
+        }
         this.setState({
             [el.target.name]: el.target.value
         })
@@ -30,7 +37,11 @@ class RotiPelangganContent extends Component {
         this.setState({
             page: value
         })
-        this.fetchRoti(value, 8);
+        if (this.state.search === "") {
+            this.fetchRoti(value, 10);
+        } else {
+            this.search(value, 10)
+        }
     }
 
     fetchRoti = (page, limit) => {
@@ -58,6 +69,11 @@ class RotiPelangganContent extends Component {
 
     search = (page, limit) => {
         this.getCountSearch()
+        if (page === undefined) {
+            this.setState({
+                page : 1
+            })
+        }
         fetch(`http://localhost:8080/roti/master/roti/searchpelanggan?search=`+this.state.search+`&page=`+page+`&limit=` + limit + ``, {
             method: "GET",
             headers: {
@@ -176,6 +192,7 @@ class RotiPelangganContent extends Component {
                     alert(
                         json.successMessage
                     );
+                    $("#exampleModal .close").click();
                 }
             })
             .catch(() => {
@@ -214,12 +231,14 @@ class RotiPelangganContent extends Component {
                         alert(
                             json.successMessage
                         );
+                        $("#exampleModal .close").click();
                     }
                 })
                 .catch(() => {
                 })
             } else {
                 alert("Roti Sudah Tersedia di Keranjang")
+                $("#exampleModal .close").click();
             }
         }
     }
@@ -253,15 +272,19 @@ class RotiPelangganContent extends Component {
                                 <div className="x_panel">
                                     <div className="x_title">
                                         <h2>List Roti</h2>
+                                        <div className="col-md-5 float-right">
+                                            <div className="input-group">
+                                                <Input type="search" className="form-control" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search"/>
+                                                <span className="input-group-btn">
+                                                    <Button type="button" className="text-white btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                        <i className="fa fa-search" />
+                                                    </Button>
+                                                </span>
+                                            </div>
+                                        </div>
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
-                                        <div className="input-group">
-                                            <input type="search" className="form-control col-md-7" placeholder="Pencarian Nama dan Harga Roti" onChange={this.setValue} value={this.state.search} name="search"/>&nbsp; &nbsp;
-                                            <button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
-                                                <i className="fa fa-search" />
-                                            </button>
-                                        </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
                                             {
                                                 this.state.roti.filter(status => status.statusRoti === true).map((roti, index) => {
@@ -283,7 +306,7 @@ class RotiPelangganContent extends Component {
                                                                     </h6>
                                                                 </div>
                                                                 <div className="product-price">
-                                                                    <span>&nbsp;&nbsp;Rp. {this.formatRupiah(roti.hargaSatuan)}</span>
+                                                                    <span>&nbsp;&nbsp;{formatRupiah(roti.hargaSatuan)}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -339,7 +362,7 @@ class RotiPelangganContent extends Component {
                                     </tbody>
                                 </table>
                                 {this.state.rotiListView.stokRoti === 0
-                                    ?<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" disabled="disabled"><i className="fa fa-times" /> Stok Habis</button>
+                                    ?<Button className="text-white btn btn-warning width" title="Tambah ke Keranjang" disabled="disabled"><i className="fa fa-times" /> Stok Habis</Button>
                                     :<button className="text-white btn btn-warning width" title="Tambah ke Keranjang" onClick={() => this.addToCart(this.state.rotiListView)}><i className="fas fa-cart-plus" /> Masukkan ke Keranjang</button>
                                 }
                             </div>

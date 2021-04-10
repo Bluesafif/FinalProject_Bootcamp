@@ -13,11 +13,16 @@ class DataPengguna extends Component {
             page: 1,
             limit: 5,
             count: 0,
-            search: ""
+            search: "",
+            pageNew: 1
         }
     }
 
     setValue = el => {
+        if (el.target.name === "search" && el.target.value === "") {
+            this.fetchPengguna(this.state.pageNew, this.state.limit)
+            this.getCount()
+        }
         this.setState({
             [el.target.name]: el.target.value
         })
@@ -59,6 +64,11 @@ class DataPengguna extends Component {
 
     search = (page, limit) => {
         this.getCountSearch()
+        if (page === undefined) {
+            this.setState({
+                page : 1
+            })
+        }
         fetch(`http://localhost:8080/roti/master/user/searchadmin?search=` + this.state.search + `&page=` + page + `&limit=` + limit + ``, {
             method: "GET",
             headers: {
@@ -202,23 +212,27 @@ class DataPengguna extends Component {
                                         <div className="clearfix" />
                                     </div>
                                     <div className="x_content">
-                                        <div className="input-group">
-                                            <Input type="search" className="form-control col-md-7" placeholder="Pencarian Id User, Nama Lengkap, Nama Pengguna, dan Peran" onChange={this.setValue} value={this.state.search} name="search" />&nbsp; &nbsp;
-                                            <Button type="button" className="btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
-                                                <i className="fa fa-search" />
-                                            </Button>
+                                        <div className="col-md-7 col-sm-5">
+                                            <div className="input-group">
+                                                <Input type="search" className="form-control" placeholder="Pencarian Id User, Nama Lengkap, Nama Pengguna, dan Peran" onChange={this.setValue} value={this.state.search} name="search" />
+                                                <span className="input-group-btn">
+                                                    <Button type="button" className="text-white btn btn-primary" onClick={() => this.search(this.state.page, this.state.limit)}>
+                                                        <i className="fa fa-search" />
+                                                    </Button>
+                                                </span>
+                                            </div>
                                         </div>
                                         <div className="dataTables_wrapper form-inline dt-bootstrap no-footer">
-                                            <table className="table table-striped table-bordered table-hover">
+                                            <table className="table table-striped jambo_table bulk_action">
                                                 <thead>
-                                                    <tr>
-                                                        <th><center>No</center></th>
-                                                        <th><center>ID User</center></th>
-                                                        <th><center>Nama Lengkap</center></th>
-                                                        <th><center>Nama Pengguna</center></th>
-                                                        <th><center>Peran</center></th>
-                                                        <th><center>Status</center></th>
-                                                        <th><center>Action</center></th>
+                                                    <tr className="headings" align="center">
+                                                        <th>No</th>
+                                                        <th>ID User</th>
+                                                        <th>Nama Lengkap</th>
+                                                        <th>Nama Pengguna</th>
+                                                        <th>Peran</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -226,35 +240,35 @@ class DataPengguna extends Component {
                                                         this.state.pengguna.map((user, index) => {
                                                             return (
                                                                 <tr key={index}>
-                                                                    <td><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
-                                                                    <td>{user.idUser.substring(0, 8)}</td>
-                                                                    <td>{user.namaLengkap}</td>
-                                                                    <td>{user.username}</td>
-                                                                    <td><center>{user.role}</center></td>
-                                                                    <td><center>{user.statusUser === true ? "Aktif" : "Tidak Aktif"}</center></td>
-                                                                    <td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{(5 * (this.state.page - 1) + (index + 1))}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}>{user.idUser.substring(0, 8)}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>{user.namaLengkap}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>{user.username}</td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{user.role}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{user.statusUser === true ? <span className="badge badge-success"> Aktif </span> : <span className="badge badge-danger"> Tidak Aktif </span>}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}>
                                                                         <center>
                                                                             {user.role === "Admin"
                                                                                 ? user.idUser === this.props.userLogin.idUser
                                                                                     ? <>
                                                                                         <Link to={"/admin-editpengguna/" + user.idUser}>
-                                                                                            <button className="text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></button>
+                                                                                            <Button className="buttons text-white btn btn-warning" title="Edit"><i className="fa fa-pencil-square-o" /></Button>
                                                                                         </Link>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="buttons text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                                     : <>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="buttons text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                                 : user.role === "Member"
                                                                                     ? <>
-                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
-                                                                                        <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                        <Button className="buttons text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></Button>
+                                                                                        <Button className="buttons text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></Button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="buttons text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                                     : <>
-                                                                                        <button className="text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></button>
-                                                                                        <button className="text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></button>
-                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
+                                                                                        <Button className="buttons text-white btn btn-warning" title="Ganti Status" onClick={() => this.resetStatus(user.idUser)}><i className="fa fa-user" /></Button>
+                                                                                        <Button className="buttons text-white btn btn-dark" title="Ganti Password Default" onClick={() => this.resetPassword(user.idUser)}><i className="fa fa-key" /></Button>
+                                                                                        <button data-toggle="modal" data-target="#exampleModal" className="buttons text-white btn btn-secondary" title="Detail" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                                     </>
                                                                             }
                                                                         </center>

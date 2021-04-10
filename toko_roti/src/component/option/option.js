@@ -7,10 +7,10 @@ class Option extends Component {
     }
 
     render() {
-        const {value} = this.props
+        const {value, key} = this.props
         return (
             <>
-                <option value={value}>
+                <option value={value} key={key}>
                     {this.props.children}
                 </option>
             </>

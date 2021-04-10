@@ -156,7 +156,7 @@ class UbahPassword extends Component {
                             <div className="x_content">
                                 <div className="form form-horizontal form-label-left">
                                     <div>
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Username<span className="required"> :</span>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Username<span className="required"> : *</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type="text" id="username" name="username" required="required" disabled="disabled" className="form-control col-md-7 col-xs-12" value={this.state.userProfil.username} />
@@ -164,7 +164,7 @@ class UbahPassword extends Component {
                                     </div><br />
                                     <div>
                                         <br /> <br />
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Lama<span className="required"> :</span>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Lama<span className="required"> : *</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type} id="pass_lama" name="passwordLama" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
@@ -178,7 +178,7 @@ class UbahPassword extends Component {
                                     </div><br />
                                     <div>
                                         <br /> <br />
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Baru<span className="required"> :</span>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Password Baru<span className="required"> : *</span>
                                         </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type2} id="pass_baru" name="password" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
@@ -192,8 +192,8 @@ class UbahPassword extends Component {
                                     </div><br />
                                     <div>
                                         <br /> <br />
-                                        <label className="control-label col-md-3 col-sm-3 col-xs-12">Ulangi Password Baru<span className="required"> :</span>
-                                        </label>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Ulangi Password Baru<span className="required"> : *</span>
+                                        </Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
                                             <Input type={this.state.type3} id="pass_baru" name="passwordUlangi" required="required" className="form-control col-md-7 col-xs-12" onChange={this.setValue} />
                                             <span className="eye-password-form">

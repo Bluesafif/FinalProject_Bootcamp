@@ -2602,9 +2602,7 @@ a.star {
   text-align: left;
   width: 100%; }
 
-button,
 .buttons,
-.btn,
 .modal-footer .btn + .btn {
   margin-bottom: 5px;
   margin-right: 5px; }
@@ -2950,8 +2948,6 @@ input.parsley-error, textarea.parsley-error, select.parsley-error {
 
 /* ***** /autocomplete *****/
 /* ***** buttons ********/
-.btn {
-  border-radius: 3px; }
 
 a.btn-success, a.btn-primary, a.btn-warning, a.btn-danger {
   color: #fff; }
@@ -5051,8 +5047,8 @@ h3{
 }
 
 .default-img {
-  width: 245px;
-  height: 200px;
+  width: 190px;
+  height: 150px;
 }
 
 .keranjang-img {

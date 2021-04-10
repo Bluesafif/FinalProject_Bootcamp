@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Input, Label, Textarea } from '../../component';
+import { Button, Input, Label, Textarea, Select, Option } from '../../component';
 
 class AddRoti extends Component {
     constructor(props) {
@@ -28,8 +28,7 @@ class AddRoti extends Component {
         if (
             obj.idRoti === "" || obj.namaRoti === "" ||
             obj.jenisRoti === "" || obj.stokRoti === "" ||
-            obj.hargaSatuan === "" || obj.hargaLusin === "" ||
-            obj.keterangan === ""
+            obj.hargaSatuan === "" || obj.hargaLusin === ""
         ) {
             alert("Semua data wajib diisi");
         } else if (obj.idRoti.length > 10) {
@@ -127,50 +126,50 @@ class AddRoti extends Component {
                             <div className="x_content">
                                 <div className="form-horizontal form-label-left" encType="multipart/form-data">
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">ID Roti</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="idRoti" className="form-control col-md-7 col-xs-12" required="required" value={this.state.idRoti} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">ID Roti <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="text" name="idRoti" className="form-control" required="required" value={this.state.idRoti} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Roti</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="namaRoti" className="form-control col-md-7 col-xs-12" required="required" value={this.state.namaRoti} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Roti <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="text" name="namaRoti" className="form-control" required="required" value={this.state.namaRoti} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jenis Roti</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <select className="form-control col-md-5 col-xs-12" value={this.state.idJenisRoti} onChange={this.setValue} name="idJenisRoti">
-                                                <option value="">-- Pilih Jenis Roti--</option>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Jenis Roti <span className="required">*</span></Label>
+                                        <div className="col-md-3 col-sm-6 col-xs-12">
+                                            <Select className="form-control" value={this.state.idJenisRoti} onChange={this.setValue} name="idJenisRoti">
+                                                <Option value="">-- Pilih Jenis Roti--</Option>
                                                 {this.state.jenisRoti.map((Item, idx) => (
-                                                    <option value={Item.idJenisRoti} key={idx}>{Item.jenisRoti}</option>
+                                                    <Option value={Item.idJenisRoti} key={idx}>{Item.jenisRoti}</Option>
                                                 ))}
-                                            </select>
+                                            </Select>
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Stok Roti</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="number" name="stokRoti" className="form-control col-md-7 col-xs-12" required="required" value={this.state.stokRoti} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Stok Roti <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="number" name="stokRoti" className="form-control" required="required" value={this.state.stokRoti} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Harga Satuan</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="number" name="hargaSatuan" className="form-control col-md-7 col-xs-12" required="required" value={this.state.hargaSatuan} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Harga Satuan <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="number" name="hargaSatuan" className="form-control" required="required" value={this.state.hargaSatuan} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Harga Lusinan</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="number" name="hargaLusin" className="form-control col-md-7 col-xs-12" required="required" value={this.state.hargaLusin} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Harga Lusinan <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="number" name="hargaLusin" className="form-control" required="required" value={this.state.hargaLusin} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
                                         <Label className="control-label col-md-3 col-sm-3 col-xs-12">Keterangan</Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Textarea type="text" name="keterangan" className="form-control col-md-7 col-xs-12" required="required" value={this.state.keterangan} onChange={this.setValue} />
+                                            <Textarea type="text" name="keterangan" className="form-control" value={this.state.keterangan} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="ln_solid" />

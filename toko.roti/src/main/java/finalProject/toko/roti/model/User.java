@@ -13,8 +13,23 @@ public class User {
     private boolean statusUser;
     private String role;
     private Date tanggalRegis;
+    private boolean validasiPass;
 
     public User() {
+    }
+
+    public User(String idUser, String username, String namaLengkap, String password, String alamat, String nomorTelepon, String email, boolean statusUser, String role, Date tanggalRegis, boolean validasiPass) {
+        this.idUser = idUser;
+        this.username = username;
+        this.namaLengkap = namaLengkap;
+        this.password = password;
+        this.alamat = alamat;
+        this.nomorTelepon = nomorTelepon;
+        this.email = email;
+        this.statusUser = statusUser;
+        this.role = role;
+        this.tanggalRegis = tanggalRegis;
+        this.validasiPass = validasiPass;
     }
 
     public User(String idUser, String username, String namaLengkap, String password, String alamat, String nomorTelepon, String email, boolean statusUser, String role, Date tanggalRegis) {
@@ -110,6 +125,14 @@ public class User {
         this.tanggalRegis = tanggalRegis;
     }
 
+    public boolean isValidasiPass() {
+        return validasiPass;
+    }
+
+    public void setValidasiPass(boolean validasiPass) {
+        this.validasiPass = validasiPass;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -123,6 +146,7 @@ public class User {
                 ", statusUser=" + statusUser +
                 ", role='" + role + '\'' +
                 ", tanggalRegis=" + tanggalRegis +
+                ", validasiPass=" + validasiPass +
                 '}';
     }
 }

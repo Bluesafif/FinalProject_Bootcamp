@@ -98,39 +98,39 @@ class AddAdmin extends Component {
                             <div className="x_content">
                                 <div className="form-horizontal form-label-left">
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">ID Pengguna</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="idUser" className="form-control col-md-7 col-xs-12" required="required" value={this.state.idUser} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">ID Pengguna <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="text" name="idUser" className="form-control" required="required" value={this.state.idUser} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Lengkap</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="namaLengkap" className="form-control col-md-7 col-xs-12" required="required" value={this.state.namaLengkap} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Lengkap <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="text" name="namaLengkap" className="form-control" required="required" value={this.state.namaLengkap} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Pengguna</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="username" className="form-control col-md-7 col-xs-12" required="required" value={this.state.username} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nama Pengguna <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="text" name="username" className="form-control" required="required" value={this.state.username} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nomor Telepon</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="nomorTelepon" className="form-control col-md-7 col-xs-12" required="required" value={this.state.nomorTelepon} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Nomor Telepon <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="tel" name="nomorTelepon" className="form-control" required="required" value={this.state.nomorTelepon} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Surel</Label>
-                                        <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Input type="text" name="email" className="form-control col-md-7 col-xs-12" required="required" value={this.state.email} onChange={this.setValue} />
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Surel <span className="required">*</span></Label>
+                                        <div className="col-md-4 col-sm-6 col-xs-12">
+                                            <Input type="email" name="email" className="form-control" required="required" value={this.state.email} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="item form-group">
-                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Alamat</Label>
+                                        <Label className="control-label col-md-3 col-sm-3 col-xs-12">Alamat <span className="required">*</span></Label>
                                         <div className="col-md-6 col-sm-6 col-xs-12">
-                                            <Textarea type="text" name="alamat" className="form-control col-md-7 col-xs-12" required="required" value={this.state.alamat} onChange={this.setValue} />
+                                            <Textarea type="text" name="alamat" className="form-control" required="required" value={this.state.alamat} onChange={this.setValue} />
                                         </div>
                                     </div>
                                     <div className="ln_solid" />

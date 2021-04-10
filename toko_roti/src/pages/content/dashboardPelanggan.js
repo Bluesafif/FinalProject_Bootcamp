@@ -38,11 +38,6 @@ class DashboardPelanggan extends Component {
                     if (this.state.jumlah >= 500000 || this.state.count >= 100) {
                         this.upgrade()
                     }
-                } else if (this.state.userProfil.role === "Member") {
-                    let date = new Date()
-                    if (this.state.laporan[0].tglBeli - date >= 14) {
-                        this.downgrade()
-                    }
                 }
             })
             .catch((e) => {
@@ -227,30 +222,9 @@ class DashboardPelanggan extends Component {
                             </div>
                             <div className="animated flipInY col-lg-4 col-md-4 col-sm-6 col-xs-12">
                                 <div className="tile-stats">
-                                    <div className="icon"><i className="fa fa-money" /></div>
+                                    <div className="icon"><i className="glyphicon glyphicon-usd" /></div>
                                     <div className="count">Rp. {this.formatRupiah(this.state.jumlah)}</div>
                                     <h3>Biaya Pengeluaran</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="">
-                        <div className="row">
-                            <div className="col-md-12 col-sm-12 col-xs-12">
-                                <div className="x_panel">
-                                    <div className="x_title">
-                                        <h2>Welcome</h2>
-                                        <div className="clearfix" />
-                                    </div>
-                                    <div className="x_content">
-                                        <div className="col-md-8 col-lg-8 col-sm-7">
-                                            <blockquote>
-                                                <span className="info-box-number">SELAMAT DATANG DI URBAN BAKERY WORKS.</span>
-                                                <p>Silahkan pilih menu Navigator untuk mempermudah anda.</p>
-                                                <footer>Jangan lupa senyum hari ini ;)</footer>
-                                            </blockquote>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -265,13 +239,13 @@ class DashboardPelanggan extends Component {
                                 <div className="x_content">
                                     <table className="table table-striped jambo_table bulk_action">
                                         <thead>
-                                            <tr className="headings">
-                                                <th><center>No</center></th>
-                                                <th><center>ID Laporan</center></th>
-                                                <th><center>Jumlah Beli</center></th>
-                                                <th><center>Tanggal Beli</center></th>
-                                                <th><center>Total</center></th>
-                                                <th><center>Action</center></th>
+                                            <tr className="headings" align="center">
+                                                <th>No</th>
+                                                <th>ID Laporan</th>
+                                                <th>Jumlah Beli</th>
+                                                <th>Tanggal Beli</th>
+                                                <th>Total</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         { this.state.laporan.length === 0
@@ -288,12 +262,12 @@ class DashboardPelanggan extends Component {
                                                         return (
                                                             <>
                                                                 <tr align="center">
-                                                                    <td>{(5*(this.state.page - 1)+(index + 1))}</td>
-                                                                    <td>{laporan.idLaporan}</td>
-                                                                    <td>{laporan.jumlahKuantitas}</td>
-                                                                    <td>{laporan.tglBeli}</td>
-                                                                    <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
-                                                                    <td>
+                                                                    <td style={{verticalAlign: "middle"}}>{(5*(this.state.page - 1)+(index + 1))}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>{laporan.idLaporan}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>{laporan.jumlahKuantitas}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>{laporan.tglBeli}</td>
+                                                                    <td style={{verticalAlign: "middle"}}>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
+                                                                    <td style={{verticalAlign: "middle", padding:"0.5rem"}}>
                                                                         <button data-toggle="modal" data-target="#exampleModal" className="text-white btn btn-secondary" title="Rincian Pembelian" onClick={() => this.view(index)}><i className="fas fa-file-alt" /></button>
                                                                     </td>
                                                                 </tr>
@@ -327,12 +301,12 @@ class DashboardPelanggan extends Component {
                             <div className="modal-body">
                                 <table className="table table-striped table-bordered table-hover">
                                     <thead>
-                                        <tr>
-                                            <th><center>Gambar</center></th>
-                                            <th><center>Nama Roti</center></th>
-                                            <th><center>Harga</center></th>
-                                            <th><center>Kuantitas</center></th>
-                                            <th><center>Total Harga</center></th>
+                                        <tr align="center">
+                                            <th>Gambar</th>
+                                            <th>Nama Roti</th>
+                                            <th>Harga</th>
+                                            <th>Kuantitas</th>
+                                            <th>Total Harga</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -341,13 +315,13 @@ class DashboardPelanggan extends Component {
                                                 return (
                                                     <>
                                                         <tr align="center">
-                                                            <td>
+                                                            <td style={{verticalAlign: "middle"}}>
                                                                 <img src={rotiGambar} alt="..." className="keranjang-img" />
                                                             </td>
-                                                            <td>{laporan.namaRoti}</td>
-                                                            <td>{laporan.harga}</td>
-                                                            <td>{laporan.kuantitas}</td>
-                                                            <td>Rp. {laporan.totalHarga}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{laporan.namaRoti}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{laporan.harga}</td>
+                                                            <td style={{verticalAlign: "middle"}}>{laporan.kuantitas}</td>
+                                                            <td style={{verticalAlign: "middle"}}>Rp. {laporan.totalHarga}</td>
                                                         </tr>
                                                     </>
                                                 )

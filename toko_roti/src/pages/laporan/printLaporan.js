@@ -23,14 +23,14 @@ class PrintLaporan extends Component {
                         <table className="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr align="center">
-                                    <th rowSpan="2">No</th>
-                                    <th rowSpan="2">Nama Pembeli</th>
-                                    <th rowSpan="2">Jumlah Beli</th>
-                                    <th rowSpan="2">Tanggal Beli</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>No</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Nama Pembeli</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Jumlah Beli</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Tanggal Beli</th>
                                     <th colSpan="4">Roti</th>
-                                    <th rowSpan="2">Biaya</th>
-                                    <th rowSpan="2">Diskon</th>
-                                    <th rowSpan="2">Total</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Biaya</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Diskon</th>
+                                    <th rowSpan="2" style={{verticalAlign: "middle"}}>Total</th>
                                 </tr>
                                 <tr align="center">
                                     <th>Nama</th>
@@ -45,11 +45,11 @@ class PrintLaporan extends Component {
                                         return (
                                             <>
                                                 <tr align="center" key={index}>
-                                                    <td>{index + 1}</td>
-                                                    <td>{laporan.namaLengkap}</td>
-                                                    <td>{laporan.jumlahKuantitas}</td>
-                                                    <td>{laporan.tglBeli}</td>
-                                                    <td>
+                                                    <td style={{verticalAlign: "middle"}}>{index + 1}</td>
+                                                    <td style={{verticalAlign: "middle"}}>{laporan.namaLengkap}</td>
+                                                    <td style={{verticalAlign: "middle"}}>{laporan.jumlahKuantitas}</td>
+                                                    <td style={{verticalAlign: "middle"}}>{laporan.tglBeli}</td>
+                                                    <td style={{verticalAlign: "middle"}}>
                                                     {
                                                         laporan.rotiList.map((detail, i) => {
                                                             return (
@@ -60,7 +60,7 @@ class PrintLaporan extends Component {
                                                         })
                                                     }
                                                     </td>
-                                                    <td>
+                                                    <td style={{verticalAlign: "middle"}}>
                                                     {
                                                         laporan.rotiList.map((detail, i) => {
                                                             return (
@@ -71,7 +71,7 @@ class PrintLaporan extends Component {
                                                         })
                                                     }
                                                     </td>
-                                                    <td>
+                                                    <td style={{verticalAlign: "middle"}}>
                                                     {
                                                         laporan.rotiList.map((detail, i) => {
                                                             return (
@@ -82,7 +82,7 @@ class PrintLaporan extends Component {
                                                         })
                                                     }
                                                     </td>
-                                                    <td>
+                                                    <td style={{verticalAlign: "middle"}}>
                                                     {
                                                         laporan.rotiList.map((detail, i) => {
                                                             return (
@@ -93,9 +93,9 @@ class PrintLaporan extends Component {
                                                         })
                                                     }
                                                     </td>
-                                                    <td>Rp. {this.formatRupiah(laporan.jumlahTotal)}</td>
-                                                    <td>Rp. {this.formatRupiah(laporan.diskon)}</td>
-                                                    <td>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
+                                                    <td style={{verticalAlign: "middle"}}>Rp. {this.formatRupiah(laporan.jumlahTotal)}</td>
+                                                    <td style={{verticalAlign: "middle"}}>Rp. {this.formatRupiah(laporan.diskon)}</td>
+                                                    <td style={{verticalAlign: "middle"}}>Rp. {this.formatRupiah(laporan.jumlahPembayaran)}</td>
                                                 </tr>
                                             </>
                                         )
