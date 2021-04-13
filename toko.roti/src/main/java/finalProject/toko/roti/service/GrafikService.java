@@ -5,5 +5,5 @@ import finalProject.toko.roti.model.Grafik;
 import java.util.List;
 
 public interface GrafikService {
-    List<Grafik> rotiTerbeli(int bulan, int tahun);
+    List<Grafik> rotiTerbeli();
 }

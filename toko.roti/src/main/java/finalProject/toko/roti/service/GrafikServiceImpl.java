@@ -14,10 +14,10 @@ public class GrafikServiceImpl implements GrafikService{
     GrafikRepository grafikRepository;
 
     @Override
-    public List<Grafik> rotiTerbeli(int bulan, int tahun) {
+    public List<Grafik> rotiTerbeli() {
         List<Grafik> pd;
         try{
-            pd = grafikRepository.rotiTerbeli(bulan, tahun);
+            pd = grafikRepository.rotiTerbeli();
         }catch (IndexOutOfBoundsException e){
             System.out.println(e);
             pd = null;

@@ -258,6 +258,7 @@ class DetailKeranjang extends Component {
     }
 
     render() {
+        console.log(this.state.rotiList);
         return (
             <div>
                 <div className="">

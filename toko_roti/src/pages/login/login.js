@@ -50,11 +50,9 @@ class Login extends Component {
                 });
             if(this.state.users.role === "Admin"){
                 this.props.submitLogin({ data: this.state.users});
-                this.props.history.push("/admin");
                 window.alert("Selamat! Anda berhasil masuk!")
             }else if(this.state.users.role === "Umum" || this.state.users.role === "Member" ){
                 this.props.submitLogin({ data: this.state.users});
-                this.props.history.push("/pelanggan");
                 window.alert("Selamat! Anda berhasil masuk!")
             }
             })
@@ -65,7 +63,9 @@ class Login extends Component {
     }
 
     validation = () => {
-        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+        if (this.props.checkLogin === true && this.props.userLogin.passwordVal === true) {
+            this.props.history.push("/ubah-password")
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
             this.props.history.push("/pelanggan");
         } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
             this.props.history.push("/pelanggan");
@@ -87,6 +87,7 @@ class Login extends Component {
     }
 
     render() {
+        console.log(this.state.users);
         this.validation()
         const { username, password } = this.state;
         return (

@@ -23,8 +23,8 @@ public class GrafikController {
     //------------------Change Password------------------//
 
     @GetMapping("/grafikRotiTerbeli/")
-    public ResponseEntity<List<Grafik>> listRotiTerbeli(@RequestParam int bulan, @RequestParam int tahun) {
-        List<Grafik> grafik = grafikService.rotiTerbeli(bulan, tahun);
+    public ResponseEntity<List<Grafik>> listRotiTerbeli() {
+        List<Grafik> grafik = grafikService.rotiTerbeli();
 
         if(grafik.isEmpty()) {
             return new ResponseEntity<>(grafik, HttpStatus.NOT_FOUND);

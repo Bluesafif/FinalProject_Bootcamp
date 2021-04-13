@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Sidebar, SidebarPel, MenuProfile, Topnav } from '../../component'
+import { Sidebar, SidebarPel, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import UbahPass from '../content/ubahPass.js'
 import { connect } from 'react-redux';
@@ -28,7 +28,6 @@ class UbahPassword extends Component {
                                 <Link to="/pelanggan" className="site_title"><i className="fa fa-home" /> <span>Urban Bakery</span></Link>
                             </div>
                             <div className="clearfix" />
-                                <MenuProfile />
                                 <br />
                                 {
                                     this.props.userLogin.role === "Admin"

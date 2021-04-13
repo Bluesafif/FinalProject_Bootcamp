@@ -48,7 +48,7 @@ public class UserController {
                     if (params.containsKey("password") && !String.valueOf(params.get("password")).isBlank()){
                         if (encoder.matches((CharSequence) params.get("password"), user.getPassword())){
                             if (user.isStatusUser() == true) {
-                                if (!encoder.encode(user.getPassword()).equals("Admin123") || !encoder.encode(user.getPassword()).equals("User123")) {
+                                if (!user.getPassword().equals("e64b78fc3bc91bcbc7dc232ba8ec59e0") && !user.getPassword().equals("5a30c9609b52fe348fb6925896e061de")) {
                                     if (user.getRole().equals("Member")) {
                                         Laporan laporan = laporanService.cariLaporan(user.getIdUser());
                                         if (laporan.getSelisih() >= 14) {

@@ -88,7 +88,7 @@ class LaporanContent extends Component {
         let date = new Date()
         let bulan = date.getMonth()
         let year = date.getFullYear();
-        if (this.state.bulan === bulan && this.state.tahun === year && this.state.namaPembeli === "" && this.state.namaRoti === "") {
+        if (this.state.bulan === bulan+1 && this.state.tahun === year && this.state.namaPembeli === "" && this.state.namaRoti === "") {
             this.fetchLaporan(value, 5);
         } else {
             this.fetchLaporanMonth(value, 5)
@@ -224,6 +224,7 @@ class LaporanContent extends Component {
     }
 
     render() {
+        console.log(this.state.count);
         return (
             <>
                 <div>

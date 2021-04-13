@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Doughnut } from "react-chartjs-2";
-import urban from '../../assets/urban.gif'
+// import urban from '../../assets/urban.gif'
+import logo from '../../assets/logo2.png'
+import satu from '../../assets/satu.png';
 
 class DashboardAdmin extends Component {
     constructor(props) {
@@ -11,29 +12,8 @@ class DashboardAdmin extends Component {
             jumlahPendapatan: 0,
             bulan: 0,
             tahun: 0,
-            rotiSold: {
-                labels: ["A"],
-                datasets: [
-                    {
-                        label: "Jumlah roti",
-                        backgroundColor: [
-                            "#B21F00",
-                            "#C9DE00",
-                            "#2FDE00",
-                            "#00A6B4",
-                            "#6800B4",
-                        ],
-                        hoverBackgroundColor: [
-                            "#501800",
-                            "#4B5000",
-                            "#175000",
-                            "#003350",
-                            "#35014F",
-                        ],
-                        data: [10]
-                    }
-                ],
-            }
+            namaRoti: "",
+            jumlahRoti: ""
         }
     }
 
@@ -102,74 +82,39 @@ class DashboardAdmin extends Component {
         return ribuan;
     };
 
-    // doughnutChart = () => {
-    //     fetch(`http://localhost:8080/roti/grafikRotiTerbeli/?bulan=` + this.state.bulan + `&tahun=` + this.state.tahun + ``, {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json; ; charset=utf-8",
-    //             "Access-Control-Allow-Headers": "Authorization, Content-Type",
-    //             "Access-Control-Allow-Origin": "*",
-    //         }
-    //     })
-    //         .then((response) => response.json())
-    //         .then((json) => {
-    //             const labelRoti = json.map(function (obj) {
-    //                 return obj.label;
-    //             });
-    //             const dataRoti = json.map(function (obj) {
-    //                 return obj.data;
-    //             });
-    //             const listRoti = {
-    //                 labels: labelRoti,
-    //                 datasets: [
-    //                     {
-    //                         label: "Total",
-    //                         backgroundColor: [
-    //                             "#B21F00",
-    //                             "#C9DE00",
-    //                             "#2FDE00",
-    //                             "#00A6B4",
-    //                             "#6800B4",
-    //                         ],
-    //                         hoverBackgroundColor: [
-    //                             "#501800",
-    //                             "#4B5000",
-    //                             "#175000",
-    //                             "#003350",
-    //                             "#35014F",
-    //                         ],
-    //                         data: dataRoti,
-    //                     },
-    //                 ],
-    //             };
+    rotiTerjualTerbanyak = () => {
+        fetch(`http://localhost:8080/roti/grafikRotiTerbeli/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json; ; charset=utf-8",
+                "Access-Control-Allow-Headers": "Authorization, Content-Type",
+                "Access-Control-Allow-Origin": "*",
+            }
+        })
+            .then((response) => response.json())
+            .then((json) => {
+                const labelRoti = json.map(function (obj) {
+                    return obj.label;
+                });
+                const dataRoti = json.map(function (obj) {
+                    return obj.data;
+                });
 
-    //             this.setState({
-    //                 rotiSold: listRoti
-    //             });
-    //         })
-    //         .catch(() => {
-    //             alert("failed fetching data!")
-    //         })
-    // }
+                this.setState({
+                    namaRoti: labelRoti,
+                    jumlahRoti: dataRoti
+                });
+            })
+            .catch(() => {
+                alert("failed fetching data!")
+            })
+    }
 
     componentDidMount() {
         this.rotiCreated()
         this.rotiSold()
         this.pendapatan()
-        // this.doughnutChart()
-
-        let date = new Date();
-        let month = date.getMonth();
-        let year = date.getFullYear();
-
-        // for (let i = 2010; i <= year; i++) {
-        //     this.state.pilihanTahun.push(i);
-        // }
-
-        this.setState({
-            bulan: month+1,
-            tahun: year
-        })
+        this.rotiTerjualTerbanyak()
     }
 
     render() {
@@ -225,35 +170,34 @@ class DashboardAdmin extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-8 col-sm-12 col-xs-12">
+                        <div className="col-md-5 col-sm-12 col-xs-12">
                             <div className="x_panel">
                                 <div className="x_title">
-                                    <h2>Bagan</h2>
+                                    <h2>Roti Terjual Terbanyak</h2>
                                     <div className="clearfix" />
                                 </div>
                                 <div className="x_content">
-                                    <div className="col-md-7 col-lg-8 col-sm-7">
-                                        <Doughnut
-                                            data={this.state.rotiSold}
-                                            options={{
-                                                title: {
-                                                    display: true,
-                                                    text: "Penjualan Roti Terbanyak Bulan Ini",
-                                                    fontSize: 20,
-                                                },
-                                                legend: {
-                                                    display: true,
-                                                    position: "right",
-                                                },
-                                            }}
-                                        />
+                                    <div>
+                                        <table className="table table-borderless table-hover">
+                                            <thead>
+                                                <tr align="center">
+                                                    <td rowSpan="2"><img src={satu} alt="..."/></td>
+                                                    <td><h1>{this.state.namaRoti}</h1></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td><h1>{this.state.jumlahRoti}</h1></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div className="clearfix" />
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-4 float-right">
-                            <img src={urban} alt="..." style={{width:"90%", height: "90%", borderRadius: "100%"}} />
+                        <div className="col-md-7">
+                            <img src={logo} alt="..." style={{width:"95%", height: "95%"}} />
                         </div>
                     </div>
                 </div>

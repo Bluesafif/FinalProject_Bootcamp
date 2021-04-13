@@ -11,6 +11,7 @@ const authReducer = (state = defaultState, action) => {
                 isLogin: true,
                 dataUser: {
                     idUser: action.payload.data.idUser,
+                    passwordVal: action.payload.data.validasiPass,
                     username: action.payload.data.username,
                     role: action.payload.data.role,
                     status: action.payload.data.status

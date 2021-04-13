@@ -6,7 +6,6 @@ import Textarea from "./textarea/textarea.js";
 import Label from "./label/label";
 import Sidebar from "./sidebar/sidebar.js"
 import SidebarPel from "./sidebar/sidebarPel.js"
-import MenuProfile from "./menuProfile/menuprofile.js"
 import Topnav from "./topnav/topnav.js"
 
-export {Button, Input, Select, Option, Textarea, Label, Sidebar, SidebarPel, MenuProfile, Topnav}
+export {Button, Input, Select, Option, Textarea, Label, Sidebar, SidebarPel, Topnav}

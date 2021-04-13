@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Sidebar, MenuProfile, Topnav } from '../../component'
+import { Sidebar, Topnav } from '../../component'
 import DashboardAdmin from '../content/dashboardAdmin.js'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -11,7 +11,9 @@ class HomeAdmin extends Component {
     }
 
     validation = () => {
-        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+        if (this.props.checkLogin === true && this.props.userLogin.passwordVal === true) {
+            this.props.history.push("/ubah-password")
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
             this.props.history.push("/pelanggan");
         } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
             this.props.history.push("/pelanggan");
@@ -32,7 +34,6 @@ class HomeAdmin extends Component {
                                 <Link to="/admin" className="site_title"><i className="fa fa-home" /> <span>Urban Bakery</span></Link>
                             </div>
                             <div className="clearfix" />
-                                <MenuProfile />
                                 <br />
                                 <Sidebar />
                             </div>

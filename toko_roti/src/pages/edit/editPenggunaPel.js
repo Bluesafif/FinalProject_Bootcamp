@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SidebarPel, MenuProfile, Topnav } from '../../component'
+import { SidebarPel, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import UbahPenggunaPel from '../content/ubahPenggunaPel.js'
 import { connect } from 'react-redux';
@@ -11,7 +11,9 @@ class EditPenggunaPel extends Component {
     }
 
     validation = () => {
-        if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
+        if (this.props.checkLogin === true && this.props.userLogin.passwordVal === true) {
+            this.props.history.push("/ubah-password")
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Admin") {
             this.props.history.push("/admin")
         } else if (this.props.checkLogin === false) {
             this.props.history.push("/")
@@ -30,7 +32,6 @@ class EditPenggunaPel extends Component {
                                     <Link to="/pelanggan" className="site_title"><i className="fa fa-home" /> <span>Urban Bakery</span></Link>
                                 </div>
                                 <div className="clearfix" />
-                                <MenuProfile />
                                 <br />
                                 <SidebarPel />
                             </div>

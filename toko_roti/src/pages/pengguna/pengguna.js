@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Sidebar, MenuProfile, Topnav } from '../../component'
+import { Sidebar, Topnav } from '../../component'
 import { Link } from 'react-router-dom'
 import DataPengguna from '../content/dataPengguna'
 import { connect } from 'react-redux';
@@ -11,9 +11,11 @@ class Pengguna extends Component {
     }
 
     validation = () => {
-        if (this.props.checkLogin === true && this.props.userLogin.role === "Umum") {
+        if (this.props.checkLogin === true && this.props.userLogin.passwordVal === true) {
+            this.props.history.push("/ubah-password")
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Umum" && this.props.userLogin.passwordVal === false) {
             this.props.history.push("/pelanggan");
-        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member") {
+        } else if (this.props.checkLogin === true && this.props.userLogin.role === "Member" && this.props.userLogin.passwordVal === false) {
             this.props.history.push("/pelanggan");
         } else if (this.props.checkLogin === false) {
             this.props.history.push("/")
@@ -32,7 +34,6 @@ class Pengguna extends Component {
                                     <Link to="/admin" className="site_title"><i className="fa fa-home" /> <span>Urban Bakery</span></Link>
                                 </div>
                                 <div className="clearfix" />
-                                <MenuProfile />
                                 <br />
                                 <Sidebar />
                             </div>

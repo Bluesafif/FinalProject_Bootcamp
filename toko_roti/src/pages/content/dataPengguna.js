@@ -245,7 +245,7 @@ class DataPengguna extends Component {
                                                                     <td style={{verticalAlign: "middle"}}>{user.namaLengkap}</td>
                                                                     <td style={{verticalAlign: "middle"}}>{user.username}</td>
                                                                     <td style={{verticalAlign: "middle"}}><center>{user.role}</center></td>
-                                                                    <td style={{verticalAlign: "middle"}}><center>{user.statusUser === true ? <span className="badge badge-success"> Aktif </span> : <span className="badge badge-danger"> Tidak Aktif </span>}</center></td>
+                                                                    <td style={{verticalAlign: "middle"}}><center>{user.statusUser === true ? <span className="badge badge-success" style={{fontSize: "12px"}}> Aktif </span> : <span className="badge badge-danger" style={{fontSize: "12px"}}> Tidak Aktif </span>}</center></td>
                                                                     <td style={{verticalAlign: "middle"}}>
                                                                         <center>
                                                                             {user.role === "Admin"
